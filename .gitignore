@@ -1,0 +1,33 @@
+#-----------------------------------------------------------------------------------------------------------------------
+#
+# Dot Files Gitignore
+#
+# Author:           Brandon Perez <bmperez@alumni.cmu.edu>
+# Creation Date:    Thursday, April 19, 2018 at 03:49:14 PM PDT
+#
+# This is the Gitignore file for the repository. This defines the files that are permitted to be tracked. This is done
+# in an inclusion-based manner.
+#
+#-----------------------------------------------------------------------------------------------------------------------
+
+# Exclude all files, then include only the necessary ones.
+*
+
+# Allow for files nested within directories.
+*/
+
+# Allow for the (un)license, README, and Gitignore files.
+!/.gitignore
+!/UNLICENSE
+!/README.md
+
+# Allow for the various configuration files.
+!/bashrc
+!/gdbinit
+!/gitconfig
+!/inputrc
+!/kilerc
+!/minttyrc
+!/pythonstartup
+!/vimrc
+!*.vim
