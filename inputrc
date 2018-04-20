@@ -1,0 +1,33 @@
+# Inputrc - Input runcom (run commands)
+#
+# This file is executed when a shell is started up, and sets the settings
+# and options for the user's input through readline.
+#
+# Creation date: Monday, July 04, 2016 at 10:56:49 PM PDT
+
+################################################################################
+# Readline Options
+################################################################################
+
+# Colorize files listed through tab completion based on their type (like ls)
+set colored-stats on
+
+# Ignore the case when matching tab completion
+set completion-ignore-case on
+
+# When tab-completing in the middle of a word skip text that is already listed
+set skip-completed-text on
+
+# When tab-completing a symlink that points to a directory, add the slash after
+set mark-symlinked-directories on
+
+################################################################################
+# Keyboard shortcuts
+################################################################################
+
+# Allow for the tab-completed options to be scrolled through with CTRL-f
+Control-f: menu-complete
+
+# Setup the shift keys to navigate forward and back a word
+"\e[1;2C": forward-word
+"\e[1;2D": backward-word

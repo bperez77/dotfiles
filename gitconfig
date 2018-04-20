@@ -1,0 +1,62 @@
+[user]
+    # User settings: name and email address in commits
+	name = Brandon Perez
+	email = bmperez@alumni.cmu.edu
+
+[color]
+    # Always use colors for commands when available (e.g. grep, diff, etc.)
+    ui = true
+
+[push]
+    # If no refspec is given for git push, then push to upstream branch on the
+    # remote that the local is set to track. Only do so if the names match.
+	default = simple
+
+[core]
+    # Use vim as the editor for things such as commit messages.
+    editor = vim
+
+    # Allow for parallel index preloading for operations like git diff
+    preloadindex = true
+
+    # Convert the newline characters to this locale's, but keep the original when
+    # pushing changes. Helps with Windows-Linux compatability.
+    autocrlf = input
+
+    # Highlight blanks at the end of a line or file, space before tab characters,
+    # and when tab characters are used for indentation.
+    whitespace = blank-at-eol,blank-at-eof,space-before-tab,tab-in-indent
+
+[grep]
+    # Show the line numbers when grepping with git.
+    lineNumber = true
+
+[status]
+    # Show the status of submodules when performing git status.
+    submodulesummary = true
+
+[log]
+    # Include commits that pertain to the file before it was renamed.
+    follow = true
+
+[filter "lfs"]
+    # Settings to properly setup git large file stroage (LFS).
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+    required = true
+
+[alias]
+    # Pull changes from the remote, and rebase any local, unpushed changes so
+    # that they appear after the remote's commits. If there are any merge commits
+    # in the remote, then keep them.
+    pullr = pull --rebase=preserve
+
+    # Aliases for git log that show the diffstat, and another that shortens the
+    # displayed commits.
+    slog = log --stat
+    sslog = log --stat --pretty=short
+
+    # Alias to update timestamp of the most recent commit to the current time.
+    commit-update-now = !GIT_COMMITTER_DATE="\"`date`\"" git commit --amend \
+        --date "\"`date`\""
