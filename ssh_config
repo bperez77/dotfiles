@@ -1,0 +1,16 @@
+# config - SSH configuration settings
+#
+# This file is read by SSH whenever it is run by the user, and configures
+# settings for SSH and short-hand aliases for host names.
+#
+# Creation Date: Wednesday, February 03, 2016 at 1:33:24 PM EDT
+
+################################################################################
+# Configuration Options (For All Hosts)
+################################################################################
+
+Host *
+    # This option sends a request to the server after the given time if no data
+    # has been received from it (the session is idle). This prevents servers
+    # from thiking the client is not alive and closing the connection.
+    ServerAliveInterval 60
