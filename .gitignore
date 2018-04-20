@@ -14,7 +14,7 @@
 *
 
 # Allow for files nested within directories.
-*/
+!*/
 
 # Allow for the (un)license, README, and Gitignore files.
 !/.gitignore
@@ -29,5 +29,11 @@
 !/kilerc
 !/minttyrc
 !/pythonstartup
-!/vimrc
+!/ssh_config
+
+# Allow for the Vim RC file and the various configuration files under the Vim directory.
 !*.vim
+!/vim/**/*.txt
+!/vim/**/*.py
+!/vim/spell/en.utf-8.add
+!/vimrc
