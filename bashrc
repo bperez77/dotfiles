@@ -1,121 +1,146 @@
+#-----------------------------------------------------------------------------------------------------------------------
+#
 # Bash Runcom/Run Commands File
 #
 # Author:           Brandon Perez <bmperez@alumni.cmu.edu>
 # Creation Date:    Monday, May 29, 2012 at 10:45:40 AM EDT
 #
-# This file is executed when a BASH shell is started up, and sets the settings,
-# command aliases, and environment variables for the shell session
+# This file is executed when a BASH shell is started up, and sets the settings, command aliases, and environment
+# variables for the shell session
+#
+#-----------------------------------------------------------------------------------------------------------------------
 
-################################################################################
+#-----------------------------------------------------------------------------------------------------------------------
 # Files to Execute (Default Values)
-################################################################################
+#----------------------------------------------------------------------------------------------------------------------
 
-# If this is a non-interactive shell session, then don't run this
+# If this shell session is non-interactive, then don't run the Bashrc. Relevant environment variables should be
+# inherited from the parent process.
 if [ -z "$PS1" ]; then
     return
 fi
 
+# Source the system-wide defaults if there is a Bashrc for it.
 if [ -f /etc/bashrc ]; then
-    . /etc/bashrc
+    source  /etc/bashrc
 fi
 
+# Source any aliases that are defined in a separate file.
 if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+    source ~/.bash_aliases
 fi
 
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
+# If the current shell is a POSIX shell, source the system-wide defaults for tab-completion for commands.
+if [ -f /etc/bash_completion ] && (! shopt -oq posix); then
+    source /etc/bash_completion
 fi
 
-################################################################################
+#-----------------------------------------------------------------------------------------------------------------------
+# History and Shell Options
+#-----------------------------------------------------------------------------------------------------------------------
+
+# Make the size of in-memory history of the current session unlimited.
+export HISTSIZE=
+
+# Make the size of the shared history stored in the history file unlimited.
+export HISTFILESIZE=
+
+# When adding new entries to the history, erase any duplicate values. Also, ignore any new entries that are a duplicate,
+# and ignore any commands beginning with whitespace (both).
+export HISTCONTROL="erasedups:ignoreboth"
+
+# Set the list of commands to ignore as new history entries.
+export HISTIGNORE='ls:bg:fg:exit:history:man'
+
+# Set the format of the timestamps used in the history file.
+export HISTTIMEFORMAT='%D:%T'
+
+# Update the command that is run before a new prompt is printed to the command to append the current history to the
+# shared history file.
+export PROMPT_COMMAND="${PROMPT_COMMAND}; history -a"
+
+# Tells the shell to append to the history file on exit, rather than overwriting it. This ensures that the history is
+# saved across multiple sessions of the shell.
+shopt -s cmdhist
+
+# Tells the shell to save any multi-line commands to the history as a single entry, so it can be easily used again.
+shopt -s histappend
+
+# Tell Bash to check the window size after each command, and adjust the text as necessary (for window resizes).
+shopt -s checkwinsize
+
+# Enable tab completion of hostnames from the /etc/hosts file, after an '@' symbol.
+shopt -s hostcomplete
+
+# Allow for the extended globbing patterns for the command-line, which allow for lists of glob patterns to be used.
+shopt -s extglob
+
+# Allow for the recursive '**' glob pattern, which matches to 0 or more subdirectories (in a file expansion context).
+shopt -s globstar
+
+# Fix simple spelling errors when using the `cd` command.
+shopt -s cdspell
+
+# Fix simple spelling errors when using tab completion on directories.
+shopt -s dirspell
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Bash Command-Line Prompt
+#-----------------------------------------------------------------------------------------------------------------------
+
+# ANSI color and modifications codes for terminal text
+CYAN="\[\033[36m\]"     # Cyan color for text
+GREEN="\[\033[32m\]"    # Green color for text (foreground color)
+NORMAL="\[\033[0m\]"    # Return text to normal
+YELLOW="\[\033[33m\]"   # Yellow color for text
+
+# Set the terminal prompt. The current user is represented by \u, host by \h, and the current working directory by \w.
+PS1="${GREEN}"'[\u@\h '"${YELLOW}"'\w'"${CYAN}"'$(__git_ps1)'"${GREEN}]\\$ ${NORMAL}"
+
+#-----------------------------------------------------------------------------------------------------------------------
 # General Environment Variables
-################################################################################
+#-----------------------------------------------------------------------------------------------------------------------
 
-# Environment variables for RISCV
-export RISCV=${HOME}/projects/18447_ta/riscv
-export PATH=${PATH}:${RISCV}/bin
-export PATH=${PATH}:${RISCV}/riscv64-unknown-elf/bin/
-export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${RISCV}/lib
-
-# Variables for Quartus
-export QUARTUS_64BIT=1
-export QUARTUS_ROOTDIR_OVERRIDE=/opt/Altera/15.1/quartus
-
-# Enable python history and tab completion
+# The startup file to use before running Python. This enables persistent Python command history and tab completion.
 export PYTHONSTARTUP=${HOME}/.pythonstartup
 
-# The ideal number of threads to use for makefile compilation
+export GOPATH=${HOME}/.go
+
+# A good heuristic for the number of threads to use when compiling code in parallel (especially with Makefiles).
 export THRS=$((2 * $(getconf _NPROCESSORS_ONLN)))
 
-# IP addresses for this machine and the Zedboard when connected over ethernet
+# IP addresses for this machine and the Zedboard when connected over Ethernet with network sharing.
 export HOST_IPADDR=10.42.0.1
 export BOARD_IPADDR=10.42.0.196
 
-################################################################################
-# Class Environment Variables
-################################################################################
-
-export SW_DIR=${HOME}/projects/xilinx_axidma
-
-# Home directories on the Andrew and ECE AFS
-export ANDREW_HOME=/afs/andrew.cmu.edu/usr19/bmperez/
-export ECE_HOME=/afs/ece.cmu.edu/usr/bmperez/
-
-# Enviroment Variables for Synopsis
-export SYNOPSYS=/afs/ece.cmu.edu/support/synopsys/synopsys.release/
-export LM_LICENSE_FILE=$LM_LICENSE_FILE:/afs/ece.cmu.edu/support/synopsys/license.dat
-export SYN_DIR=$SYNOPSYS/synopsys-2007.03-SP5
-
-# Environment variables for Design Compiler (DC)
-export DC_HOME=$SYN_DIR/linux/syn
-export PATH=$PATH:$DC_HOME/bin
-export MANPATH=$MANPATH:$SYN_DIR/doc/syn/man
-
-# Environment variables for Verilog Compiler Simulator (VCS)
-export VCS_HOME=$SYNOPSYS/vcs-mx_vK-2015.09/
-export PATH=$PATH:$VCS_HOME/bin
-export VCS_ARCH_OVERRIDE=linux
-export VCS_MODE_FLAG=64
-export VCS_TARGET_ARCH="amd64"
-export VCS_LIC_EXPIRE_WARNING=0
-export MANPATH=$MANPATH:$VCS_HOME/doc/man
-alias sv="vcs -sverilog -debug"
-
-# Environment variables for ModelSim (Verilog Simulator)
-export LM_LICENSE_FILE=$LM_LICENSE_FILE:/afs/ece.cmu.edu/support/mgc/license.dat
-export PATH=$PATH:/afs/ece.cmu.edu/support/mgc/mgc.release/modelsim-se_10.4c/modeltech/bin/
-
-################################################################################
+#-----------------------------------------------------------------------------------------------------------------------
 # Paths
-################################################################################
+#-----------------------------------------------------------------------------------------------------------------------
 
-# Path variables for various programs
-export PATH=$PATH:${HOME}/bin/
-export PATH=$PATH:/usr/share/smlnj/bin/
-export PATH=$PATH:/usr/share/cc0/bin/
-export PATH=$PATH:/usr/bin/altera/12.1/quartus/bin/
-export PATH=$PATH:/usr/bin/Arduino/arduino
-export PATH=$PATH:/home/bmperez/projects/build18_2014/dev/scripts/
-export PATH=$PATH:/usr/local/MATLAB/R2015a/bin/
-export PATH=$PATH:/opt/Altera/15.1/quartus/bin/
-export PATH=$PATH:/opt/eagle-7.5.0/bin/
-export PATH="$PATH:/usr/local/heroku/bin"
+# Add the programs for the manually installed C0 and SML/NJ languages to the path.
+export PATH=${PATH}:/usr/share/smlnj/bin/
+export PATH=${PATH}:/usr/share/cc0/bin/
 
-# Path variables for Xilinx
-export XILINX_ROOT=/opt/Xilinx/
-export XILINX_VERSION=2017.2
-export PATH=${PATH}:${XILINX_ROOT}/Vivado/${XILINX_VERSION}/bin/
-export PATH=${PATH}:${XILINX_ROOT}/SDK/${XILINX_VERSION}/gnu/arm/lin/bin/
-export PATH=${PATH}:${XILINX_ROOT}/SDK/${XILINX_VERSION}/bin/
-export PATH=${PATH}:${XILINX_ROOT}/Vivado_HLS/${XILINX_VERSION}/bin/
+# Add various manually installed code development programs to the path.
+export PATH=${PATH}:/usr/bin/Arduino/arduino
+export PATH=${PATH}:/usr/local/MATLAB/R2015a/bin/
+export PATH=${PATH}:/opt/Altera/15.1/quartus/bin/
+export PATH=${PATH}:/opt/eagle-7.5.0/bin/
 
-# Path for go
-export GOPATH=${HOME}/.go
+# Add the various Xilinx tools to the path.
+XILINX_ROOT=/opt/Xilinx/
+XILINX_VERSION=2017.2
+export PATH="${PATH}:${XILINX_ROOT}/Vivado/${XILINX_VERSION}/bin/"
+export PATH="${PATH}:${XILINX_ROOT}/SDK/${XILINX_VERSION}/gnu/arm/lin/bin/"
+export PATH="${PATH}:${XILINX_ROOT}/SDK/${XILINX_VERSION}/bin/"
+export PATH="${PATH}:${XILINX_ROOT}/Vivado_HLS/${XILINX_VERSION}/bin/"
+
+# Add the programs for the Go language and any installed Go programs to the path.
 export PATH=${PATH}:${GOPATH}/bin
 
-################################################################################
+#-----------------------------------------------------------------------------------------------------------------------
 # Aliases
-################################################################################
+#-----------------------------------------------------------------------------------------------------------------------
 
 # Allow aliases to be used with the sudo command
 alias sudo='sudo '
@@ -176,7 +201,7 @@ alias safe-remove='udisksctl power-off -b'
 # Download a file in parallel from a website, using multiple (16) connections
 alias parallel-download='aria2c -x 16 -s 16'
 
-# Aliases for using latex with minted and pygments syntax highlighters
+# Aliases for using latex with minted and Pygments syntax highlighters
 alias pdflatex='pdflatex -shell-escape'
 alias latex='latex -shell-escape'
 
@@ -243,7 +268,7 @@ alias flash-modules='cd ~/school/18545/kernels/xillinux/ && make-xarm -j8 module
 alias flash-modules-nfs='cd ~/school/18545/kernels/xillinux/ && make-xarm -j8 modules &&
     sudo env "PATH=$PATH" make ARCH=arm CROSS_COMPILE=arm-xilinx-linux-gnueabi- INSTALL_MOD_PATH=~/school/18545/filesystems/xillinux_core_fs/ modules_install'
 
-# Aliase to sync and umount the SD boot card
+# Alias to sync and unmount the SD boot card
 alias bootumount='sync && umount /media/bmperez/boot /media/bmperez/rootfs'
 
 # Restart Wifi (helps deal with poor/lost connections)
@@ -359,89 +384,3 @@ function randomize-mac {
     sudo macchanger -a ${device} &&
     sudo ifconfig $device up
 }
-
-################################################################################
-# History and Shell Options
-################################################################################
-
-# Make the history unlimited
-export HISTSIZE=
-export HISTFILESIZE=
-
-# Erase duplicates, and set commands to ignore
-export HISTCONTROL="erasedups:ignoreboth"
-export HISTIGNORE='ls:bg:fg:exit:history:man'
-
-# Set the history timestamp format, and the prompt command used
-export HISTTIMEFORMAT='%D:%T'
-export PROMPT_COMMAND='history -a'
-
-# Append the to the history file on exit, so it is save across sessions , and
-# save all lines of multi-line commands in the history
-shopt -s histappend
-shopt -s cmdhist
-
-# Make sure the shell adjusts the text based on the window size, and allow for
-# tab-completion of hostnames from the /etc/hosts file
-shopt -s checkwinsize
-shopt -s hostcomplete
-
-# Allow for extended globbing patterns (e.g. inverse), and a recursive '**'
-# pattern, which matches 0 or more subdirectories
-shopt -s extglob
-shopt -s globstar
-
-# Fix simple mispelling errors with `cd` and directory names
-shopt -s cdspell
-shopt -s dirspell
-
-################################################################################
-# Bash Prompt Setting
-################################################################################
-
-# ANSI color and modifications codes for terminal text
-NORMAL="\[\033[0m\]"    # Return text to normal
-GREEN="\[\033[32m\]"    # Green color for text (foreground color)
-YELLOW="\[\033[33m\]"   # Yellow color for text
-CYAN="\[\033[36m\]"     # Cyan color for text
-
-# Shorten the given path so that the PS1 prompt does not become excessively
-# long. Displays only the last several components of an absolute path. If we're
-# inside a git repository, the top-level directory is also displayed. Any
-# elided components of the path are displayed with the given pattern. Assumes
-# that there are no repeated '/' characters in the path.
-function __summarize_path
-{
-    # The symbol for parts of the path that are elided, and the number of parent
-    # directories to display in the prompt.
-    ELIDED_PATTERN='**'
-    PATH_NUM_COMPONENTS=4
-
-    # Parse the arguments
-    path="$1"
-
-    # Remove repeated '/' characters, and check if the path has less than n
-    # components. In this case, we don't need to change the path.
-    num_components=$(tr -dc '/' <<<"${path}" | wc -c)
-    if [ ${num_components} -le ${PATH_COMPONENTS} ]; then
-        printf "${path}"
-        set +x
-        return
-    fi
-
-    # Get the last n components of the given path
-    parsed_path="${path}"
-    short_path=""
-    for i in $(seq 1 ${PATH_NUM_COMPONENTS})
-    do
-        short_path+="/$(basename \"${parsed_path}\")"
-        parsed_path="$(dirname \"${path}\")"
-    done
-
-    # TODO: Add intelligence with git directory
-    printf '/**/%s' "${short_path}"
-}
-
-# Set the terminal prompt. The current sser is represented by \u, host by \h,
-# and the current working directory by \w.
-PS1="${GREEN}"'[\u@\h '"${YELLOW}"'\w'"${CYAN}"'$(__git_ps1)'"${GREEN}]\\$ ${NORMAL}"
