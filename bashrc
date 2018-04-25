@@ -40,24 +40,39 @@ fi
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Make the size of in-memory history of the current session unlimited.
-export HISTSIZE=
+export HISTSIZE=-1
 
 # Make the size of the shared history stored in the history file unlimited.
-export HISTFILESIZE=
+export HISTFILESIZE==-1
 
-# When adding new entries to the history, erase any duplicate values. Also, ignore any new entries that are a duplicate,
-# and ignore any commands beginning with whitespace (both).
-export HISTCONTROL="erasedups:ignoreboth"
+# When adding new entries to the history, erase any duplicate values. Also, ignore any new entries that are a duplicate.
+export HISTCONTROL="erasedups:ignoredups"
 
-# Set the list of commands to ignore as new history entries.
-export HISTIGNORE='ls:bg:fg:exit:history:man'
+# Create the list of commands to ignore when they are used without any arguments (including options without arguments).
+IGNORED_NOARG_COMMANDS=(python make ls ll dir cd "git log" "git clean" "git status" "git pull" "git diff")
+for cmd in "${IGNORED_NOARG_COMMANDS[@]}"
+do
+    IGNORED_COMMANDS+=":*([ \t])${cmd}*([0-9-_.])*([ \t])"
 
+done
+
+# Add the list of commands to ignore even when they are used with arguments. These are ones not worth repeating.
+IGNORED_ARG_COMMANDS=(bg fg exit history man vman kill "cd -")
+for cmd in "${IGNORED_ARG_COMMANDS[@]}"
+do
+    IGNORED_COMMANDS+=":*([ \t])${cmd}*"
+done
+
+# Set the list of commands to ignore for new history entries, focusing on the items described above.
+export HISTIGNORE="${HISTIGNORE}:${IGNORED_COMMANDS}"
+
+# Set the list of commands to ignore for new history entries, focusing mainly on commands not worth repeating. Also,
 # Set the format of the timestamps used in the history file.
 export HISTTIMEFORMAT='%D:%T'
 
 # Update the command that is run before a new prompt is printed to the command to append the current history to the
 # shared history file.
-export PROMPT_COMMAND="${PROMPT_COMMAND}; history -a"
+export PROMPT_COMMAND="history -a; ${PROMPT_COMMAND}"
 
 # Tells the shell to append to the history file on exit, rather than overwriting it. This ensures that the history is
 # saved across multiple sessions of the shell.
@@ -104,7 +119,8 @@ PS1="${GREEN}"'[\u@\h '"${YELLOW}"'\w'"${CYAN}"'$(__git_ps1)'"${GREEN}]\\$ ${NOR
 # The startup file to use before running Python. This enables persistent Python command history and tab completion.
 export PYTHONSTARTUP=${HOME}/.pythonstartup
 
-export GOPATH=${HOME}/.go
+# Add locally installed go programs for the user to the list of paths for Go programs and their binaries.
+export GOPATH="${GOPATH}:${HOME}/.go"
 
 # A good heuristic for the number of threads to use when compiling code in parallel (especially with Makefiles).
 export THRS=$((2 * $(getconf _NPROCESSORS_ONLN)))
