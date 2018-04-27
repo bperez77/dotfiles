@@ -22,7 +22,7 @@ fi
 
 # Source the system-wide defaults if there is a Bashrc for it.
 if [ -f /etc/bashrc ]; then
-    source  /etc/bashrc
+    source /etc/bashrc
 fi
 
 # Source any aliases that are defined in a separate file.
@@ -53,7 +53,6 @@ IGNORED_NOARG_COMMANDS=(python make ls ll dir cd "git log" "git clean" "git stat
 for cmd in "${IGNORED_NOARG_COMMANDS[@]}"
 do
     IGNORED_COMMANDS+=":*([ \t])${cmd}*([0-9-_.])*([ \t])"
-
 done
 
 # Add the list of commands to ignore even when they are used with arguments. These are ones not worth repeating.
@@ -125,25 +124,20 @@ export GOPATH="${GOPATH}:${HOME}/.go"
 # A good heuristic for the number of threads to use when compiling code in parallel (especially with Makefiles).
 export THRS=$((2 * $(getconf _NPROCESSORS_ONLN)))
 
-# IP addresses for this machine and the Zedboard when connected over Ethernet with network sharing.
-export HOST_IPADDR=10.42.0.1
-export BOARD_IPADDR=10.42.0.196
-
 #-----------------------------------------------------------------------------------------------------------------------
 # Paths
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Add the programs for the manually installed C0 and SML/NJ languages to the path.
-export PATH=${PATH}:/usr/share/smlnj/bin/
-export PATH=${PATH}:/usr/share/cc0/bin/
+# Add the path to the bin directory, where any miscellaneous executables may be, to the path.
+export PATH="${PATH}:${HOME}/bin/"
 
-# Add various manually installed code development programs to the path.
-export PATH=${PATH}:/usr/bin/Arduino/arduino
-export PATH=${PATH}:/usr/local/MATLAB/R2015a/bin/
-export PATH=${PATH}:/opt/Altera/15.1/quartus/bin/
-export PATH=${PATH}:/opt/eagle-7.5.0/bin/
+# Add the paths for the installed Arduino studio, MATLAB, Altera Quartus, and Eagle programs to the path
+export PATH="${PATH}:/usr/bin/Arduino/arduino"
+export PATH="${PATH}:/usr/local/MATLAB/R2015a/bin/"
+export PATH="${PATH}:/opt/Altera/15.1/quartus/bin/"
+export PATH="${PATH}:/opt/eagle-7.5.0/bin/"
 
-# Add the various Xilinx tools to the path.
+# Add the various Xilinx tools (Vivado, HLS, SDK, cross-compiler) to the path.
 XILINX_ROOT=/opt/Xilinx/
 XILINX_VERSION=2017.2
 export PATH="${PATH}:${XILINX_ROOT}/Vivado/${XILINX_VERSION}/bin/"
@@ -152,167 +146,79 @@ export PATH="${PATH}:${XILINX_ROOT}/SDK/${XILINX_VERSION}/bin/"
 export PATH="${PATH}:${XILINX_ROOT}/Vivado_HLS/${XILINX_VERSION}/bin/"
 
 # Add the programs for the Go language and any installed Go programs to the path.
-export PATH=${PATH}:${GOPATH}/bin
+export PATH="${PATH}:${GOPATH}/bin"
+
+# Add the programs for the manually installed C0 and SML/NJ languages to the path.
+export PATH="${PATH}:/usr/share/smlnj/bin/"
+export PATH="${PATH}:/usr/share/cc0/bin/"
 
 #-----------------------------------------------------------------------------------------------------------------------
-# Aliases
+# General Aliases
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Allow aliases to be used with the sudo command
+# Allow aliases to be used with the sudo command. This is done by adding a space at the end of the alias.
 alias sudo='sudo '
 
-# Add color to commands
+# Setup the ls and various grep commands to use color highlighting by default.
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
-# Add default options to common commands
+# Add some shortcut aliases for default options for the ls command. This includes adding displaying of metadata.
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+
+# Make sure that the remove, move, and copy commands prompt before deleting/overwriting files by default. Also, make
+# sure the copy command preserves all the properties of the files it copies by default.
 alias rm='rm -i'
 alias mv='mv -i'
 alias cp='cp -i -d --preserve=all'
-alias dmesg='dmesg -T'
 
-# Aliases for navigating up directories
-alias ..='cd ..'
-alias ..2='cd ../../'
-alias ..3='cd ../../../'
-alias ..4='cd ../../../../'
-alias ..5='cd ../../../../../'
-alias ..6='cd ../../../../../../'
-alias ..7='cd ../../../../../../../'
-alias ..8='cd ../../../../../../../../'
-alias ..9='cd ../../../../../../../../../'
-alias ..10='cd ../../../../../../../../../../'
-
-# Always SSH with X11 forwarding (windows opened on remote display locally)
-alias ssh-x='ssh -X'
-
-# Commands for working with a persistent SSH connection to a server
-alias ssh-open='ssh -M -f -N -o ControlPath=${HOME}/.ssh/ssh-%r-%h-%p'
-alias ssh-close='ssh -S ${HOME}/.ssh/ssh-%r-%h-%p -O exit'
-alias rsync-per='rsync -e "ssh -o ControlPath=${HOME}/.ssh/ssh-%r-%h-%p"'
-alias scp-per='scp -o ControlPath=${HOME}/.ssh/ssh-%r-%h-%p'
-
-# Setup rsync to exclude generated files, and preserve file information.
-# Also setup alises for tracking progress and mirroring directories
-alias rsync='rsync -a --info=progress2 --exclude ".*.swp" --exclude "*.o" \
-             --exclude "*~" --exclude "*.pyc" '
-alias rsync-mirror='rsync --delete --delete-excluded '
-alias rsync-progress='rsync --no-inc-recursive '
-
-# Aliases for text editors
+# Setup a shorter alias for Vim, and setup an alias for Emacs to open in the terminal, instead of a GUI window.
 alias vi='vim'
 alias emacs='emacs24 -nw'
 
-# Show progress when copying data with dd
-alias dd='dd status=progress '
+# Setup the dd command to show progress of the data movement by default.
+alias dd='dd status=progress'
 
-# Safely remove a disk by its device name
-alias safe-remove='udisksctl power-off -b'
+# Setup the dmesg command so that the kernel log messages have human-readable timestamps by default.
+alias dmesg='dmesg -T'
 
-# Download a file in parallel from a website, using multiple (16) connections
-alias parallel-download='aria2c -x 16 -s 16'
+# Setup the remote sync command to preserve all file metadata, show incremental progress, and exclude a set of files by
+# default.
+# TODO: Have rsync use the checksum by default, add explicit -r option, add more preserve options
+RSYNC_EXCLUDED_FILES=(".*.swp" "*.o" "*~" "*.pyc" "__pycache__")
+RSYNC_EXCLUDE=("${RSYNC_EXCLUDED_FILES[@]/#/--exclude }")
+alias rsync="rsync -a --info=progress2 ${RSYNC_EXCLUDE[@]}"
 
-# Aliases for using latex with minted and Pygments syntax highlighters
-alias pdflatex='pdflatex -shell-escape'
-alias latex='latex -shell-escape'
+# Add a remote sync alias to mirror the destination to the source. This means any files present on the destination, but
+# not in the source are deleted (along with excluded files). Normally, these files would remain.
+alias rsync-mirror='rsync --delete --delete-excluded'
 
-# Aliases for shutting down a computer in Wake on LAN mode, and waking up the computers
-# from their Wake on LAN states
-ETH_IFACE=$(ifconfig | grep '^e' | awk '{print $1}')
-alias wol-poweroff="sudo ethtool -s ${ETH_IFACE} wol g && sudo poweroff"
-alias homefs-wol="wakeonlan -i ${HOMEFS_IPADDR} ${HOMEFS_HWADDR}"
-alias forty2-wol="wakeonlan -i ${FORTY2_IPADDR} ${FORTY2_HWADDR}"
+# Add a remote sync alias to display the true progress. Normally, it will only display incremental progress, as it scans
+# directory contents incrementally. This forces the command to first scan the source directories before beginning the
+# transfer, which naturally can require significantly more memory.
+alias rsync-progress='rsync --no-inc-recursive'
 
-# Mount commands for accessing files on the windows drive with a dual boot setup
-alias mountwin='sudo mount -t ntfs /dev/sda2 /mnt/windows -o umask=022'
-alias unmountwin='sudo umount /dev/sda2'
+# Setup several shortcut aliases for navigating up parent directories (one alias for each level of directories). These
+# aliases are of the format ..1, ..2, ..3, etc.
+MAX_DIRS=20
+PARENT_DIR_STRING="../"
+for i in $(seq 1 ${MAX_DIRS})
+do
+    eval "alias ..${i}='cd ${PARENT_DIR_STRING}'"
+    PARENT_DIR_STRING+="../"
+done
 
-# Command for mounting the AFS volume
-alias mount-afs='sudo service openafs-client start && kinit && aklog && aklog andrew.cmu.edu'
-
-# Alias to run a python script with the python debugger (pdb)
-alias python-pdb='python -m pdb'
-
-# Enable command history for smlnj (15-150), C0 (15-122), P18240 Simulator
-alias smlnj='rlwrap sml'
-alias coin='rlwrap coin'
-alias sim240='rlwrap sim240'
-
-# Add safe and debugging aliases for gcc compilation
-SAFE_FLAGS="-Wall -Werror -Wextra -std=gnu99"
-DEBUG_FLAGS="${SAFE_FLAGS} -g -ggdb -O0"
-alias gcc-safe="gcc ${SAFE_FLAGS}"
-alias gcc-debug="gcc ${DEBUG_FLAGS}"
-alias g++-safe="gcc ${SAFE_FLAGS}"
-alias g++-debug="gcc ${DEBUG_FLAGS}"
-
-# Add debug aliases for valgrind and pylint
-alias vgd='valgrind --track-origins=yes --track-fds=yes --leak-check=full'
-alias pylint-dbg='python $(which pylint) -r n --disable=C,R'
-alias pylint3-dbg='python3 $(which pylint3) -r n --disable=C,R'
-
-# Some cross-architecture targets
-alias make-arm='make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-'
-alias make-android='make ARCH=arm CROSS_COMPILE=arm-linux-androideabi-'
-
-# An alias to connect to the board
-alias zynq-console='sudo minicom -D /dev/ttyACM0'
-alias zynq-ssh='ssh root@10.42.0.35'
-
-# Alias to fetch all files under a directory on a website
-alias wget-dir='wget -r -nH -nd -np -e robots=off '
-
-# Alias to flash the FPGA with a new bit file (update the hardware)
-function zynq-remote-flash
-{
-    scp $1 root@${BOARD_IPADDR}:/dev/xdevcfg
-}
-
-# Aliases to compile and copy components
-alias flash-kern='cd ~/school/18545/kernels/xillinux/ &&
-    make-xarm -j8 UIMAGE_LOADADDR=0x8000 uImage &&
-    /bin/cp arch/arm/boot/uImage /media/bmperez/boot/uImage'
-alias flash-dtb='cd ~/school/18545/kernels/xillinux/ && make-xarm dtbs &&
-    /bin/cp arch/arm/boot/dts/zynq-zed.dtb /media/bmperez/boot/devicetree.dtb'
-alias flash-modules='cd ~/school/18545/kernels/xillinux/ && make-xarm -j8 modules &&
-    sudo env "PATH=$PATH" make ARCH=arm CROSS_COMPILE=arm-xilinx-linux-gnueabi- INSTALL_MOD_PATH=/media/bmperez/rootfs/ modules_install'
-alias flash-modules-nfs='cd ~/school/18545/kernels/xillinux/ && make-xarm -j8 modules &&
-    sudo env "PATH=$PATH" make ARCH=arm CROSS_COMPILE=arm-xilinx-linux-gnueabi- INSTALL_MOD_PATH=~/school/18545/filesystems/xillinux_core_fs/ modules_install'
-
-# Alias to sync and unmount the SD boot card
-alias bootumount='sync && umount /media/bmperez/boot /media/bmperez/rootfs'
-
-# Restart Wifi (helps deal with poor/lost connections)
-alias wifi-restart='sudo service network-manager restart'
-
-# Formats a text file according to the preferred style
+# Add an alias to format a text file to use tabs, Unix-style line endings, and strip all extraneous whitespace and extra
+# blank lines (this is implicit in the Vimrc).
+# TODO: Update to a function that can take multiple files
 alias format-text-file='vim -c ":retab" -c "set ff=unix" -c ":wq"'
 
-# Replace the Xilinx tools with aliases that place the logs in a directory
-export VIVADO_LOG_DIR=/tmp/
-function vivado {
-    cd ${VIVADO_LOG_DIR}
-    nohup $(which vivado) "$@" &> /dev/null &
-    cd - &> /dev/null
-}
-function xsdk {
-    cd ${VIVADO_LOG_DIR}
-    nohup $(which xsdk) "$@" &> /dev/null &
-    cd - &> /dev/null
-}
-function vivado_hls {
-    cd ${VIVADO_LOG_DIR}
-    # Don't use the latest GTK version, this causes HLS to crash
-    SWT_GTK3=0 nohup $(which vivado_hls) "$@" &> /dev/null &
-    cd - &> /dev/null
-}
-
-# A convenient command to send a desktop notification when a command finishes
+# Add a function that runs an arbitrary command and sends a desktop notification (Ubuntu only) when the command
+# finishes. The message also reports and exit status.
 function notify {
     nargs=$#
     if [ $# -eq 0 ]; then
@@ -327,7 +233,9 @@ function notify {
     notify-send "Command \`${cmd_name}\` has finished. Exit status was $?."
 }
 
-# Wrapper for chroot that gives you a complete kernel environment
+# Add a change root function that binds parts of the original root file system to the faked root filesystem, and unmount
+# them when done (it is very important that they are unmounted). This provides common kernel pseudofiles, and gives an
+# environment comparable to a virtual machine. This is good for installing packages in a cross-architecture filesystem.
 function chroot-full {
     num_args=$#
     if [ $num_args -ne 1 ]; then
@@ -351,41 +259,64 @@ function chroot-full {
     done
 }
 
-# Mount commands to mount a google drive account as a folder in the user's home
-function mount-gdrive {
-    sudo mkdir -p /mnt/gdrive &&
-    if [ ! -e ~/gdrive ]; then
-        ln -s /mnt/gdrive ~/gdrive
-    fi &&
-    sudo google-drive-ocamlfuse -o default_permissions,allow_other,umask=022 \
-        /mnt/gdrive
+# Add a function that compiles a markdown file into HTML and then renders it in the system default browser.
+function markdown() {
+    pandoc $@ | bcat
 }
-alias umount-gdrive='sudo fusermount -u /mnt/gdrive'
 
-# Replaces commands with aliases that automatically run in the background
-cmds=(evince quartus arduino vmware virtualbox libreoffice gimp \
-      makerware kile qtspim spotify kicad gedit meld keepassx eclipse krop feh \
-      picard)
+# Create functions for commands that will run them in the background, disown them, and redirect their output to
+# /dev/null by default. This is useful for launching GUI commands from the shell.
+# TODO: Update command array name, format function
+cmds=(evince quartus arduino vmware virtualbox libreoffice gimp makerware kile qtspim spotify kicad gedit meld
+        keepassx eclipse krop feh picard)
 for cmd in ${cmds[@]}
 do
     eval "function $cmd { nohup $cmd \"\$@\" &> /dev/null & }"
 done
 
-# Automatically run feh in the background, and scale the image to the screen size
+# Add a function for feh that will scale the image to the screen size by default.
+# TODO: Change to an alias, move feh to cmd list
 function feh {
     nohup $(which feh) --scale-down "$@" &> /dev/null &
 }
 
-# Matlab doesn't cooperate well with nohup, and an alias for the no GUI version
-function matlab {
-    $(which matlab) "$@" &> /dev/null &
-}
-alias matlab-shell="$(which matlab) -nodisplay"
+#-----------------------------------------------------------------------------------------------------------------------
+# SSH and Networking Aliases
+#-----------------------------------------------------------------------------------------------------------------------
 
-# Function to render markdown in a browser tab
-function markdown() {
-    pandoc $@ | bcat
-}
+# Add an alias that restarts the network service. This restarts WiFi and can help deal with poor or lost connections,
+# when the driver and/or software gets into a bad state.
+# TODO: Update to networking
+alias wifi-restart='sudo service network-manager restart'
+
+# Add an SSH alias for setting up X11 forwarding (windows opened on the remote server display locally).
+alias ssh-x='ssh -X'
+
+# Add aliases for opening and closing a persistent SSH connection that can be utilized by multiple commands. The path
+# to the connection file is unique, where %r is the remote user, %h is the remote host, and %p is the port number used.
+SSH_CONNECTION_PATH="\${HOME}/.ssh/ssh-%r-%h-%p"
+alias ssh-open="ssh -M -f -N -o ControlPath=${SSH_CONNECTION_PATH}"
+alias ssh-close="ssh -S ${SSH_CONNECTION_PATH} -O exit"
+
+# Add versions of the remote sync and secure copy commands that utilize a persistent SSH connection previously setup.
+alias rsync-per="rsync -e \"ssh -o ControlPath=${SSH_CONNECTION_PATH}\""
+alias scp-per="scp -o ControlPath=${SSH_CONNECTION_PATH}"
+
+# Add an alias for shutting down a computer in Wake on LAN mode, which allows the computer to be turned on from the
+# network with the appropriate "magic packet".
+ETHERNET_INTERFACE=$(ifconfig | grep '^e' | awk '{print $1}')
+alias wol-poweroff="sudo ethtool -s ${ETHERNET_INTERFACE} wol g && sudo poweroff"
+
+# Add a wake on LAN alias for turning any computers on the local network that were shutdown. One MAC address per machine
+# is needed.
+alias wol-poweron="wakeonlan -i 192.168.2.255"
+
+# Add a web get alias to fetch all the files under a given directory on a website.
+alias wget-dir='wget -r -nH -nd -np -e robots=off'
+
+# Add an alias to download a file in parallel from a website using the maximum possible number of connections.
+MAX_DOWNLOAD_CONNECTIONS=16
+alias parallel-download="aria2c -x ${MAX_DOWNLOAD_CONNECTIONS} -s ${MAX_DOWNLOAD_CONNECTIONS}"
 
 # Function to randomize the MAC address of the given device
 function randomize-mac {
@@ -399,4 +330,127 @@ function randomize-mac {
     sudo ifconfig $device down &&
     sudo macchanger -a ${device} &&
     sudo ifconfig $device up
+}
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Disk Utility Aliases
+#-----------------------------------------------------------------------------------------------------------------------
+
+# Add an alias to safely remove a disk by its device name (e.g. /dev/sdb). This only works for non-USB disks.
+alias safe-remove='udisksctl power-off -b'
+
+# Add an alias to mount Carnegie Mellon University's AFS volume.
+CMU_AFS_DOMAIN="andrew.cmu.edu"
+alias mount-afs="sudo service openafs-client start && kinit && aklog && aklog ${CMU_AFS_DOMAIN}"
+
+# Add aliases for mounting and unmounting the windows partition in a dual boot setup. For safety (to prevent accidental
+# deletions), the partition is mounted with the root as the owner.
+WINDOWS_PARTITION="/dev/sda2"
+alias mountwin="sudo mount -t ntfs ${WINDOWS_PARTITION} /mnt/windows -o umask=022"
+alias unmountwin="sudo umount ${WINDOWS_PARTITION}"
+
+# Add a function and alias for mounting and unmounting a Google Drive account's contents as a folder in the filesystem.
+# For safety (to prevent accidental deletions), the drive is mounted with the root as the owner.
+# TODO: Simplify to an alias
+function mount-gdrive {
+    sudo mkdir -p /mnt/gdrive &&
+
+    if [ ! -e ~/gdrive ]; then
+        ln -s /mnt/gdrive ~/gdrive
+    fi &&
+
+    sudo google-drive-ocamlfuse -o default_permissions,allow_other,umask=022 /mnt/gdrive
+}
+alias umount-gdrive='sudo fusermount -u /mnt/gdrive'
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Programming and Build Tool Aliases
+#-----------------------------------------------------------------------------------------------------------------------
+
+# Add an alias to run a Python script with the Python debugger (PDB), used for line debugging.
+# TODO: Update to not pause when starting
+alias python-pdb='python -m pdb'
+alias python3-pdb='python3 -m pdb'
+
+# Add aliases for GCC and G++ to compile code with strict warnings and to compile code in debug mode.
+# TODO: Update g++ aliases
+GCC_SAFE_FLAGS="-Wall -Werror -Wextra -std=gnu99"
+GCC_DEBUG_FLAGS="${GCC_SAFE_FLAGS} -g -ggdb -O0"
+alias gcc-safe="gcc ${GCC_SAFE_FLAGS}"
+alias gcc-debug="gcc ${GCC_DEBUG_FLAGS}"
+alias g++-safe="gcc ${GCC_SAFE_FLAGS}"
+alias g++-debug="gcc ${GCC_DEBUG_FLAGS}"
+
+# Add an alias for Valgrind that uses the all of the relevant checks for debugging code.
+# TODO: Update name valgrind-debug
+alias vgd='valgrind --track-origins=yes --track-fds=yes --leak-check=full'
+
+# Add an alias for the Python linter that only displays error and warning messages (style guidelines are ignored).
+# TODO: Update to use module instead
+alias pylint-dbg='python $(which pylint) -r n --disable=C,R'
+alias pylint3-dbg='python3 $(which pylint3) -r n --disable=C,R'
+
+# Add shortcut aliases for Make to cross-compile code for ARM and Android.
+alias make-arm='make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-'
+alias make-android='make ARCH=arm CROSS_COMPILE=arm-linux-androideabi-'
+
+# Setup the LaTeX compilation commands to be compatible with the Minted and Pygments syntax highlighters by default.
+alias pdflatex='pdflatex -shell-escape'
+alias latex='latex -shell-escape'
+
+# Setup the SML/NJ compiler, C0 interpreter, and P18240 simulator to be wrapped with the readline library by default,
+# enabling command history for these REPLs.
+# TODO: Update to enable persistent command history
+alias smlnj='rlwrap sml'
+alias coin='rlwrap coin'
+alias sim240='rlwrap sim240'
+
+# Matlab does not cooperate well with disowning, so simply launch the command with its output redirected.
+function matlab {
+    $(which matlab) "$@" &> /dev/null &
+}
+
+# Add an alias for running the command-line (no GUI) version of Matlab.
+alias matlab-shell="$(which matlab) -nodisplay"
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Xilinx Tool Aliases
+#-----------------------------------------------------------------------------------------------------------------------
+
+# IP addresses for this machine and the Zedboard when connected over Ethernet with network sharing.
+export HOST_IPADDR=10.42.0.1
+export ZYNQ_IPADDR=10.42.0.196
+
+# Add aliases for connecting to a Xilinx Zynq device shell over UART (via USB) and over a local Ethernet connection.
+alias zynq-console='sudo minicom -D /dev/ttyACM0'
+alias zynq-ssh="ssh root@${ZYNQ_IPADDR}"
+
+# Add a alias to flash a Zynq device's FPGA with a new hardware image (bit file) over a local Ethernet connection.
+# TODO: Check num arguments, add default value for Zynq IP address.
+function zynq-remote-flash {
+    scp $1 root@${ZYNQ_IPADDR}:/dev/xdevcfg
+}
+
+# Alias to sync and unmount the SD boot card
+# TODO: boot-umount
+alias bootumount='sync && umount /media/bmperez/boot /media/bmperez/rootfs'
+
+# Create functions for the Xilinx to tools to place the log files into a temporary directory by default. This reduces
+# filesystem clutter, as a fair number of logs can be generated.
+export VIVADO_LOG_DIR="/tmp/"
+function vivado {
+    cd ${VIVADO_LOG_DIR}
+    nohup $(which vivado) "$@" &> /dev/null &
+    cd - &> /dev/null
+}
+function xsdk {
+    cd ${VIVADO_LOG_DIR}
+    nohup $(which xsdk) "$@" &> /dev/null &
+    cd - &> /dev/null
+}
+function vivado_hls {
+    cd ${VIVADO_LOG_DIR}
+    # Don't use the latest GTK version, this causes HLS to crash
+    SWT_GTK3=0 nohup $(which vivado_hls) "$@" &> /dev/null &
+    cd - &> /dev/null
 }
