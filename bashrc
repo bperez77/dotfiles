@@ -202,6 +202,14 @@ alias rsync-mirror='rsync --delete --delete-excluded'
 # transfer, which naturally can require significantly more memory.
 alias rsync-progress='rsync --no-inc-recursive'
 
+# Add an alias to format a text file to use tabs, Unix-style line endings, and strip all extraneous whitespace and extra
+# blank lines (this is implicit in the Vimrc).
+# TODO: Update to a function that can take multiple files
+alias format-text-file='vim -c ":retab" -c "set ff=unix" -c ":wq"'
+
+# Setup the Feh image viewing command to scale the image down to the screen size by default.
+alias feh='feh --scale-down'
+
 # Setup several shortcut aliases for navigating up parent directories (one alias for each level of directories). These
 # aliases are of the format ..1, ..2, ..3, etc.
 MAX_DIRS=20
@@ -212,73 +220,84 @@ do
     PARENT_DIR_STRING+="../"
 done
 
-# Add an alias to format a text file to use tabs, Unix-style line endings, and strip all extraneous whitespace and extra
-# blank lines (this is implicit in the Vimrc).
-# TODO: Update to a function that can take multiple files
-alias format-text-file='vim -c ":retab" -c "set ff=unix" -c ":wq"'
-
 # Add a function that runs an arbitrary command and sends a desktop notification (Ubuntu only) when the command
-# finishes. The message also reports and exit status.
-function notify {
-    nargs=$#
-    if [ $# -eq 0 ]; then
+# finishes. The message also reports the exit status.
+# TODO: Add in timing of the command.
+function notify
+{
+    # Check that the proper number of command line arguments was specified.
+    local nargs=$#
+    if [ ${nargs} -eq 0 ]; then
         echo "Error: No command specified."
+        echo "Usage: notify <cmd> [cmd_arg1 cmd_arg2 ...]"
         echo "Usage: notify <cmd> [arg1 arg2 ...]"
         return 1
     fi
-    cmd_name=$(basename $1)
-    cmd="$@"
 
-    $cmd
-    notify-send "Command \`${cmd_name}\` has finished. Exit status was $?."
+    # Get the name of the command (without the path) and the full command.
+    local cmd_name=$(basename ${1})
+    local cmd="${@}"
+
+    # Run the command to completion, and then send a desktop notification when it finishes.
+    ${cmd}
+    notify-send "The command '${cmd_name}' has finished with exit status '${?}'."
 }
 
 # Add a change root function that binds parts of the original root file system to the faked root filesystem, and unmount
 # them when done (it is very important that they are unmounted). This provides common kernel pseudofiles, and gives an
-# environment comparable to a virtual machine. This is good for installing packages in a cross-architecture filesystem.
-function chroot-full {
-    num_args=$#
-    if [ $num_args -ne 1 ]; then
+# environment comparable to a virtual machine when combined with the QEMU static binary.
+function chroot-full
+{
+    # Check that the user has specified the proper number of command line arguments.
+    local num_args=${#}
+    if [ ${num_args} -ne 1 ]; then
         echo "Error: Improper number of command line arguments"
-        echo "Usage: chroot-full <corefs_path>"
-        return
+        echo "Usage: $(basename ${0}) <new_root_path>"
+        return 1
     fi
 
-    fs_root=$1
+    # Get the new root to use the filesystem, and declare the mount points to bind.
+    local fs_root="${1}"
+    local mount_points=("/sys" "/proc" "/dev" "/dev/pts" "/etc/resolv.conf")
 
-    for mod in /sys /proc /dev /dev/pts /etc/resolv.conf
+    # Bind the mount points from the original filesystem to the faked root filesystem.
+    for mount_point in "${mount_points[@]}"
     do
-        sudo mount -o bind $mod "$fs_root/$mod"
+        sudo mount -o bind ${mount_point} "${fs_root}/${mount_point}"
     done
 
-    sudo LC_ALL=C chroot "$fs_root"
+    # Change the root directory to the specified location, forcing the use of the C locale.
+    sudo LC_ALL=C chroot "${fs_root}"
 
-    for dev in /sys /proc /dev/pts /dev /etc/resolv.conf
+    # Unmount all of the binded mount points from the faked root filesystem.
+    for mount_point in "${mount_points[@]}"
     do
-        sudo umount "$fs_root/$dev"
+        exit_status=1
+        while [ ${exit_status} -ne 0]
+        do
+            sudo umount "${fs_root}/${mount_point}"
+            exit_status=${?}
+        done
     done
 }
 
 # Add a function that compiles a markdown file into HTML and then renders it in the system default browser.
-function markdown() {
-    pandoc $@ | bcat
+function markdown-view
+{
+    pandoc "${@}" | bcat
 }
 
 # Create functions for commands that will run them in the background, disown them, and redirect their output to
 # /dev/null by default. This is useful for launching GUI commands from the shell.
-# TODO: Update command array name, format function
-cmds=(evince quartus arduino vmware virtualbox libreoffice gimp makerware kile qtspim spotify kicad gedit meld
+# TODO: Add printing out of command output if command does not complete successfully
+GUI_COMMANDS=(evince quartus arduino vmware virtualbox libreoffice gimp makerware kile qtspim spotify kicad gedit meld
         keepassx eclipse krop feh picard)
-for cmd in ${cmds[@]}
+for cmd in "${GUI_COMMANDS[@]}"
 do
-    eval "function $cmd { nohup $cmd \"\$@\" &> /dev/null & }"
+    eval "function $cmd {
+        nohup $cmd \"\$@\" &> /dev/null &
+    }"
 done
-
-# Add a function for feh that will scale the image to the screen size by default.
-# TODO: Change to an alias, move feh to cmd list
-function feh {
-    nohup $(which feh) --scale-down "$@" &> /dev/null &
-}
 
 #-----------------------------------------------------------------------------------------------------------------------
 # SSH and Networking Aliases
