@@ -230,7 +230,6 @@ function notify
     if [ ${nargs} -eq 0 ]; then
         echo "Error: No command specified."
         echo "Usage: notify <cmd> [cmd_arg1 cmd_arg2 ...]"
-        echo "Usage: notify <cmd> [arg1 arg2 ...]"
         return 1
     fi
 
@@ -305,8 +304,7 @@ done
 
 # Add an alias that restarts the network service. This restarts WiFi and can help deal with poor or lost connections,
 # when the driver and/or software gets into a bad state.
-# TODO: Update to networking
-alias wifi-restart='sudo service network-manager restart'
+alias wifi-restart='sudo service networking restart'
 
 # Add an SSH alias for setting up X11 forwarding (windows opened on the remote server display locally).
 alias ssh-x='ssh -X'
@@ -368,46 +366,34 @@ WINDOWS_PARTITION="/dev/sda2"
 alias mountwin="sudo mount -t ntfs ${WINDOWS_PARTITION} /mnt/windows -o umask=022"
 alias unmountwin="sudo umount ${WINDOWS_PARTITION}"
 
-# Add a function and alias for mounting and unmounting a Google Drive account's contents as a folder in the filesystem.
-# For safety (to prevent accidental deletions), the drive is mounted with the root as the owner.
-# TODO: Simplify to an alias
-function mount-gdrive {
-    sudo mkdir -p /mnt/gdrive &&
-
-    if [ ! -e ~/gdrive ]; then
-        ln -s /mnt/gdrive ~/gdrive
-    fi &&
-
-    sudo google-drive-ocamlfuse -o default_permissions,allow_other,umask=022 /mnt/gdrive
-}
-alias umount-gdrive='sudo fusermount -u /mnt/gdrive'
+# Add aliases for mounting and unmounting a Google Drive account's contents as a folder in the filesystem. For safety
+# (to prevent accidental deletions), the drive is mounted with the root as the owner.
+GDRIVE_MOUNT="/mnt/gdrive"
+alias mount-gdrive="sudo google-drive-ocamlfuse -o default_permissions,allow_other,umask=022 ${GDRIVE_MOUNT}"
+alias umount-gdrive="sudo fusermount -u ${GDRIVE_MOUNT}"
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Programming and Build Tool Aliases
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Add an alias to run a Python script with the Python debugger (PDB), used for line debugging.
-# TODO: Update to not pause when starting
-alias python-pdb='python -m pdb'
-alias python3-pdb='python3 -m pdb'
+alias python-pdb='python -m pdb -c continue'
+alias python3-pdb='python3 -m pdb -c continue'
 
 # Add aliases for GCC and G++ to compile code with strict warnings and to compile code in debug mode.
-# TODO: Update g++ aliases
 GCC_SAFE_FLAGS="-Wall -Werror -Wextra -std=gnu99"
 GCC_DEBUG_FLAGS="${GCC_SAFE_FLAGS} -g -ggdb -O0"
 alias gcc-safe="gcc ${GCC_SAFE_FLAGS}"
 alias gcc-debug="gcc ${GCC_DEBUG_FLAGS}"
-alias g++-safe="gcc ${GCC_SAFE_FLAGS}"
-alias g++-debug="gcc ${GCC_DEBUG_FLAGS}"
+alias g++-safe="g++ ${GCC_SAFE_FLAGS}"
+alias g++-debug="g++ ${GCC_DEBUG_FLAGS}"
 
 # Add an alias for Valgrind that uses the all of the relevant checks for debugging code.
-# TODO: Update name valgrind-debug
-alias vgd='valgrind --track-origins=yes --track-fds=yes --leak-check=full'
+alias valgrind-debug='valgrind --track-origins=yes --track-fds=yes --leak-check=full'
 
 # Add an alias for the Python linter that only displays error and warning messages (style guidelines are ignored).
-# TODO: Update to use module instead
-alias pylint-dbg='python $(which pylint) -r n --disable=C,R'
-alias pylint3-dbg='python3 $(which pylint3) -r n --disable=C,R'
+alias pylint-dbg='python -m pylint -r n --disable=C,R'
+alias pylint3-dbg='python3 -m pylint -r n --disable=C,R'
 
 # Add shortcut aliases for Make to cross-compile code for ARM and Android.
 alias make-arm='make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-'
@@ -425,7 +411,8 @@ alias coin='rlwrap coin'
 alias sim240='rlwrap sim240'
 
 # Matlab does not cooperate well with disowning, so simply launch the command with its output redirected.
-function matlab {
+function matlab
+{
     $(which matlab) "$@" &> /dev/null &
 }
 
@@ -451,8 +438,7 @@ function zynq-remote-flash {
 }
 
 # Alias to sync and unmount the SD boot card
-# TODO: boot-umount
-alias bootumount='sync && umount /media/bmperez/boot /media/bmperez/rootfs'
+alias boot-umount='sync && umount /media/bmperez/boot /media/bmperez/rootfs'
 
 # Create functions for the Xilinx to tools to place the log files into a temporary directory by default. This reduces
 # filesystem clutter, as a fair number of logs can be generated.
