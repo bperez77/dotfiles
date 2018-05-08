@@ -191,7 +191,8 @@ alias dmesg='dmesg -T'
 # TODO: Have rsync use the checksum by default, add explicit -r option, add more preserve options
 RSYNC_EXCLUDED_FILES=(".*.swp" "*.o" "*~" "*.pyc" "__pycache__")
 RSYNC_EXCLUDE=("${RSYNC_EXCLUDED_FILES[@]/#/--exclude }")
-alias rsync="rsync -a --info=progress2 ${RSYNC_EXCLUDE[@]}"
+alias rsync="rsync --recursive --archive --hard-links --acls --xattrs --checksum --human-readable --human-readable \
+        --info=progress2 ${RSYNC_EXCLUDE[@]}"
 
 # Add a remote sync alias to mirror the destination to the source. This means any files present on the destination, but
 # not in the source are deleted (along with excluded files). Normally, these files would remain.
