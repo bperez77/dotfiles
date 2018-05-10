@@ -350,18 +350,19 @@ MAX_DOWNLOAD_CONNECTIONS=16
 alias parallel-download="aria2c --max-connection-per-server=${MAX_DOWNLOAD_CONNECTIONS} --split=${MAX_DOWNLOAD_CONNECTIONS}"
 
 # Function to randomize the MAC address of the given device
-# TODO: UPdate
-function randomize-mac {
-    if [ $# -ne 1 ]; then
-        echo "Error: Improper number of command line arguments."
-        echo "randomize-mac <device>"
+function randomize-mac
+{
+    nargs=${#}
+    if [ $nargs -ne 1 ]; then
+        echo "Error: Improper number of command line arguments specified."
+        echo "Usage: randomize-mac <device>"
         return 1
     fi
 
-    device=$1
-    sudo ifconfig $device down &&
-    sudo macchanger -a ${device} &&
-    sudo ifconfig $device up
+    device="${1}"
+    sudo ifconfig "${device}" down &&
+    (sudo macchanger --another "${device}"
+    sudo ifconfig "${device}" up)
 }
 
 #-----------------------------------------------------------------------------------------------------------------------
