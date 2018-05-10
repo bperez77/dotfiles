@@ -433,49 +433,57 @@ done
 # Matlab does not cooperate well with disowning, so simply launch the command with its output redirected.
 function matlab
 {
-    $(which matlab) "$@" &> /dev/null &
+    matlab "$@" &> /dev/null &
 }
 
 # Add an alias for running the command-line (no GUI) version of Matlab.
-alias matlab-shell="$(which matlab) -nodisplay"
+alias matlab-shell='command matlab -nodisplay'
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Xilinx Tool Aliases
 #-----------------------------------------------------------------------------------------------------------------------
 
 # IP addresses for this machine and the Zedboard when connected over Ethernet with network sharing.
-export HOST_IPADDR=10.42.0.1
-export ZYNQ_IPADDR=10.42.0.196
+export HOST_IP_ADDR=10.42.0.1
+export ZYNQ_IP_ADDR=10.42.0.196
 
 # Add aliases for connecting to a Xilinx Zynq device shell over UART (via USB) and over a local Ethernet connection.
 alias zynq-console='sudo minicom --device /dev/ttyACM0'
-alias zynq-ssh="ssh root@${ZYNQ_IPADDR}"
-
-# Add a alias to flash a Zynq device's FPGA with a new hardware image (bit file) over a local Ethernet connection.
-# TODO: Check num arguments, add default value for Zynq IP address.
-function zynq-remote-flash {
-    scp $1 root@${ZYNQ_IPADDR}:/dev/xdevcfg
-}
+alias zynq-ssh="ssh root@${ZYNQ_IP_ADDR}"
 
 # Alias to sync and unmount the SD boot card
 alias boot-umount='sync && umount /media/bmperez/boot /media/bmperez/rootfs'
 
-# Create functions for the Xilinx to tools to place the log files into a temporary directory by default. This reduces
-# filesystem clutter, as a fair number of logs can be generated.
+# Add a alias to flash a Zynq device's FPGA with a new hardware image (bit file) over a local Ethernet connection.
+function zynq-remote-flash
+{
+    nargs=${#}
+    if [ ${nargs} -lt 1 -o ${nargs} -gt 2 ]; then
+        echo "Error: Improper number of command line arguments specified."
+        echo "Usage: zynq-remote-flash <bit_image_file> [zynq_ip_addr]"
+        return 1
+    fi
+
+    # Get the values of the arguments
+    bit_image_file="${1}"
+    if [ ${nargs} -eq 2 ]; then
+        zynq_ip_addr="${2}"
+    else
+        zynq_ip_addr=${ZYNQ_IP_ADDR}
+    fi
+
+    scp "${bit_image_file}" root@"${zynq_ip_addr}":/dev/xdevcfg
+}
+
+# Create functions for the Xilinx tools that runs them as GUI commands. Also, setup the commands to be launched in a
+# temporary directory so the log files do not clutter the filesystem, as these tools generate a fair number of them.
 export VIVADO_LOG_DIR="/tmp/"
-function vivado {
-    cd ${VIVADO_LOG_DIR}
-    nohup $(which vivado) "$@" &> /dev/null &
-    cd - &> /dev/null
-}
-function xsdk {
-    cd ${VIVADO_LOG_DIR}
-    nohup $(which xsdk) "$@" &> /dev/null &
-    cd - &> /dev/null
-}
-function vivado_hls {
-    cd ${VIVADO_LOG_DIR}
-    # Don't use the latest GTK version, this causes HLS to crash
-    SWT_GTK3=0 nohup $(which vivado_hls) "$@" &> /dev/null &
-    cd - &> /dev/null
-}
+VIVADO_COMMANDS=(vivado xsdk vivado_hls)
+for cmd in "${VIVADO_COMMANDS[@]}"
+do
+    eval "function ${cmd} {
+        cd '${VIVADO_LOG_DIR}'
+        nohup ${cmd} \"${@}\" &> /dev/null &
+        cd - &> /dev/null
+    }"
+done
