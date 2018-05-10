@@ -184,6 +184,7 @@ alias emacs='emacs24 --no-window-system'
 alias dd='dd status=progress'
 
 # Setup the dmesg command so that the kernel log messages have human-readable timestamps by default.
+# TODO: Update options
 alias dmesg='dmesg --ctime'
 
 # Setup the remote sync command to preserve all file metadata, show incremental progress, and exclude a set of files by
@@ -317,7 +318,7 @@ alias ssh-open="ssh -M -f -N -o ControlPath=${SSH_CONNECTION_PATH}"
 alias ssh-close="ssh -S ${SSH_CONNECTION_PATH} -O exit"
 
 # Add versions of the remote sync and secure copy commands that utilize a persistent SSH connection previously setup.
-alias rsync-per="rsync -e \"ssh -o ControlPath=${SSH_CONNECTION_PATH}\""
+alias rsync-per="rsync --rsh=\"ssh -o ControlPath=${SSH_CONNECTION_PATH}\""
 alias scp-per="scp -o ControlPath=${SSH_CONNECTION_PATH}"
 
 # Add an alias for shutting down a computer in Wake on LAN mode, which allows the computer to be turned on from the
@@ -330,13 +331,14 @@ alias wol-poweroff="sudo ethtool -s ${ETHERNET_INTERFACE} wol g && sudo poweroff
 alias wol-poweron="wakeonlan -i 192.168.2.255"
 
 # Add a web get alias to fetch all the files under a given directory on a website.
-alias wget-dir='wget -r -nH -nd -np -e robots=off'
+alias wget-dir='wget --recursive i--no-host-directories --no-directories --no-parent --execute robots=off'
 
 # Add an alias to download a file in parallel from a website using the maximum possible number of connections.
 MAX_DOWNLOAD_CONNECTIONS=16
-alias parallel-download="aria2c -x ${MAX_DOWNLOAD_CONNECTIONS} -s ${MAX_DOWNLOAD_CONNECTIONS}"
+alias parallel-download="aria2c --max-connection-per-server=${MAX_DOWNLOAD_CONNECTIONS} --split=${MAX_DOWNLOAD_CONNECTIONS}"
 
 # Function to randomize the MAC address of the given device
+# TODO: UPdate
 function randomize-mac {
     if [ $# -ne 1 ]; then
         echo "Error: Improper number of command line arguments."
