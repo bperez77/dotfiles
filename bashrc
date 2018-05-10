@@ -419,12 +419,16 @@ alias make-android='make ARCH=arm CROSS_COMPILE=arm-linux-androideabi-'
 alias pdflatex='pdflatex -shell-escape'
 alias latex='latex -shell-escape'
 
-# Setup the SML/NJ compiler, C0 interpreter, and P18240 simulator to be wrapped with the readline library by default,
-# enabling command history for these REPLs.
-# TODO: Update to enable persistent command history
-alias smlnj='rlwrap sml'
-alias coin='rlwrap coin'
-alias sim240='rlwrap sim240'
+# Setup rlwrap so that it maintains a large history, doesn't repeat duplicates, and handles ANSI color codes by default.
+alias rlwrap='rlwrap --histsize 1000000 --history-no-dupes 2 --ansi-colour-aware'
+
+# Create aliases for commands that will wrap them with the readline library. This is useful for commands that utilize a
+# REPL, but do not provide readline functionality. This will give the commands persistent history and tab completion.
+RLWRAP_COMMANDS=(smlnj coin sim240)
+for cmd in "${RLWRAP_COMMANDS[@]}"
+do
+    eval "alias ${cmd}='rlwrap --history-filename \"${HOME}/.$(basename ${cmd})_history\" ${cmd}'"
+done
 
 # Matlab does not cooperate well with disowning, so simply launch the command with its output redirected.
 function matlab
