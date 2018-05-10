@@ -189,7 +189,6 @@ alias dmesg='dmesg --ctime'
 
 # Setup the remote sync command to preserve all file metadata, show incremental progress, and exclude a set of files by
 # default.
-# TODO: Have rsync use the checksum by default, add explicit -r option, add more preserve options
 RSYNC_EXCLUDED_FILES=(".*.swp" "*.o" "*~" "*.pyc" "__pycache__")
 RSYNC_EXCLUDE=("${RSYNC_EXCLUDED_FILES[@]/#/--exclude }")
 alias rsync="rsync --recursive --archive --hard-links --acls --xattrs --checksum --human-readable --human-readable \
@@ -204,11 +203,6 @@ alias rsync-mirror='rsync --delete --delete-excluded'
 # transfer, which naturally can require significantly more memory.
 alias rsync-progress='rsync --no-inc-recursive'
 
-# Add an alias to format a text file to use tabs, Unix-style line endings, and strip all extraneous whitespace and extra
-# blank lines (this is implicit in the Vimrc).
-# TODO: Update to a function that can take multiple files
-alias format-text-file='vim -c ":retab" -c "set ff=unix" -c ":wq"'
-
 # Setup the Feh image viewing command to scale the image down to the screen size by default.
 alias feh='feh --scale-down'
 
@@ -221,6 +215,24 @@ do
     eval "alias ..${i}='cd ${PARENT_DIR_STRING}'"
     PARENT_DIR_STRING+="../"
 done
+
+# Format a list of one or more text files according to the standard format. This converts all tabs to spaces, line
+# endings to Unix-style, and strips all extraneous whitespace and extra blank lines (this is implicit in the Vimrc).
+function format-text-files
+{
+    nargs=${#}
+    if [ ${nargs} -eq 0 ]; then
+        echo "Error: No text files specified."
+        echo "Usage: $(basename ${0}) <text_file1> [text_file2 text_file3 ...]"
+        return 1
+    fi
+
+    text_files=("${@}")
+    for text_file in "${text_files[@]}"
+    do
+        vim -c ':retab' -c 'set ff=unix' -c ':wq' ${text_file}
+    done
+}
 
 # Add a function that runs an arbitrary command and sends a desktop notification (Ubuntu only) when the command
 # finishes. The message also reports the exit status.
