@@ -92,7 +92,7 @@ shopt -s extglob
 # Allow for the recursive '**' glob pattern, which matches to 0 or more subdirectories (in a file expansion context).
 shopt -s globstar
 
-# Fix simple spelling errors when using the `cd` command.
+# Fix simple spelling errors when using the change directory command.
 shopt -s cdspell
 
 # Fix simple spelling errors when using tab completion on directories.
@@ -116,7 +116,7 @@ PS1="${GREEN}"'[\u@\h '"${YELLOW}"'\w'"${CYAN}"'$(__git_ps1)'"${GREEN}]\\$ ${NOR
 #-----------------------------------------------------------------------------------------------------------------------
 
 # The startup file to use before running Python. This enables persistent Python command history and tab completion.
-export PYTHONSTARTUP=${HOME}/.pythonstartup
+export PYTHONSTARTUP="${HOME}/.pythonstartup"
 
 # Add locally installed go programs for the user to the list of paths for Go programs and their binaries.
 export GOPATH="${GOPATH}:${HOME}/.go"
@@ -138,8 +138,8 @@ export PATH="${PATH}:/opt/Altera/15.1/quartus/bin/"
 export PATH="${PATH}:/opt/eagle-7.5.0/bin/"
 
 # Add the various Xilinx tools (Vivado, HLS, SDK, cross-compiler) to the path.
-XILINX_ROOT=/opt/Xilinx/
-XILINX_VERSION=2017.2
+XILINX_ROOT="/opt/Xilinx/"
+XILINX_VERSION="2017.2"
 export PATH="${PATH}:${XILINX_ROOT}/Vivado/${XILINX_VERSION}/bin/"
 export PATH="${PATH}:${XILINX_ROOT}/SDK/${XILINX_VERSION}/gnu/arm/lin/bin/"
 export PATH="${PATH}:${XILINX_ROOT}/SDK/${XILINX_VERSION}/bin/"
@@ -166,25 +166,25 @@ alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
 # Add some shortcut aliases for default options for the ls command. This includes adding displaying of metadata.
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+alias ll='ls --almost-all --classify -l'
+alias la='ls --all --classify -l'
+alias l='ls -C --classify'
 
 # Make sure that the remove, move, and copy commands prompt before deleting/overwriting files by default. Also, make
 # sure the copy command preserves all the properties of the files it copies by default.
-alias rm='rm -i'
-alias mv='mv -i'
-alias cp='cp -i -d --preserve=all'
+alias rm='rm --interactive'
+alias mv='mv --interactive'
+alias cp='cp --archive --interactive'
 
 # Setup a shorter alias for Vim, and setup an alias for Emacs to open in the terminal, instead of a GUI window.
 alias vi='vim'
-alias emacs='emacs24 -nw'
+alias emacs='emacs24 --no-window-system'
 
 # Setup the dd command to show progress of the data movement by default.
 alias dd='dd status=progress'
 
 # Setup the dmesg command so that the kernel log messages have human-readable timestamps by default.
-alias dmesg='dmesg -T'
+alias dmesg='dmesg --ctime'
 
 # Setup the remote sync command to preserve all file metadata, show incremental progress, and exclude a set of files by
 # default.
