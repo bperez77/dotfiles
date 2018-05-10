@@ -357,7 +357,7 @@ function randomize-mac {
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Add an alias to safely remove a disk by its device name (e.g. /dev/sdb). This only works for non-USB disks.
-alias safe-remove='udisksctl power-off -b'
+alias safe-remove='udisksctl power-off --block-device'
 
 # Add an alias to mount Carnegie Mellon University's AFS volume.
 CMU_AFS_DOMAIN="andrew.cmu.edu"
@@ -366,7 +366,7 @@ alias mount-afs="sudo service openafs-client start && kinit && aklog && aklog ${
 # Add aliases for mounting and unmounting the windows partition in a dual boot setup. For safety (to prevent accidental
 # deletions), the partition is mounted with the root as the owner.
 WINDOWS_PARTITION="/dev/sda2"
-alias mountwin="sudo mount -t ntfs ${WINDOWS_PARTITION} /mnt/windows -o umask=022"
+alias mountwin="sudo mount --types ntfs --options umask=022 ${WINDOWS_PARTITION} /mnt/windows"
 alias unmountwin="sudo umount ${WINDOWS_PARTITION}"
 
 # Add aliases for mounting and unmounting a Google Drive account's contents as a folder in the filesystem. For safety
@@ -395,8 +395,8 @@ alias g++-debug="g++ ${GCC_DEBUG_FLAGS}"
 alias valgrind-debug='valgrind --track-origins=yes --track-fds=yes --leak-check=full'
 
 # Add an alias for the Python linter that only displays error and warning messages (style guidelines are ignored).
-alias pylint-dbg='python -m pylint -r n --disable=C,R'
-alias pylint3-dbg='python3 -m pylint -r n --disable=C,R'
+alias pylint-dbg='python -m pylint --reports=no --disable=C,R'
+alias pylint3-dbg='python3 -m pylint --reports=no --disable=C,R'
 
 # Add shortcut aliases for Make to cross-compile code for ARM and Android.
 alias make-arm='make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-'
@@ -431,7 +431,7 @@ export HOST_IPADDR=10.42.0.1
 export ZYNQ_IPADDR=10.42.0.196
 
 # Add aliases for connecting to a Xilinx Zynq device shell over UART (via USB) and over a local Ethernet connection.
-alias zynq-console='sudo minicom -D /dev/ttyACM0'
+alias zynq-console='sudo minicom --device /dev/ttyACM0'
 alias zynq-ssh="ssh root@${ZYNQ_IPADDR}"
 
 # Add a alias to flash a Zynq device's FPGA with a new hardware image (bit file) over a local Ethernet connection.
