@@ -49,14 +49,14 @@ export HISTFILESIZE==-1
 export HISTCONTROL="erasedups:ignoredups"
 
 # Create the list of commands to ignore when they are used without any arguments (including options without arguments).
-IGNORED_NOARG_COMMANDS=(python make ls ll dir cd "git log" "git clean" "git status" "git pull" "git diff")
+IGNORED_NOARG_COMMANDS=(python make ls ll dir cd 'git log' 'git clean' 'git status' 'git pull' 'git diff')
 for cmd in "${IGNORED_NOARG_COMMANDS[@]}"
 do
     IGNORED_COMMANDS+=":*([ \t])${cmd}*([0-9-_.])*([ \t])"
 done
 
 # Add the list of commands to ignore even when they are used with arguments. These are ones not worth repeating.
-IGNORED_ARG_COMMANDS=(bg fg exit history man vman kill "cd -")
+IGNORED_ARG_COMMANDS=(bg fg exit history man vman kill 'cd -')
 for cmd in "${IGNORED_ARG_COMMANDS[@]}"
 do
     IGNORED_COMMANDS+=":*([ \t])${cmd}*"
@@ -138,8 +138,8 @@ export PATH="${PATH}:/opt/Altera/15.1/quartus/bin/"
 export PATH="${PATH}:/opt/eagle-7.5.0/bin/"
 
 # Add the various Xilinx tools (Vivado, HLS, SDK, cross-compiler) to the path.
-XILINX_ROOT="/opt/Xilinx/"
-XILINX_VERSION="2017.2"
+XILINX_ROOT='/opt/Xilinx/'
+XILINX_VERSION='2017.2'
 export PATH="${PATH}:${XILINX_ROOT}/Vivado/${XILINX_VERSION}/bin/"
 export PATH="${PATH}:${XILINX_ROOT}/SDK/${XILINX_VERSION}/gnu/arm/lin/bin/"
 export PATH="${PATH}:${XILINX_ROOT}/SDK/${XILINX_VERSION}/bin/"
@@ -188,7 +188,7 @@ alias dmesg='dmesg --ctime --color=always'
 
 # Setup the remote sync command to preserve all file metadata, show incremental progress, and exclude a set of files by
 # default.
-RSYNC_EXCLUDED_FILES=(".*.swp" "*.o" "*~" "*.pyc" "__pycache__")
+RSYNC_EXCLUDED_FILES=('.*.swp' '*.o' '*~' '*.pyc' '__pycache__')
 RSYNC_EXCLUDE=("${RSYNC_EXCLUDED_FILES[@]/#/--exclude }")
 alias rsync="rsync --recursive --archive --hard-links --acls --xattrs --checksum --human-readable --human-readable \
         --info=progress2 ${RSYNC_EXCLUDE[@]}"
@@ -221,8 +221,8 @@ function format-text-files
 {
     nargs=${#}
     if [ ${nargs} -eq 0 ]; then
-        echo "Error: No text files specified."
-        echo "Usage: $(basename ${0}) <text_file1> [text_file2 text_file3 ...]"
+        echo 'Error: No text files specified.'
+        echo 'Usage: $(basename ${0}) <text_file1> [text_file2 text_file3 ...]'
         return 1
     fi
 
@@ -240,8 +240,8 @@ function notify-complete
     # Check that the proper number of command line arguments was specified.
     local nargs=$#
     if [ ${nargs} -eq 0 ]; then
-        echo "Error: No command specified."
-        echo "Usage: notify <cmd> [cmd_arg1 cmd_arg2 ...]"
+        echo 'Error: No command specified.'
+        echo 'Usage: notify <cmd> [cmd_arg1 cmd_arg2 ...]'
         return 1
     fi
 
@@ -262,14 +262,14 @@ function chroot-full
     # Check that the user has specified the proper number of command line arguments.
     local num_args=${#}
     if [ ${num_args} -ne 1 ]; then
-        echo "Error: Improper number of command line arguments"
-        echo "Usage: $(basename ${0}) <new_root_path>"
+        echo 'Error: Improper number of command line arguments'
+        echo 'Usage: $(basename ${0}) <new_root_path>'
         return 1
     fi
 
     # Get the new root to use the filesystem, and declare the mount points to bind.
     local fs_root="${1}"
-    local mount_points=("/sys" "/proc" "/dev" "/dev/pts" "/etc/resolv.conf")
+    local mount_points=('/sys' '/proc' '/dev' '/dev/pts' '/etc/resolv.conf')
 
     # Bind the mount points from the original filesystem to the faked root filesystem.
     for mount_point in "${mount_points[@]}"
@@ -322,7 +322,7 @@ alias ssh-x='ssh -X'
 
 # Add aliases for opening and closing a persistent SSH connection that can be utilized by multiple commands. The path
 # to the connection file is unique, where %r is the remote user, %h is the remote host, and %p is the port number used.
-SSH_CONNECTION_PATH="\${HOME}/.ssh/ssh-%r-%h-%p"
+SSH_CONNECTION_PATH='${HOME}/.ssh/ssh-%r-%h-%p'
 alias ssh-open="ssh -M -f -N -o ControlPath=${SSH_CONNECTION_PATH}"
 alias ssh-close="ssh -S ${SSH_CONNECTION_PATH} -O exit"
 
@@ -337,7 +337,7 @@ alias wol-poweroff="sudo ethtool -s ${ETHERNET_INTERFACE} wol g && sudo poweroff
 
 # Add a wake on LAN alias for turning any computers on the local network that were shutdown. One MAC address per machine
 # is needed.
-alias wol-poweron="wakeonlan -i 192.168.2.255"
+alias wol-poweron='wakeonlan -i 192.168.2.255'
 
 # Add a web get alias to fetch all the files under a given directory on a website.
 alias wget-dir='wget --recursive i--no-host-directories --no-directories --no-parent --execute robots=off'
@@ -351,8 +351,8 @@ function randomize-mac
 {
     nargs=${#}
     if [ $nargs -ne 1 ]; then
-        echo "Error: Improper number of command line arguments specified."
-        echo "Usage: randomize-mac <device>"
+        echo 'Error: Improper number of command line arguments specified.'
+        echo 'Usage: randomize-mac <device>'
         return 1
     fi
 
@@ -370,18 +370,18 @@ function randomize-mac
 alias safe-remove='udisksctl power-off --block-device'
 
 # Add an alias to mount Carnegie Mellon University's AFS volume.
-CMU_AFS_DOMAIN="andrew.cmu.edu"
+CMU_AFS_DOMAIN='andrew.cmu.edu'
 alias mount-afs="sudo service openafs-client start && kinit && aklog && aklog ${CMU_AFS_DOMAIN}"
 
 # Add aliases for mounting and unmounting the windows partition in a dual boot setup. For safety (to prevent accidental
 # deletions), the partition is mounted with the root as the owner.
-WINDOWS_PARTITION="/dev/sda2"
+WINDOWS_PARTITION='/dev/sda2'
 alias mountwin="sudo mount --types ntfs --options umask=022 ${WINDOWS_PARTITION} /mnt/windows"
 alias unmountwin="sudo umount ${WINDOWS_PARTITION}"
 
 # Add aliases for mounting and unmounting a Google Drive account's contents as a folder in the filesystem. For safety
 # (to prevent accidental deletions), the drive is mounted with the root as the owner.
-GDRIVE_MOUNT="/mnt/gdrive"
+GDRIVE_MOUNT='/mnt/gdrive'
 alias mount-gdrive="sudo google-drive-ocamlfuse -o default_permissions,allow_other,umask=022 ${GDRIVE_MOUNT}"
 alias umount-gdrive="sudo fusermount -u ${GDRIVE_MOUNT}"
 
@@ -394,7 +394,7 @@ alias python-pdb='python -m pdb -c continue'
 alias python3-pdb='python3 -m pdb -c continue'
 
 # Add aliases for GCC and G++ to compile code with strict warnings and to compile code in debug mode.
-GCC_SAFE_FLAGS="-Wall -Werror -Wextra -std=gnu99"
+GCC_SAFE_FLAGS='-Wall -Werror -Wextra -std=gnu99'
 GCC_DEBUG_FLAGS="${GCC_SAFE_FLAGS} -g -ggdb -O0"
 alias gcc-safe="gcc ${GCC_SAFE_FLAGS}"
 alias gcc-debug="gcc ${GCC_DEBUG_FLAGS}"
@@ -457,8 +457,8 @@ function zynq-remote-flash
 {
     nargs=${#}
     if [ ${nargs} -lt 1 -o ${nargs} -gt 2 ]; then
-        echo "Error: Improper number of command line arguments specified."
-        echo "Usage: zynq-remote-flash <bit_image_file> [zynq_ip_addr]"
+        echo 'Error: Improper number of command line arguments specified.'
+        echo 'Usage: zynq-remote-flash <bit_image_file> [zynq_ip_addr]'
         return 1
     fi
 
@@ -475,7 +475,7 @@ function zynq-remote-flash
 
 # Create functions for the Xilinx tools that runs them as GUI commands. Also, setup the commands to be launched in a
 # temporary directory so the log files do not clutter the filesystem, as these tools generate a fair number of them.
-export VIVADO_LOG_DIR="/tmp/"
+VIVADO_LOG_DIR='/tmp/'
 VIVADO_COMMANDS=(vivado xsdk vivado_hls)
 for cmd in "${VIVADO_COMMANDS[@]}"
 do
