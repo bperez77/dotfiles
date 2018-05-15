@@ -73,6 +73,10 @@ export HISTTIMEFORMAT='%D:%T'
 # shared history file.
 export PROMPT_COMMAND="history -a; ${PROMPT_COMMAND}"
 
+# When executing a pipeline of commands, the exit code of the pipeline is from rightmost command to exit with a non-zero
+# exit status, or 0 if all commands are successful. Normally, the exit code simply comes from the last command.
+set -o pipefail
+
 # Tells the shell to append to the history file on exit, rather than overwriting it. This ensures that the history is
 # saved across multiple sessions of the shell.
 shopt -s cmdhist
