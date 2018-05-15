@@ -184,8 +184,7 @@ alias emacs='emacs24 --no-window-system'
 alias dd='dd status=progress'
 
 # Setup the dmesg command so that the kernel log messages have human-readable timestamps by default.
-# TODO: Update options
-alias dmesg='dmesg --ctime'
+alias dmesg='dmesg --ctime --color=always'
 
 # Setup the remote sync command to preserve all file metadata, show incremental progress, and exclude a set of files by
 # default.
@@ -236,8 +235,7 @@ function format-text-files
 
 # Add a function that runs an arbitrary command and sends a desktop notification (Ubuntu only) when the command
 # finishes. The message also reports the exit status.
-# TODO: Add in timing of the command.
-function notify
+function notify-complete
 {
     # Check that the proper number of command line arguments was specified.
     local nargs=$#
@@ -302,7 +300,6 @@ function markdown-view
 
 # Create functions for commands that will run them in the background, disown them, and redirect their output to
 # /dev/null by default. This is useful for launching GUI commands from the shell.
-# TODO: Add printing out of command output if command does not complete successfully
 GUI_COMMANDS=(evince quartus arduino vmware virtualbox libreoffice gimp makerware kile qtspim spotify kicad gedit meld
         keepassx eclipse krop feh picard)
 for cmd in "${GUI_COMMANDS[@]}"
@@ -419,7 +416,8 @@ alias make-android='make ARCH=arm CROSS_COMPILE=arm-linux-androideabi-'
 alias pdflatex='pdflatex -shell-escape'
 alias latex='latex -shell-escape'
 
-# Setup rlwrap so that it maintains a large history, doesn't repeat duplicates, and handles ANSI color codes by default.
+# Setup the readline wrapper so that it maintains a large history, doesn't repeat duplicates, and handles ANSI color
+# codes by default.
 alias rlwrap='rlwrap --histsize 1000000 --history-no-dupes 2 --ansi-colour-aware'
 
 # Create aliases for commands that will wrap them with the readline library. This is useful for commands that utilize a
