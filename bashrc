@@ -157,6 +157,53 @@ export PATH="${PATH}:/usr/share/smlnj/bin/"
 export PATH="${PATH}:/usr/share/cc0/bin/"
 
 #-----------------------------------------------------------------------------------------------------------------------
+# Windows Subsystem for Linux (WSL) Settings
+#-----------------------------------------------------------------------------------------------------------------------
+
+# Determine if the shell is being run under Microsoft's Windows Subsystem for Linux (WSL)
+if (grep --quiet --regexp='\<Microsoft\>' --regexp='\<WSL\>' '/proc/version'); then
+
+    # Change the ls colors so that other-writable directories will not be highlighted in green, and instead appear as
+    # normal directories. This is done because files on the Windows drives will not have proper permissions.
+    eval $(dircolors -b)
+    export LS_COLORS="${LS_COLORS}:ow=01;34"
+
+    # Set the display variable to the localhost so Xming can be used with X11-forwarding to display GUI applications.
+    export DISPLAY='127.0.0.1:0'
+
+    # The location where the C drive is mounted in the WSL.
+    export C_DRIVE='/mnt/c/'
+
+    # The location of the Window User's home directory in the WSL (assumes the usernames match).
+    export WINDOWS_HOME="${C_DRIVE}/Users/${USER}"
+
+    # Add in paths to common Windows binaries
+    export PATH="${PATH}:${C_DRIVE}/Windows/System32/"
+    export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
+
+    # Runs a native Windows command/binary from within the WSL, and handles the conversion of any drive paths to their
+    # Windows drive letter before running the command (e.g. /mnt/c to C:). This is necessary because Windows programs
+    # cannot access the WSL filesystem, so a /mnt/c like path will not work.
+    function run-windows
+    {
+        new_cmd=$(echo "${@}" | sed -e 's|/mnt/\([a-zA-Z]\)/*|\1:\\|g')
+        ${new_cmd}
+    }
+
+    # Setup aliases for common Windows commands that call the path translation function before running them. Some
+    # commands are also run in a new command Window, as the WSL does not have a good pseudoterminal (PTY) interface.
+    # This is done so that the output is not mangled and escape codes (i.e. colors) are properly displayed.
+    WINDOWS_COMMAND_ALIASES=(cmd start powershell msbuild quickbuild pacman build drop)
+    WINDOWS_COMMANDS=(cmd.exe 'powershell.exe -NoExit' msbuild quickbuild pacman build drop.exe)
+    for ((i=0; i < ${#WINDOWS_COMMAND_ALIASES[@]}; i++))
+    do
+        eval "alias ${WINDOWS_COMMAND_ALIASES[$i]}='run-windows cmd.exe /C start ${WINDOWS_COMMANDS[$i]}'"
+    done
+    alias start='run-windows cmd.exe /C start'
+    alias vsmsbuild='run-windows cmd.exe /C vsmsbuild'
+fi
+
+#-----------------------------------------------------------------------------------------------------------------------
 # General Aliases
 #-----------------------------------------------------------------------------------------------------------------------
 
