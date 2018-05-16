@@ -181,26 +181,26 @@ if (grep --quiet --regexp='\<Microsoft\>' --regexp='\<WSL\>' '/proc/version'); t
     export PATH="${PATH}:${C_DRIVE}/Windows/System32/"
     export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
 
-    # Runs a native Windows command/binary from within the WSL, and handles the conversion of any drive paths to their
-    # Windows drive letter before running the command (e.g. /mnt/c to C:). This is necessary because Windows programs
-    # cannot access the WSL filesystem, so a /mnt/c like path will not work.
+    # Runs a native Windows command/binary from within the WSL, and performs some steps for sane execution. This
+    # includes converting any drive paths to their Window drive letter (e.g. /mnt/c to C:) and starting the command in a
+    # new command window. These are done to handle idiosyncrancies of running in the WSL.
     function run-windows
     {
-        new_cmd=$(echo "${@}" | sed -e 's|/mnt/\([a-zA-Z]\)/*|\1:\\|g')
-        ${new_cmd}
+        cmd="${@}"
+        new_cmd=$(echo "${cmd}" | sed -e 's|/mnt/\([a-zA-Z]\)/*|\1:\\|g')
+        cmd.exe /C start cmd.exe /K ${new_cmd}
     }
 
     # Setup aliases for common Windows commands that call the path translation function before running them. Some
     # commands are also run in a new command Window, as the WSL does not have a good pseudoterminal (PTY) interface.
     # This is done so that the output is not mangled and escape codes (i.e. colors) are properly displayed.
-    WINDOWS_COMMAND_ALIASES=(cmd start powershell msbuild quickbuild pacman build drop)
-    WINDOWS_COMMANDS=(cmd.exe 'powershell.exe -NoExit' msbuild quickbuild pacman build drop.exe)
+    alias start='run-windows'
+    WINDOWS_COMMAND_ALIASES=(cmd powershell msbuild vsmsbuild quickbuild pacman build drop)
+    WINDOWS_COMMANDS=(cmd.exe 'powershell.exe -NoExit' msbuild vsmsbuild quickbuild pacman build drop.exe)
     for ((i=0; i < ${#WINDOWS_COMMAND_ALIASES[@]}; i++))
     do
-        eval "alias ${WINDOWS_COMMAND_ALIASES[$i]}='run-windows cmd.exe /C start ${WINDOWS_COMMANDS[$i]}'"
+        eval "alias ${WINDOWS_COMMAND_ALIASES[$i]}='run-windows ${WINDOWS_COMMANDS[$i]}'"
     done
-    alias start='run-windows cmd.exe /C start'
-    alias vsmsbuild='run-windows cmd.exe /C vsmsbuild'
 fi
 
 #-----------------------------------------------------------------------------------------------------------------------
