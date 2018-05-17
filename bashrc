@@ -106,13 +106,13 @@ shopt -s dirspell
 #-----------------------------------------------------------------------------------------------------------------------
 
 # ANSI color and modifications codes for terminal text
-CYAN="\[\033[36m\]"     # Cyan color for text
-GREEN="\[\033[32m\]"    # Green color for text (foreground color)
-NORMAL="\[\033[0m\]"    # Return text to normal
-YELLOW="\[\033[33m\]"   # Yellow color for text
+CYAN=$(tput setaf 6)    # Cyan color for text
+GREEN=$(tput setaf 2)   # Green color for text (foreground color)
+NORMAL=$(tput sgr0)     # Return text to normal
+YELLOW=$(tput setaf 3)  # Yellow color for text
 
 # Set the terminal prompt. The current user is represented by \u, host by \h, and the current working directory by \w.
-PS1="${GREEN}"'[\u@\h '"${YELLOW}"'\w'"${CYAN}"'$(__git_ps1)'"${GREEN}]\\$ ${NORMAL}"
+PS1="${GREEN}[\\u@\\h ${YELLOW}\\w${CYAN}\$(__git_ps1)${GREEN}]\\\$ ${NORMAL}"
 
 #-----------------------------------------------------------------------------------------------------------------------
 # General Environment Variables
@@ -168,7 +168,7 @@ if (grep --quiet --regexp='\<Microsoft\>' --regexp='\<WSL\>' '/proc/version'); t
     export LS_COLORS="${LS_COLORS}:ow=01;34"
 
     # Set the display variable to the localhost so Xming can be used with X11-forwarding to display GUI applications.
-    export DISPLAY='127.0.0.1:0'
+    export DISPLAY='localhost:0'
 
     # The location where the C drive is mounted in the WSL.
     export C_DRIVE='/mnt/c/'
@@ -388,8 +388,7 @@ alias scp-per="scp -o ControlPath=${SSH_CONNECTION_PATH}"
 
 # Shuts down a computer in Wake on LAN (WoL) mode, which allows the computer to be turned on from the network with the
 # appropriate "magic packet".
-ETHERNET_INTERFACE=$(ifconfig | grep '^e' | awk '{print $1}')
-alias wol-poweroff="sudo ethtool -s ${ETHERNET_INTERFACE} wol g && sudo poweroff"
+alias wol-poweroff="sudo ethtool -s \$(ifconfig | grep '^e' | awk '{print \$1}') wol g && sudo poweroff"
 
 # Turns on any computers on the local network that were previously shut down in Wake on LAN mode. One MAC address per
 # machine is required to wake them up.
