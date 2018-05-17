@@ -1,3 +1,18 @@
+#-----------------------------------------------------------------------------------------------------------------------
+#
+# Git Configuration File
+#
+# Author:           Brandon Perez <bmperez@alumni.cmu.edu>
+# Creation Date:    Wednesday, February 12, 2014 at 1:54:33 PM EDT
+#
+# This file is parsed whenever any git command is run, and sets the global settings and command aliases for Git.
+#
+#-----------------------------------------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------------------------------------
+# General and Core Settings
+#-----------------------------------------------------------------------------------------------------------------------
+
 [user]
     # User settings: name and email address in commits
 	name = Brandon Perez
@@ -27,6 +42,10 @@
     # and when tab characters are used for indentation.
     whitespace = blank-at-eol,blank-at-eof,space-before-tab,tab-in-indent
 
+#-----------------------------------------------------------------------------------------------------------------------
+# Command Settings
+#-----------------------------------------------------------------------------------------------------------------------
+
 [grep]
     # Show the line numbers when grepping with git.
     lineNumber = true
@@ -46,6 +65,10 @@
 	process = git-lfs filter-process
     required = true
 
+#-----------------------------------------------------------------------------------------------------------------------
+# Git Command Aliases
+#-----------------------------------------------------------------------------------------------------------------------
+
 [alias]
     # Pull changes from the remote, and rebase any local, unpushed changes so
     # that they appear after the remote's commits. If there are any merge commits
@@ -58,5 +81,4 @@
     sslog = log --stat --pretty=short
 
     # Alias to update timestamp of the most recent commit to the current time.
-    commit-update-now = !GIT_COMMITTER_DATE="\"`date`\"" git commit --amend \
-        --date "\"`date`\""
+    commit-update-now = !GIT_COMMITTER_DATE="\"`date`\"" git commit --amend --date "\"`date`\""
