@@ -470,6 +470,9 @@ alias pylint3-dbg='python3 -m pylint --reports=no --disable=C,R'
 alias make-arm='make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-'
 alias make-android='make ARCH=arm CROSS_COMPILE=arm-linux-androideabi-'
 
+# Change directory to the top-level/root of the current Git repository
+alias git-root='cd $(git rev-parse --show-cdup)'
+
 # Setup the LaTeX compilation commands to be compatible with the Minted and Pygments syntax highlighters by default.
 alias pdflatex='pdflatex -shell-escape'
 alias latex='latex -shell-escape'
