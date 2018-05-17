@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------------------------------------------------------
 #
-# Bash Runcom/Run Commands File
+# Bash Runcom/Run Commands (RC) File
 #
 # Author:           Brandon Perez <bmperez@alumni.cmu.edu>
 # Creation Date:    Monday, May 29, 2012 at 10:45:40 AM EDT
@@ -55,7 +55,7 @@ do
     IGNORED_COMMANDS+=":*([ \t])${cmd}*([0-9-_.])*([ \t])"
 done
 
-# Add the list of commands to ignore even when they are used with arguments. These are ones not worth repeating.
+# Create a list of commands to ignore even when they are used with arguments. These are ones not worth repeating.
 IGNORED_ARG_COMMANDS=(bg fg exit history man vman kill 'cd -')
 for cmd in "${IGNORED_ARG_COMMANDS[@]}"
 do
@@ -65,29 +65,28 @@ done
 # Set the list of commands to ignore for new history entries, focusing on the items described above.
 export HISTIGNORE="${HISTIGNORE}:${IGNORED_COMMANDS}"
 
-# Set the list of commands to ignore for new history entries, focusing mainly on commands not worth repeating. Also,
 # Set the format of the timestamps used in the history file.
 export HISTTIMEFORMAT='%D:%T'
 
-# Update the command that is run before a new prompt is printed to the command to append the current history to the
-# shared history file.
+# Add to the command that is run before a new prompt is printed to the terminal to append the current history to the
+# global history file. This ensures that new command windows will immediately have the history from other ones.
 export PROMPT_COMMAND="history -a; ${PROMPT_COMMAND}"
 
 # When executing a pipeline of commands, the exit code of the pipeline is from rightmost command to exit with a non-zero
 # exit status, or 0 if all commands are successful. Normally, the exit code simply comes from the last command.
 set -o pipefail
 
-# Tells the shell to append to the history file on exit, rather than overwriting it. This ensures that the history is
-# saved across multiple sessions of the shell.
+# Append to the history file on exit, rather than overwriting it. This ensures that the history is saved across
+# multiple sessions of the shell.
 shopt -s cmdhist
 
-# Tells the shell to save any multi-line commands to the history as a single entry, so it can be easily used again.
+# Save any multi-line commands to the history file as a single entry, so it can be easily recalled and used again.
 shopt -s histappend
 
-# Tell Bash to check the window size after each command, and adjust the text as necessary (for window resizes).
+# Check the window size after each command, and adjust the text as necessary (for window resizes).
 shopt -s checkwinsize
 
-# Enable tab completion of hostnames from the /etc/hosts file, after an '@' symbol.
+# Enable tab completion of hostnames from the /etc/hosts file, after an '@' character.
 shopt -s hostcomplete
 
 # Allow for the extended globbing patterns for the command-line, which allow for lists of glob patterns to be used.
@@ -122,7 +121,7 @@ PS1="${GREEN}"'[\u@\h '"${YELLOW}"'\w'"${CYAN}"'$(__git_ps1)'"${GREEN}]\\$ ${NOR
 # The startup file to use before running Python. This enables persistent Python command history and tab completion.
 export PYTHONSTARTUP="${HOME}/.pythonstartup"
 
-# Add locally installed go programs for the user to the list of paths for Go programs and their binaries.
+# Add locally installed Go programs for the user to the list of paths for Go programs and their binaries.
 export GOPATH="${GOPATH}:${HOME}/.go"
 
 # A good heuristic for the number of threads to use when compiling code in parallel (especially with Makefiles).
@@ -174,16 +173,16 @@ if (grep --quiet --regexp='\<Microsoft\>' --regexp='\<WSL\>' '/proc/version'); t
     # The location where the C drive is mounted in the WSL.
     export C_DRIVE='/mnt/c/'
 
-    # The location of the Window User's home directory in the WSL (assumes the usernames match).
+    # The location of the Window User's home directory in the WSL (assumes that the usernames match).
     export WINDOWS_HOME="${C_DRIVE}/Users/${USER}"
 
-    # Add in paths to common Windows binaries
+    # Add in paths to common Windows binaries.
     export PATH="${PATH}:${C_DRIVE}/Windows/System32/"
     export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
 
     # Runs a native Windows command/binary from within the WSL, and performs some steps for sane execution. This
-    # includes converting any drive paths to their Windows drive letter (e.g. /mnt/c to C:) and starting the command in a
-    # new command window. These are done to handle idiosyncrasies of running in the WSL.
+    # includes converting any drive paths to their Windows drive letter (e.g. /mnt/c to C:) and starting the command in
+    # a new command window. These are done to handle idiosyncrasies of running in the WSL.
     function run-windows
     {
         cmd=("${@}")
@@ -244,23 +243,22 @@ alias dd='dd status=progress'
 # Setup the dmesg command so that the kernel log messages have human-readable timestamps by default.
 alias dmesg='dmesg --ctime --color=always'
 
-# Setup the remote sync command to preserve all file metadata, show incremental progress, and exclude a set of files by
-# default.
+# Setup the remote sync command to preserve file metadata, show incremental progress, and exclude files by default.
 RSYNC_EXCLUDED_FILES=('.*.swp' '*.o' '*~' '*.pyc' '__pycache__')
 RSYNC_EXCLUDE=("${RSYNC_EXCLUDED_FILES[@]/#/--exclude }")
 alias rsync="rsync --recursive --archive --hard-links --acls --xattrs --checksum --human-readable --human-readable \
         --info=progress2 ${RSYNC_EXCLUDE[@]}"
 
-# Add a remote sync alias to mirror the destination to the source. This means any files present on the destination, but
-# not in the source are deleted (along with excluded files). Normally, these files would remain.
+# Remote sync and mirror the destination to the source. This means any files present on the destination, but not in the
+# source are deleted (along with excluded files). Normally, these files would remain.
 alias rsync-mirror='rsync --delete --delete-excluded'
 
-# Add a remote sync alias to display the true progress. Normally, it will only display incremental progress, as it scans
-# directory contents incrementally. This forces the command to first scan the source directories before beginning the
-# transfer, which naturally can require significantly more memory.
+# Display the true progress when transferring data with remote sync.  Normally, it will only display incremental
+# progress, as it scans directory contents incrementally. This forces the command to first scan the source directories
+# before beginning the transfer, which naturally can require significantly more memory.
 alias rsync-progress='rsync --no-inc-recursive'
 
-# Setup the Feh image viewing command to scale the image down to the screen size by default.
+# Setup the Feh image viewer to scale the image down to the screen size by default.
 alias feh='feh --scale-down'
 
 # Setup several shortcut aliases for navigating up parent directories (one alias for each level of directories). These
@@ -273,7 +271,7 @@ do
     PARENT_DIR_STRING+="../"
 done
 
-# Format a list of one or more text files according to the standard format. This converts all tabs to spaces, line
+# Formats a list of one or more text files according to the standard format. This converts all tabs to spaces, line
 # endings to Unix-style, and strips all extraneous whitespace and extra blank lines (this is implicit in the Vimrc).
 function format-text-files
 {
@@ -291,8 +289,8 @@ function format-text-files
     done
 }
 
-# Add a function that runs an arbitrary command and sends a desktop notification (Ubuntu only) when the command
-# finishes. The message also reports the exit status.
+# Runs an arbitrary command and sends a desktop notification (Ubuntu only) when the command finishes. The message also
+# reports the exit status of the command that was run.
 function notify-complete
 {
     # Check that the proper number of command line arguments was specified.
@@ -312,7 +310,7 @@ function notify-complete
     notify-send "The command '${cmd_name}' has finished with exit status '${?}'."
 }
 
-# Add a change root function that binds parts of the original root file system to the faked root filesystem, and unmount
+# Changes the root directory and binds parts of the original root file system to the faked root filesystem, and unmount
 # them when done (it is very important that they are unmounted). This provides common kernel pseudofiles, and gives an
 # environment comparable to a virtual machine when combined with the QEMU static binary.
 function chroot-full
@@ -350,14 +348,14 @@ function chroot-full
     done
 }
 
-# Add a function that compiles a markdown file into HTML and then renders it in the system default browser.
+# Compiles a markdown file into HTML and then renders it in the system default browser.
 function markdown-view
 {
     pandoc "${@}" | bcat
 }
 
 # Create functions for commands that will run them in the background, disown them, and redirect their output to
-# /dev/null by default. This is useful for launching GUI commands from the shell.
+# /dev/null by default. This is useful for launching GUI commands from the shell (e.g. Evince).
 GUI_COMMANDS=(evince quartus arduino vmware virtualbox libreoffice gimp makerware kile qtspim spotify kicad gedit meld
         keepassx eclipse krop feh picard)
 for cmd in "${GUI_COMMANDS[@]}"
@@ -371,40 +369,40 @@ done
 # SSH and Networking Aliases
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Add an alias that restarts the network service. This restarts WiFi and can help deal with poor or lost connections,
-# when the driver and/or software gets into a bad state.
+# Restarts the network service. This restarts WiFi and can help deal with poor or lost connections, when the driver
+# and/or software gets into a bad state.
 alias wifi-restart='sudo service networking restart'
 
-# Add an SSH alias for setting up X11 forwarding (windows opened on the remote server display locally).
+# SSH with X11 forwarding enabled (GUI windows opened on the remote server display locally).
 alias ssh-x='ssh -X'
 
-# Add aliases for opening and closing a persistent SSH connection that can be utilized by multiple commands. The path
+# Open and close a persistent SSH connection that can be utilized by multiple commands. The path
 # to the connection file is unique, where %r is the remote user, %h is the remote host, and %p is the port number used.
 SSH_CONNECTION_PATH='${HOME}/.ssh/ssh-%r-%h-%p'
 alias ssh-open="ssh -M -f -N -o ControlPath=${SSH_CONNECTION_PATH}"
 alias ssh-close="ssh -S ${SSH_CONNECTION_PATH} -O exit"
 
-# Add versions of the remote sync and secure copy commands that utilize a persistent SSH connection previously setup.
+# Versions of the remote sync and secure copy commands that utilize a previously setup persistent SSH connection.
 alias rsync-per="rsync --rsh=\"ssh -o ControlPath=${SSH_CONNECTION_PATH}\""
 alias scp-per="scp -o ControlPath=${SSH_CONNECTION_PATH}"
 
-# Add an alias for shutting down a computer in Wake on LAN mode, which allows the computer to be turned on from the
-# network with the appropriate "magic packet".
+# Shuts down a computer in Wake on LAN (WoL) mode, which allows the computer to be turned on from the network with the
+# appropriate "magic packet".
 ETHERNET_INTERFACE=$(ifconfig | grep '^e' | awk '{print $1}')
 alias wol-poweroff="sudo ethtool -s ${ETHERNET_INTERFACE} wol g && sudo poweroff"
 
-# Add a wake on LAN alias for turning any computers on the local network that were shutdown. One MAC address per machine
-# is needed.
+# Turns on any computers on the local network that were previously shut down in Wake on LAN mode. One MAC address per
+# machine is required to wake them up.
 alias wol-poweron='wakeonlan -i 192.168.2.255'
 
-# Add a web get alias to fetch all the files under a given directory on a website.
+# Fetches all the files under a given directory on a website with the web get command.
 alias wget-dir='wget --recursive i--no-host-directories --no-directories --no-parent --execute robots=off'
 
-# Add an alias to download a file in parallel from a website using the maximum possible number of connections.
+# Downloads a file in parallel from a website using the maximum possible number of connections and threads.
 MAX_DOWNLOAD_CONNECTIONS=16
 alias parallel-download="aria2c --max-connection-per-server=${MAX_DOWNLOAD_CONNECTIONS} --split=${MAX_DOWNLOAD_CONNECTIONS}"
 
-# Function to randomize the MAC address of the given device
+# Randomizes the MAC address of the specified device.
 function randomize-mac
 {
     nargs=${#}
@@ -424,21 +422,21 @@ function randomize-mac
 # Disk Utility Aliases
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Add an alias to safely remove a disk by its device name (e.g. /dev/sdb). This only works for non-USB disks.
+# Safely removes a disk device by its device name (e.g. /dev/sdb). This only works for non-USB storage devices.
 alias safe-remove='udisksctl power-off --block-device'
 
-# Add an alias to mount Carnegie Mellon University's AFS volume.
+# Mounts Carnegie Mellon University's AFS volume.
 CMU_AFS_DOMAIN='andrew.cmu.edu'
 alias mount-afs="sudo service openafs-client start && kinit && aklog && aklog ${CMU_AFS_DOMAIN}"
 
-# Add aliases for mounting and unmounting the windows partition in a dual boot setup. For safety (to prevent accidental
+# Aliases for mounting and unmounting the windows partition in a dual boot setup. For safety (to prevent accidental
 # deletions), the partition is mounted with the root as the owner.
 WINDOWS_PARTITION='/dev/sda2'
 alias mountwin="sudo mount --types ntfs --options umask=022 ${WINDOWS_PARTITION} /mnt/windows"
 alias unmountwin="sudo umount ${WINDOWS_PARTITION}"
 
-# Add aliases for mounting and unmounting a Google Drive account's contents as a folder in the filesystem. For safety
-# (to prevent accidental deletions), the drive is mounted with the root as the owner.
+# Aliases for mounting and unmounting a Google Drive account's contents as a folder in the filesystem. For safety (to
+# prevent accidental deletions), the drive is mounted with the root as the owner.
 GDRIVE_MOUNT='/mnt/gdrive'
 alias mount-gdrive="sudo google-drive-ocamlfuse -o default_permissions,allow_other,umask=022 ${GDRIVE_MOUNT}"
 alias umount-gdrive="sudo fusermount -u ${GDRIVE_MOUNT}"
@@ -447,11 +445,11 @@ alias umount-gdrive="sudo fusermount -u ${GDRIVE_MOUNT}"
 # Programming and Build Tool Aliases
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Add an alias to run a Python script with the Python debugger (PDB), used for line debugging.
+# Runs a Python script with the Python debugger (PDB), which is used for line debugging (both for Python 2.x and 3.x).
 alias python-pdb='python -m pdb -c continue'
 alias python3-pdb='python3 -m pdb -c continue'
 
-# Add aliases for GCC and G++ to compile code with strict warnings and to compile code in debug mode.
+# Aliases for GCC and G++ to both compile code with strict warnings and with all debug flags enabled.
 GCC_SAFE_FLAGS='-Wall -Werror -Wextra -std=gnu99'
 GCC_DEBUG_FLAGS="${GCC_SAFE_FLAGS} -g -ggdb -O0"
 alias gcc-safe="gcc ${GCC_SAFE_FLAGS}"
@@ -459,18 +457,18 @@ alias gcc-debug="gcc ${GCC_DEBUG_FLAGS}"
 alias g++-safe="g++ ${GCC_SAFE_FLAGS}"
 alias g++-debug="g++ ${GCC_DEBUG_FLAGS}"
 
-# Add an alias for Valgrind that uses the all of the relevant checks for debugging code.
+# A version of the Valgrind command that uses all of the relevant checks for debugging C/C++ code.
 alias valgrind-debug='valgrind --track-origins=yes --track-fds=yes --leak-check=full'
 
-# Add an alias for the Python linter that only displays error and warning messages (style guidelines are ignored).
+# Runs the Python linter command and only displays error and warning messages (style guidelines are ignored).
 alias pylint-dbg='python -m pylint --reports=no --disable=C,R'
 alias pylint3-dbg='python3 -m pylint --reports=no --disable=C,R'
 
-# Add shortcut aliases for Make to cross-compile code for ARM and Android.
+# Aliases for running Makefiles to cross-compile C/C++ code for ARM and Android.
 alias make-arm='make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-'
 alias make-android='make ARCH=arm CROSS_COMPILE=arm-linux-androideabi-'
 
-# Change directory to the top-level/root of the current Git repository
+# Changes directory to the top-level/root of the current Git repository
 alias git-root='cd $(git rev-parse --show-cdup)'
 
 # Setup the LaTeX compilation commands to be compatible with the Minted and Pygments syntax highlighters by default.
@@ -481,7 +479,7 @@ alias latex='latex -shell-escape'
 # codes by default.
 alias rlwrap='rlwrap --histsize 1000000 --history-no-dupes 2 --ansi-colour-aware'
 
-# Create aliases for commands that will wrap them with the readline library. This is useful for commands that utilize a
+# Create aliases for commands that wraps them with the readline library. This is useful for commands that utilize a
 # REPL, but do not provide readline functionality. This will give the commands persistent history and tab completion.
 RLWRAP_COMMANDS=(smlnj coin sim240)
 for cmd in "${RLWRAP_COMMANDS[@]}"
@@ -495,25 +493,25 @@ function matlab
     matlab "$@" &> /dev/null &
 }
 
-# Add an alias for running the command-line (no GUI) version of Matlab.
+# Runs the command-line (no GUI) version of Matlab.
 alias matlab-shell='command matlab -nodisplay'
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Xilinx Tool Aliases
 #-----------------------------------------------------------------------------------------------------------------------
 
-# IP addresses for this machine and the Zedboard when connected over Ethernet with network sharing.
+# The (typical) IP addresses for this machine and the Zedboard when connected over Ethernet with network sharing.
 export HOST_IP_ADDR=10.42.0.1
 export ZYNQ_IP_ADDR=10.42.0.196
 
-# Add aliases for connecting to a Xilinx Zynq device shell over UART (via USB) and over a local Ethernet connection.
+# Aliases for connecting to a Xilinx Zynq device shell over UART (via USB) and over SSH (via Ethernet).
 alias zynq-console='sudo minicom --device /dev/ttyACM0'
 alias zynq-ssh="ssh root@${ZYNQ_IP_ADDR}"
 
-# Alias to sync and unmount the SD boot card
+# Synchronizes against an outstanding file writes and then unmounts the SD card with the boot image and root filesystem.
 alias boot-umount='sync && umount /media/bmperez/boot /media/bmperez/rootfs'
 
-# Add a alias to flash a Zynq device's FPGA with a new hardware image (bit file) over a local Ethernet connection.
+# Flashes a Zynq device's FPGA with a new hardware image (bit file) over a local Ethernet connection.
 function zynq-remote-flash
 {
     nargs=${#}
@@ -534,8 +532,8 @@ function zynq-remote-flash
     scp "${bit_image_file}" root@"${zynq_ip_addr}":/dev/xdevcfg
 }
 
-# Create functions for the Xilinx tools that runs them as GUI commands. Also, setup the commands to be launched in a
-# temporary directory so the log files do not clutter the filesystem, as these tools generate a fair number of them.
+# Create functions for the Xilinx tools that runs them as GUI commands. Also, launch the commands  in a temporary
+# directory so the log files do not clutter the current working directory, as these tools generate a lot of them.
 VIVADO_LOG_DIR='/tmp/'
 VIVADO_COMMANDS=(vivado xsdk vivado_hls)
 for cmd in "${VIVADO_COMMANDS[@]}"
