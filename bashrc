@@ -441,7 +441,7 @@ alias mount-gdrive="sudo google-drive-ocamlfuse -o default_permissions,allow_oth
 alias umount-gdrive="sudo fusermount -u ${GDRIVE_MOUNT}"
 
 #-----------------------------------------------------------------------------------------------------------------------
-# Programming and Build Tool Aliases
+# Programming and Development Tool Aliases
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Runs a Python script with the Python debugger (PDB), which is used for line debugging (both for Python 2.x and 3.x).
@@ -467,6 +467,11 @@ alias pylint3-dbg='python3 -m pylint --reports=no --disable=C,R'
 alias make-arm='make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-'
 alias make-android='make ARCH=arm CROSS_COMPILE=arm-linux-androideabi-'
 
+# Setup the tag generation command to recursively traverse all subdirectories, use class/hierarchy qualified tags to
+# resolve naming conflicts, include class inheritance information for fields, and use the line number to identify
+# declaration instead of patterns to make it robust against source code changes.
+alias ctags='ctags --recurse --extras=+q --fields=+i --excmd=number'
+
 # Changes directory to the top-level/root of the current Git repository
 alias git-root='cd $(git rev-parse --show-cdup)'
 
@@ -476,11 +481,11 @@ alias latex='latex -shell-escape'
 
 # Setup the readline wrapper so that it maintains a large history, doesn't repeat duplicates, and handles ANSI color
 # codes by default.
-alias rlwrap='rlwrap --histsize 1000000 --history-no-dupes 2 --ansi-colour-aware'
+alias rlwrap='rlwrap --always-readline --histsize 1000000 --history-no-dupes 2 --ansi-colour-aware'
 
 # Create aliases for commands that wraps them with the readline library. This is useful for commands that utilize a
 # REPL, but do not provide readline functionality. This will give the commands persistent history and tab completion.
-RLWRAP_COMMANDS=(smlnj coin sim240)
+RLWRAP_COMMANDS=(lua smlnj coin sim240)
 for cmd in "${RLWRAP_COMMANDS[@]}"
 do
     eval "alias ${cmd}='rlwrap --history-filename \"${HOME}/.$(basename ${cmd})_history\" ${cmd}'"
