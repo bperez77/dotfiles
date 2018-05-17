@@ -21,18 +21,18 @@ if [ -z "$PS1" ]; then
 fi
 
 # Source the system-wide defaults if there is a Bashrc for it.
-if [ -f /etc/bashrc ]; then
-    source /etc/bashrc
+if [ -f '/etc/bashrc' ]; then
+    source '/etc/bashrc'
 fi
 
 # Source any aliases that are defined in a separate file.
-if [ -f ~/.bash_aliases ]; then
-    source ~/.bash_aliases
+if [ -f "${HOME}/.bash_aliases" ]; then
+    source "${HOME}/.bash_aliases"
 fi
 
 # If the current shell is a POSIX shell, source the system-wide defaults for tab-completion for commands.
-if [ -f /etc/bash_completion ] && (! shopt -oq posix); then
-    source /etc/bash_completion
+if [ -f '/etc/bash_completion' ] && (! shopt -oq posix); then
+    source '/etc/bash_completion'
 fi
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -188,7 +188,8 @@ if (grep --quiet --regexp='\<Microsoft\>' --regexp='\<WSL\>' '/proc/version'); t
     {
         cmd=("${@}")
 
-        # Iterate over each element of the command and replace drive paths with their Windows drive letter.
+        # Replace drive paths in each element of the command with the Windows drive letter, making sure to preserve
+        # spaces that are embedded in arguments.
         new_cmd=()
         for elem in "${cmd[@]}"
         do
@@ -542,3 +543,12 @@ do
         cd - &> /dev/null
     }"
 done
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Local Machine-Specific Settings
+#----------------------------------------------------------------------------------------------------------------------
+
+# Source any local, machine-specific settings if there is a Bashrc file for it.
+if [ -f "${HOME}/.bashrc_local" ]; then
+    source "${HOME}/.bashrc_local"
+fi
