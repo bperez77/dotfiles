@@ -131,7 +131,7 @@ export THRS=$((2 * $(getconf _NPROCESSORS_ONLN)))
 # Paths
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Add the path to the bin directory, where any miscellaneous executables may be, to the path.
+# Add the bin directory to the path, where any miscellaneous executables may be.
 export PATH="${PATH}:${HOME}/bin/"
 
 # Add the paths for the installed Arduino studio, MATLAB, Altera Quartus, and Eagle programs to the path
@@ -156,58 +156,64 @@ export PATH="${PATH}:/usr/share/smlnj/bin/"
 export PATH="${PATH}:/usr/share/cc0/bin/"
 
 #-----------------------------------------------------------------------------------------------------------------------
-# Windows Subsystem for Linux (WSL) Settings
+# Programming and Development Tool Aliases
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Determine if the shell is being run under Microsoft's Windows Subsystem for Linux (WSL)
-if (grep --quiet --regexp='\<Microsoft\>' --regexp='\<WSL\>' '/proc/version'); then
+# Runs a Python script with the Python debugger (PDB), which is used for line debugging (both for Python 2.x and 3.x).
+alias python-pdb='python -m pdb -c continue'
+alias python3-pdb='python3 -m pdb -c continue'
 
-    # Change the ls colors so that other-writable directories will not be highlighted in green, and instead appear as
-    # normal directories. This is done because files on the Windows drives will not have proper permissions.
-    eval $(dircolors -b)
-    export LS_COLORS="${LS_COLORS}:ow=01;34"
+# Aliases for GCC and G++ to both compile code with strict warnings and with all debug flags enabled.
+GCC_SAFE_FLAGS='-Wall -Werror -Wextra -std=gnu99'
+GCC_DEBUG_FLAGS="${GCC_SAFE_FLAGS} -g -ggdb -O0"
+alias gcc-safe="gcc ${GCC_SAFE_FLAGS}"
+alias gcc-debug="gcc ${GCC_DEBUG_FLAGS}"
+alias g++-safe="g++ ${GCC_SAFE_FLAGS}"
+alias g++-debug="g++ ${GCC_DEBUG_FLAGS}"
 
-    # Set the display variable to the localhost so Xming can be used with X11-forwarding to display GUI applications.
-    export DISPLAY='localhost:0'
+# A version of the Valgrind command that uses all of the relevant checks for debugging C/C++ code.
+alias valgrind-debug='valgrind --track-origins=yes --track-fds=yes --leak-check=full'
 
-    # The location where the C drive is mounted in the WSL.
-    export C_DRIVE='/mnt/c/'
+# Runs the Python linter command and only displays error and warning messages (style guidelines are ignored).
+alias pylint-dbg='python -m pylint --reports=no --disable=C,R'
+alias pylint3-dbg='python3 -m pylint --reports=no --disable=C,R'
 
-    # The location of the Window User's home directory in the WSL (assumes that the usernames match).
-    export WINDOWS_HOME="${C_DRIVE}/Users/${USER}"
+# Aliases for running Makefiles to cross-compile C/C++ code for ARM and Android.
+alias make-arm='make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-'
+alias make-android='make ARCH=arm CROSS_COMPILE=arm-linux-androideabi-'
 
-    # Add in paths to common Windows binaries.
-    export PATH="${PATH}:${C_DRIVE}/Windows/System32/"
-    export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
+# Setup the tag generation command to recursively traverse all subdirectories, use class/hierarchy qualified tags to
+# resolve naming conflicts, include class inheritance information for fields, and use the line number to identify
+# declaration instead of patterns to make it robust against source code changes.
+alias ctags='ctags --recurse --extras=+q --fields=+i --excmd=number'
 
-    # Runs a native Windows command/binary from within the WSL, and performs some steps for sane execution. This
-    # includes converting any drive paths to their Windows drive letter (e.g. /mnt/c to C:) and starting the command in
-    # a new command window. These are done to handle idiosyncrasies of running in the WSL.
-    function run-windows
-    {
-        cmd=("${@}")
+# Changes directory to the top-level/root of the current Git repository
+alias git-root='cd $(git rev-parse --show-cdup)'
 
-        # Replace drive paths in each element of the command with the Windows drive letter, making sure to preserve
-        # spaces that are embedded in arguments.
-        new_cmd=()
-        for elem in "${cmd[@]}"
-        do
-            new_cmd+=("$(echo ${elem} | sed -e 's|/mnt/\([a-zA-Z]\)/*|\1:\\|g')")
-        done
+# Setup the LaTeX compilation commands to be compatible with the Minted and Pygments syntax highlighters by default.
+alias pdflatex='pdflatex -shell-escape'
+alias latex='latex -shell-escape'
 
-        # Run the command in a separate command window.
-        cmd.exe /C start cmd.exe /K "${new_cmd[@]}"
-    }
+# Setup the readline wrapper so that it maintains a large history, doesn't repeat duplicates, and handles ANSI color
+# codes by default.
+alias rlwrap='rlwrap --always-readline --histsize 1000000 --history-no-dupes 2 --ansi-colour-aware'
 
-    # Setup alias for common Windows commands. These call the run Windows function to invoke them.
-    alias start='run-windows'
-    WINDOWS_COMMAND_ALIASES=(cmd powershell msbuild vsmsbuild quickbuild pacman build drop)
-    WINDOWS_COMMANDS=(cmd.exe 'powershell.exe -NoExit' msbuild vsmsbuild quickbuild pacman build drop.exe)
-    for ((i=0; i < ${#WINDOWS_COMMAND_ALIASES[@]}; i++))
-    do
-        eval "alias ${WINDOWS_COMMAND_ALIASES[$i]}='run-windows ${WINDOWS_COMMANDS[$i]}'"
-    done
-fi
+# Create aliases for commands that wraps them with the readline library. This is useful for commands that utilize a
+# REPL, but do not provide readline functionality. This will give the commands persistent history and tab completion.
+RLWRAP_COMMANDS=(lua smlnj coin sim240)
+for cmd in "${RLWRAP_COMMANDS[@]}"
+do
+    eval "alias ${cmd}='rlwrap --history-filename \"${HOME}/.$(basename ${cmd})_history\" ${cmd}'"
+done
+
+# Matlab does not cooperate well with disowning, so simply launch the command with its output redirected.
+function matlab
+{
+    matlab "$@" &> /dev/null &
+}
+
+# Runs the command-line (no GUI) version of Matlab.
+alias matlab-shell='command matlab -nodisplay'
 
 #-----------------------------------------------------------------------------------------------------------------------
 # General Aliases
@@ -441,66 +447,6 @@ alias mount-gdrive="sudo google-drive-ocamlfuse -o default_permissions,allow_oth
 alias umount-gdrive="sudo fusermount -u ${GDRIVE_MOUNT}"
 
 #-----------------------------------------------------------------------------------------------------------------------
-# Programming and Development Tool Aliases
-#-----------------------------------------------------------------------------------------------------------------------
-
-# Runs a Python script with the Python debugger (PDB), which is used for line debugging (both for Python 2.x and 3.x).
-alias python-pdb='python -m pdb -c continue'
-alias python3-pdb='python3 -m pdb -c continue'
-
-# Aliases for GCC and G++ to both compile code with strict warnings and with all debug flags enabled.
-GCC_SAFE_FLAGS='-Wall -Werror -Wextra -std=gnu99'
-GCC_DEBUG_FLAGS="${GCC_SAFE_FLAGS} -g -ggdb -O0"
-alias gcc-safe="gcc ${GCC_SAFE_FLAGS}"
-alias gcc-debug="gcc ${GCC_DEBUG_FLAGS}"
-alias g++-safe="g++ ${GCC_SAFE_FLAGS}"
-alias g++-debug="g++ ${GCC_DEBUG_FLAGS}"
-
-# A version of the Valgrind command that uses all of the relevant checks for debugging C/C++ code.
-alias valgrind-debug='valgrind --track-origins=yes --track-fds=yes --leak-check=full'
-
-# Runs the Python linter command and only displays error and warning messages (style guidelines are ignored).
-alias pylint-dbg='python -m pylint --reports=no --disable=C,R'
-alias pylint3-dbg='python3 -m pylint --reports=no --disable=C,R'
-
-# Aliases for running Makefiles to cross-compile C/C++ code for ARM and Android.
-alias make-arm='make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-'
-alias make-android='make ARCH=arm CROSS_COMPILE=arm-linux-androideabi-'
-
-# Setup the tag generation command to recursively traverse all subdirectories, use class/hierarchy qualified tags to
-# resolve naming conflicts, include class inheritance information for fields, and use the line number to identify
-# declaration instead of patterns to make it robust against source code changes.
-alias ctags='ctags --recurse --extras=+q --fields=+i --excmd=number'
-
-# Changes directory to the top-level/root of the current Git repository
-alias git-root='cd $(git rev-parse --show-cdup)'
-
-# Setup the LaTeX compilation commands to be compatible with the Minted and Pygments syntax highlighters by default.
-alias pdflatex='pdflatex -shell-escape'
-alias latex='latex -shell-escape'
-
-# Setup the readline wrapper so that it maintains a large history, doesn't repeat duplicates, and handles ANSI color
-# codes by default.
-alias rlwrap='rlwrap --always-readline --histsize 1000000 --history-no-dupes 2 --ansi-colour-aware'
-
-# Create aliases for commands that wraps them with the readline library. This is useful for commands that utilize a
-# REPL, but do not provide readline functionality. This will give the commands persistent history and tab completion.
-RLWRAP_COMMANDS=(lua smlnj coin sim240)
-for cmd in "${RLWRAP_COMMANDS[@]}"
-do
-    eval "alias ${cmd}='rlwrap --history-filename \"${HOME}/.$(basename ${cmd})_history\" ${cmd}'"
-done
-
-# Matlab does not cooperate well with disowning, so simply launch the command with its output redirected.
-function matlab
-{
-    matlab "$@" &> /dev/null &
-}
-
-# Runs the command-line (no GUI) version of Matlab.
-alias matlab-shell='command matlab -nodisplay'
-
-#-----------------------------------------------------------------------------------------------------------------------
 # Xilinx Tool Aliases
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -548,6 +494,60 @@ do
         cd - &> /dev/null
     }"
 done
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Windows Subsystem for Linux (WSL) Settings
+#-----------------------------------------------------------------------------------------------------------------------
+
+# Determine if the shell is being run under Microsoft's Windows Subsystem for Linux (WSL)
+if (grep --quiet --regexp='\<Microsoft\>' --regexp='\<WSL\>' '/proc/version'); then
+
+    # Change the ls colors so that other-writable directories will not be highlighted in green, and instead appear as
+    # normal directories. This is done because files on the Windows drives will not have proper permissions.
+    eval $(dircolors -b)
+    export LS_COLORS="${LS_COLORS}:ow=01;34"
+
+    # Set the display variable to the localhost so Xming can be used with X11-forwarding to display GUI applications.
+    export DISPLAY='localhost:0'
+
+    # The location where the C drive is mounted in the WSL.
+    export C_DRIVE='/mnt/c/'
+
+    # The location of the Window User's home directory in the WSL (assumes that the usernames match).
+    export WINDOWS_HOME="${C_DRIVE}/Users/${USER}"
+
+    # Add in paths to common Windows binaries.
+    export PATH="${PATH}:${C_DRIVE}/Windows/System32/"
+    export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
+
+    # Runs a native Windows command/binary from within the WSL, and performs some steps for sane execution. This
+    # includes converting any drive paths to their Windows drive letter (e.g. /mnt/c to C:) and starting the command in
+    # a new command window. These are done to handle idiosyncrasies of running in the WSL.
+    function run-windows
+    {
+        cmd=("${@}")
+
+        # Replace drive paths in each element of the command with the Windows drive letter, making sure to preserve
+        # spaces that are embedded in arguments.
+        new_cmd=()
+        for elem in "${cmd[@]}"
+        do
+            new_cmd+=("$(echo ${elem} | sed -e 's|/mnt/\([a-zA-Z]\)/*|\1:\\|g')")
+        done
+
+        # Run the command in a separate command window.
+        cmd.exe /C start cmd.exe /K "${new_cmd[@]}"
+    }
+
+    # Setup alias for common Windows commands. These call the run Windows function to invoke them.
+    alias start='run-windows'
+    WINDOWS_COMMAND_ALIASES=(cmd powershell msbuild vsmsbuild quickbuild pacman build drop)
+    WINDOWS_COMMANDS=(cmd.exe 'powershell.exe -NoExit' msbuild vsmsbuild quickbuild pacman build drop.exe)
+    for ((i=0; i < ${#WINDOWS_COMMAND_ALIASES[@]}; i++))
+    do
+        eval "alias ${WINDOWS_COMMAND_ALIASES[$i]}='run-windows ${WINDOWS_COMMANDS[$i]}'"
+    done
+fi
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Local Machine-Specific Settings
