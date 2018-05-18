@@ -539,7 +539,49 @@ if (uname -a | grep --quiet --regexp='\<Microsoft\>' --regexp='\<WSL\>'); then
         cmd.exe /C start cmd.exe /K "${new_cmd[@]}"
     }
 
-    # Setup alias for common Windows commands. These call the run Windows function to invoke them.
+    # Setup aliases for common Windows commands. These call the run Windows function to invoke them.
+    alias start='run-windows'
+    WINDOWS_COMMAND_ALIASES=(cmd powershell msbuild vsmsbuild quickbuild pacman build drop)
+    WINDOWS_COMMANDS=(cmd.exe 'powershell.exe -NoExit' msbuild vsmsbuild quickbuild pacman build drop.exe)
+    for ((i=0; i < ${#WINDOWS_COMMAND_ALIASES[@]}; i++))
+    do
+        eval "alias ${WINDOWS_COMMAND_ALIASES[$i]}='run-windows ${WINDOWS_COMMANDS[$i]}'"
+    done
+fi
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Git Bash (Windows) Settings
+#-----------------------------------------------------------------------------------------------------------------------
+
+# Determine if the shell is being run under Git Bash (Windows).
+if (uname -s | grep --quiet '^MINGW'); then
+
+    # The location where the C drive is mounted in Git Bash.
+    export C_DRIVE='/c/'
+
+    # Add in paths to common Windows binaries.
+    export PATH="${PATH}:${C_DRIVE}/Windows/System32/"
+    export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
+
+    # Runs a native Windows command/binary from within Git Bash. This starts the command in a new command window, to
+    # handle idiosyncrasies of running in Git Bash.
+    function run-windows
+    {
+        cmd=("${@}")
+
+        # Ensure that each part of the command is explicitly surrounded by quotes, so that spaces embedded within
+        # arguments are preserved.
+        new_cmd="${cmd[0]} "
+        for elem in "${cmd[@]:1}"
+        do
+            new_cmd+="\"${elem}\" "
+        done
+
+        # Run the command in a separate command window.
+        cmd.exe /C "start cmd.exe /K ${new_cmd[*]}"
+    }
+
+    # Setup aliases for common Windows commands. These call the run Windows function to invoke them.
     alias start='run-windows'
     WINDOWS_COMMAND_ALIASES=(cmd powershell msbuild vsmsbuild quickbuild pacman build drop)
     WINDOWS_COMMANDS=(cmd.exe 'powershell.exe -NoExit' msbuild vsmsbuild quickbuild pacman build drop.exe)
