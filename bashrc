@@ -16,7 +16,7 @@
 
 # If this shell session is non-interactive, then don't run the Bashrc. Relevant environment variables should be
 # inherited from the parent process.
-if [ -z "$PS1" ]; then
+if [ -z "${PS1}" ]; then
     return
 fi
 
@@ -366,8 +366,8 @@ GUI_COMMANDS=(evince quartus arduino vmware virtualbox libreoffice gimp makerwar
         keepassx eclipse krop feh picard)
 for cmd in "${GUI_COMMANDS[@]}"
 do
-    eval "function $cmd {
-        nohup $cmd \"\$@\" &> /dev/null &
+    eval "function ${cmd} {
+        nohup ${cmd} \"\$@\" &> /dev/null &
     }"
 done
 
@@ -411,7 +411,7 @@ alias parallel-download="aria2c --max-connection-per-server=${MAX_DOWNLOAD_CONNE
 function randomize-mac
 {
     nargs=${#}
-    if [ $nargs -ne 1 ]; then
+    if [ ${nargs} -ne 1 ]; then
         echo 'Error: Improper number of command line arguments specified.'
         echo 'Usage: randomize-mac <device>'
         return 1
@@ -547,7 +547,7 @@ if (uname -a | grep --quiet --regexp='\<Microsoft\>' --regexp='\<WSL\>'); then
     WINDOWS_COMMANDS=(cmd.exe 'powershell.exe -NoExit' msbuild vsmsbuild quickbuild pacman build drop.exe)
     for ((i=0; i < ${#WINDOWS_COMMAND_ALIASES[@]}; i++))
     do
-        eval "alias ${WINDOWS_COMMAND_ALIASES[$i]}='run-windows ${WINDOWS_COMMANDS[$i]}'"
+        eval "alias ${WINDOWS_COMMAND_ALIASES[${i}]}='run-windows ${WINDOWS_COMMANDS[${i}]}'"
     done
 fi
 
@@ -589,7 +589,7 @@ if (uname -s | grep --quiet '^MINGW'); then
     WINDOWS_COMMANDS=(cmd.exe 'powershell.exe -NoExit' msbuild vsmsbuild quickbuild pacman build drop.exe)
     for ((i=0; i < ${#WINDOWS_COMMAND_ALIASES[@]}; i++))
     do
-        eval "alias ${WINDOWS_COMMAND_ALIASES[$i]}='run-windows ${WINDOWS_COMMANDS[$i]}'"
+        eval "alias ${WINDOWS_COMMAND_ALIASES[${i}]}='run-windows ${WINDOWS_COMMANDS[${i}]}'"
     done
 fi
 
