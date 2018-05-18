@@ -281,14 +281,14 @@ done
 # endings to Unix-style, and strips all extraneous whitespace and extra blank lines (this is implicit in the Vimrc).
 function format-text-files
 {
-    nargs=${#}
+    local nargs=${#}
     if [ ${nargs} -eq 0 ]; then
         echo 'Error: No text files specified.'
         echo 'Usage: $(basename ${0}) <text_file1> [text_file2 text_file3 ...]'
         return 1
     fi
 
-    text_files=("${@}")
+    local text_files=("${@}")
     for text_file in "${text_files[@]}"
     do
         vim -c ':retab' -c 'set ff=unix' -c ':wq' ${text_file}
@@ -464,7 +464,7 @@ alias boot-umount='sync && umount /media/bmperez/boot /media/bmperez/rootfs'
 # Flashes a Zynq device's FPGA with a new hardware image (bit file) over a local Ethernet connection.
 function zynq-remote-flash
 {
-    nargs=${#}
+    local nargs=${#}
     if [ ${nargs} -lt 1 -o ${nargs} -gt 2 ]; then
         echo 'Error: Improper number of command line arguments specified.'
         echo 'Usage: zynq-remote-flash <bit_image_file> [zynq_ip_addr]'
@@ -472,11 +472,11 @@ function zynq-remote-flash
     fi
 
     # Get the values of the arguments
-    bit_image_file="${1}"
+    local bit_image_file="${1}"
     if [ ${nargs} -eq 2 ]; then
-        zynq_ip_addr="${2}"
+        local zynq_ip_addr="${2}"
     else
-        zynq_ip_addr=${ZYNQ_IP_ADDR}
+        local zynq_ip_addr=${ZYNQ_IP_ADDR}
     fi
 
     scp "${bit_image_file}" root@"${zynq_ip_addr}":/dev/xdevcfg
@@ -524,11 +524,11 @@ if (uname -a | grep --quiet --regexp='\<Microsoft\>' --regexp='\<WSL\>'); then
     # interoperability. These mainly involve handling path differences.
     function run-windows
     {
-        cmd=("${@}")
+        local cmd=("${@}")
 
         # If applicable, convert the program's path from a Unix-style to a Windows-style path and replace a drive path
         # with the equivalent Windows drive letter, making sure to preserved any embedded spaces.
-        new_cmd=("$(echo ${cmd[0]} | sed -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g' -e 's|/|\\|g')")
+        local new_cmd=("$(echo ${cmd[0]} | sed -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g' -e 's|/|\\|g')")
 
         # Replace any drive paths in each element of the command with the Windows drive letter.
         for elem in "${cmd[@]:1}"
@@ -569,11 +569,11 @@ if (uname -s | grep --quiet '^MINGW'); then
     # handle idiosyncrasies of running in Git Bash.
     function run-windows
     {
-        cmd=("${@}")
+        local cmd=("${@}")
 
         # Ensure that each part of the command is explicitly surrounded by quotes, so that spaces embedded within
         # arguments are preserved.
-        new_cmd="${cmd[0]} "
+        local new_cmd="${cmd[0]} "
         for elem in "${cmd[@]:1}"
         do
             new_cmd+="\"${elem}\" "
