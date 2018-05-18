@@ -471,13 +471,9 @@ function zynq-remote-flash
         return 1
     fi
 
-    # Get the values of the arguments
+    # Send the new bit image image to the Zynq board, reconfiguring the FPGA.
     local bit_image_file="${1}"
-    if [[ ${nargs} -eq 2 ]]; then
-        local zynq_ip_addr="${2}"
-    else
-        local zynq_ip_addr=${ZYNQ_IP_ADDR}
-    fi
+    local zynq_ip_addr="${2:-${ZYNQ_IP_ADDR}}"
 
     scp "${bit_image_file}" root@"${zynq_ip_addr}":/dev/xdevcfg
 }
