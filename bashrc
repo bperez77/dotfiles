@@ -3,7 +3,7 @@
 # Bash Runcom/Run Commands (RC) File
 #
 # Author:           Brandon Perez <bmperez@alumni.cmu.edu>
-# Creation Date:    Monday, May 29, 2012 at 10:45:40 AM EDT
+# Creation Date:    Monday, May 29, 2013 at 10:45:40 AM EDT
 #
 # This file is executed when a BASH shell is started up, and sets the settings, command aliases, and environment
 # variables for the shell session
