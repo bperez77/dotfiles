@@ -16,22 +16,22 @@
 
 # If this shell session is non-interactive, then don't run the Bashrc. Relevant environment variables should be
 # inherited from the parent process.
-if [ -z "${PS1}" ]; then
+if [[ -z "${PS1}" ]]; then
     return
 fi
 
 # Source the system-wide defaults if there is a Bashrc for it.
-if [ -f '/etc/bashrc' ]; then
+if [[ -f '/etc/bashrc' ]]; then
     source '/etc/bashrc'
 fi
 
 # Source any aliases that are defined in a separate file.
-if [ -f "${HOME}/.bash_aliases" ]; then
+if [[ -f "${HOME}/.bash_aliases" ]]; then
     source "${HOME}/.bash_aliases"
 fi
 
 # If the current shell is a POSIX shell, source the system-wide defaults for tab-completion for commands.
-if [ -f '/etc/bash_completion' ] && (! shopt -oq posix); then
+if [[ -f '/etc/bash_completion' ]] && (! shopt -oq posix); then
     source '/etc/bash_completion'
 fi
 
@@ -282,7 +282,7 @@ done
 function format-text-files
 {
     local nargs=${#}
-    if [ ${nargs} -eq 0 ]; then
+    if [[ ${nargs} -eq 0 ]]; then
         echo 'Error: No text files specified.'
         echo 'Usage: $(basename ${0}) <text_file1> [text_file2 text_file3 ...]'
         return 1
@@ -301,7 +301,7 @@ function notify-complete
 {
     # Check that the proper number of command line arguments was specified.
     local nargs=$#
-    if [ ${nargs} -eq 0 ]; then
+    if [[ ${nargs} -eq 0 ]]; then
         echo 'Error: No command specified.'
         echo 'Usage: notify <cmd> [cmd_arg1 cmd_arg2 ...]'
         return 1
@@ -323,7 +323,7 @@ function chroot-full
 {
     # Check that the user has specified the proper number of command line arguments.
     local num_args=${#}
-    if [ ${num_args} -ne 1 ]; then
+    if [[ ${num_args} -ne 1 ]]; then
         echo 'Error: Improper number of command line arguments'
         echo 'Usage: $(basename ${0}) <new_root_path>'
         return 1
@@ -411,7 +411,7 @@ alias parallel-download="aria2c --max-connection-per-server=${MAX_DOWNLOAD_CONNE
 function randomize-mac
 {
     nargs=${#}
-    if [ ${nargs} -ne 1 ]; then
+    if [[ ${nargs} -ne 1 ]]; then
         echo 'Error: Improper number of command line arguments specified.'
         echo 'Usage: randomize-mac <device>'
         return 1
@@ -465,7 +465,7 @@ alias boot-umount='sync && umount /media/bmperez/boot /media/bmperez/rootfs'
 function zynq-remote-flash
 {
     local nargs=${#}
-    if [ ${nargs} -lt 1 -o ${nargs} -gt 2 ]; then
+    if [[ ${nargs} -lt 1 || ${nargs} -gt 2 ]]; then
         echo 'Error: Improper number of command line arguments specified.'
         echo 'Usage: zynq-remote-flash <bit_image_file> [zynq_ip_addr]'
         return 1
@@ -473,7 +473,7 @@ function zynq-remote-flash
 
     # Get the values of the arguments
     local bit_image_file="${1}"
-    if [ ${nargs} -eq 2 ]; then
+    if [[ ${nargs} -eq 2 ]]; then
         local zynq_ip_addr="${2}"
     else
         local zynq_ip_addr=${ZYNQ_IP_ADDR}
@@ -598,6 +598,6 @@ fi
 #----------------------------------------------------------------------------------------------------------------------
 
 # Source any local, machine-specific settings if there is a Bashrc file for it.
-if [ -f "${HOME}/.bashrc_local" ]; then
+if [[ -f "${HOME}/.bashrc_local" ]]; then
     source "${HOME}/.bashrc_local"
 fi
