@@ -520,22 +520,24 @@ if (uname -a | grep --quiet --regexp='\<Microsoft\>' --regexp='\<WSL\>'); then
     export PATH="${PATH}:${C_DRIVE}/Windows/System32/"
     export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
 
-    # Runs a native Windows command/binary from within the WSL, and performs some steps for sane execution. This
-    # includes converting any drive paths to their Windows drive letter (e.g. /mnt/c to C:) and starting the command in
-    # a new command window. These are done to handle idiosyncrasies of running in the WSL.
+    # Runs a native Windows program from within the WSL in a separate window, taking some steps to ensure smooth
+    # interoperability. These mainly involve handling path differences.
     function run-windows
     {
         cmd=("${@}")
 
-        # Replace drive paths in each element of the command with the Windows drive letter, making sure to preserve
-        # spaces that are embedded in arguments.
-        new_cmd=()
-        for elem in "${cmd[@]}"
+        # If applicable, convert the program's path from a Unix-style to a Windows-style path and replace a drive path
+        # with the equivalent Windows drive letter, making sure to preserved any embedded spaces.
+        new_cmd=("$(echo ${cmd[0]} | sed -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g' -e 's|/|\\|g')")
+
+        # Replace any drive paths in each element of the command with the Windows drive letter.
+        for elem in "${cmd[@]:1}"
         do
-            new_cmd+=("$(echo ${elem} | sed -e 's|/mnt/\([a-zA-Z]\)/*|\1:\\|g')")
+            new_cmd+=("$(echo ${elem} | sed -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g')")
         done
 
-        # Run the command in a separate command window.
+        # Run the command in a separate command window. This is done because the WSL does not have a good pseudoterminal
+        # (PTY) interface, so colors will not show up properly and the command output can sometimes be truncated.
         cmd.exe /C start cmd.exe /K "${new_cmd[@]}"
     }
 
