@@ -500,7 +500,7 @@ done
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Determine if the shell is being run under Microsoft's Windows Subsystem for Linux (WSL)
-if (grep --quiet --regexp='\<Microsoft\>' --regexp='\<WSL\>' '/proc/version'); then
+if (uname -a | grep --quiet --regexp='\<Microsoft\>' --regexp='\<WSL\>'); then
 
     # Change the ls colors so that other-writable directories will not be highlighted in green, and instead appear as
     # normal directories. This is done because files on the Windows drives will not have proper permissions.
