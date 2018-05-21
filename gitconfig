@@ -5,7 +5,8 @@
 # Author:           Brandon Perez <bmperez@alumni.cmu.edu>
 # Creation Date:    Wednesday, February 12, 2014 at 1:54:33 PM EDT
 #
-# This file is parsed whenever any git command is run, and sets the global settings and command aliases for Git.
+# This file is read and parsed whenever any git command is run, and sets the global settings and command aliases for
+# Git.
 #
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -14,32 +15,33 @@
 #-----------------------------------------------------------------------------------------------------------------------
 
 [user]
-    # User settings: name and email address in commits
-	name = Brandon Perez
-	email = bmperez@alumni.cmu.edu
+    # Set the default name and email address used in commits.
+    name = Brandon Perez
+    email = bmperez@alumni.cmu.edu
 
 [color]
-    # Always use colors for commands when available (e.g. grep, diff, etc.)
+    # Always use colors for commands (e.g. grep, diff, etc.) whenever possible, except when a terminal isn't used.
     ui = true
 
 [push]
-    # If no refspec is given for git push, then push to upstream branch on the
-    # remote that the local is set to track. Only do so if the names match.
-	default = simple
+    # If no refspec is given, then push the local branch to the upstream branch on the remote that it is set to track.
+    # Additionally, this enforces that the name of the local and remote branches must match.
+    default = simple
 
 [core]
-    # Use vim as the editor for things such as commit messages.
+    # Use Vim as the default editor, which is utilized for things such as writing commit messages.
     editor = vim
 
-    # Allow for parallel index preloading for operations like git diff
-    preloadindex = true
+    # Allow for parallel index preloading to speed up operations like git diff. Good for filesystems with poor caching.
+    preloadIndex = true
 
-    # Convert the newline characters to this locale's, but keep the original when
-    # pushing changes. Helps with Windows-Linux compatability.
+    # Convert newline characters to this machine's locale's line endings, but keep the original when pushing changes to
+    # the remote repository. This aids with smooth interoperability between Linux and Windows.
     autocrlf = input
 
-    # Highlight blanks at the end of a line or file, space before tab characters,
-    # and when tab characters are used for indentation.
+    # Set common whitespace problems to be noticed for commands such as git diff and git apply. Detect extraneous
+    # whitespace a the end of a line, extra lines at the end of a file, space before tab characters, and when tab
+    # characters are used for indentiation as errors.
     whitespace = blank-at-eol,blank-at-eof,space-before-tab,tab-in-indent
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -47,22 +49,25 @@
 #-----------------------------------------------------------------------------------------------------------------------
 
 [grep]
-    # Show the line numbers when grepping with git.
+    # Display line numbers by deafult with the matches when using git grep.
     lineNumber = true
 
 [status]
-    # Show the status of submodules when performing git status.
-    submodulesummary = true
+    # Include a summary of all submodules in the repository by default in the information displayed by git status.
+    submoduleSummary = true
 
 [log]
-    # Include commits that pertain to the file before it was renamed.
+    # Include commit that pertain to the file before it was renamed by default when using git log.
     follow = true
 
 [filter "lfs"]
-    # Settings to properly setup git large file stroage (LFS).
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
+    # Setup Git large file storage (LFS) as a file filter. Git LFS is used to handle the storage of large files,
+    # particularily binaries. Setup the clean, smudge, and process aliases for the filter driver.
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+
+    # Indicates that the filter must always succeed. Any failure means the operation must be aborted.
     required = true
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -70,15 +75,16 @@
 #-----------------------------------------------------------------------------------------------------------------------
 
 [alias]
-    # Pull changes from the remote, and rebase any local, unpushed changes so
-    # that they appear after the remote's commits. If there are any merge commits
-    # in the remote, then keep them.
+    # Pull changes from the remote and rebase the local branch on top of them. Any local, unpushed changes will appear
+    # after the remote's commits, and no merge commit will be generated. Keep any local merge commits during the rebase.
     pullr = pull --rebase=preserve
 
-    # Aliases for git log that show the diffstat, and another that shortens the
-    # displayed commits.
+    # Show the Git history with a summary of changes to each file. This is the number of lines added and/or removed.
     slog = log --stat
+
+    # Show an abbreviated version of the Git history with the summary of changes to each file. This only shows the
+    # commit hash, author, and the first line of each commit, along with the change summary.
     sslog = log --stat --pretty=short
 
-    # Alias to update timestamp of the most recent commit to the current time.
+    # Update the committer and author timestamps of the most recent commit to the current time.
     commit-update-now = !GIT_COMMITTER_DATE="\"`date`\"" git commit --amend --date "\"`date`\""
