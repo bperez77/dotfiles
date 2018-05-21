@@ -15,20 +15,24 @@
 #-----------------------------------------------------------------------------------------------------------------------
 
 [user]
+
     # Set the default name and email address used in commits.
     name = Brandon Perez
     email = bmperez@alumni.cmu.edu
 
 [color]
-    # Always use colors for commands (e.g. grep, diff, etc.) whenever possible, except when a terminal isn't used.
+
+    # Use colors for commands (e.g. grep, diff, etc.) whenever possible, except when the output is not to a terminal.
     ui = true
 
 [push]
+
     # If no refspec is given, then push the local branch to the upstream branch on the remote that it is set to track.
     # Additionally, this enforces that the name of the local and remote branches must match.
     default = simple
 
 [core]
+
     # Use Vim as the default editor, which is utilized for things such as writing commit messages.
     editor = vim
 
@@ -49,18 +53,22 @@
 #-----------------------------------------------------------------------------------------------------------------------
 
 [grep]
+
     # Display line numbers by deafult with the matches when using git grep.
     lineNumber = true
 
 [status]
+
     # Include a summary of all submodules in the repository by default in the information displayed by git status.
     submoduleSummary = true
 
 [log]
+
     # Include commit that pertain to the file before it was renamed by default when using git log.
     follow = true
 
 [filter "lfs"]
+
     # Setup Git large file storage (LFS) as a file filter. Git LFS is used to handle the storage of large files,
     # particularily binaries. Setup the clean, smudge, and process aliases for the filter driver.
     clean = git-lfs clean -- %f
@@ -75,6 +83,7 @@
 #-----------------------------------------------------------------------------------------------------------------------
 
 [alias]
+
     # Pull changes from the remote and rebase the local branch on top of them. Any local, unpushed changes will appear
     # after the remote's commits, and no merge commit will be generated. Keep any local merge commits during the rebase.
     pullr = pull --rebase=preserve
