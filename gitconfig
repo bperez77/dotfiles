@@ -104,3 +104,7 @@
 
     # Update the committer and author timestamps of the most recent commit to the current time.
     commit-update-now = !GIT_COMMITTER_DATE="\"`date`\"" git commit --amend --date "\"`date`\""
+
+    # Checks that the Gitignore file is properly configured. This command will print out any files that are tracked by
+    # Git, but are listed as being a file that should be ignored by the Gitignore file.
+    check-gitignore = ls-files -i --exclude-standard
