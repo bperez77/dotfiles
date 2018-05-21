@@ -87,6 +87,10 @@
     # List all of the currently configured Git aliases available to the user.
     ls-aliases = config --get-regexp '^alias\\.'
 
+    # Prune any branches that have been deleted from the remote, deleting the local copy of the remote branch. This is
+    # useful becuase it reduces the number of available options when tab completing branch names.
+    prune-branches = fetch --prune --all
+
     # Pull changes from the remote and rebase the local branch on top of them. Any local, unpushed changes will appear
     # after the remote's commits, and no merge commit will be generated. Keep any local merge commits during the rebase.
     pullr = pull --rebase=preserve
