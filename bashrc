@@ -533,15 +533,6 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 ]]; then
         # (PTY) interface, so colors will not show up properly and the command output can sometimes be truncated.
         cmd.exe /C start cmd.exe /K "${new_cmd[@]}"
     }
-
-    # Setup aliases for common Windows commands. These call the run Windows function to invoke them.
-    alias start='run-windows'
-    WINDOWS_COMMAND_ALIASES=(cmd powershell msbuild vsmsbuild quickbuild pacman build drop)
-    WINDOWS_COMMANDS=(cmd.exe 'powershell.exe -NoExit' msbuild vsmsbuild quickbuild pacman build drop.exe)
-    for ((i=0; i < ${#WINDOWS_COMMAND_ALIASES[@]}; i++))
-    do
-        eval "alias ${WINDOWS_COMMAND_ALIASES[${i}]}='run-windows ${WINDOWS_COMMANDS[${i}]}'"
-    done
 fi
 
 #-----------------------------------------------------------------------------------------------------------------------
