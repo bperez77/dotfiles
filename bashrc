@@ -496,7 +496,8 @@ done
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Determine if the shell is being run under Microsoft's Windows Subsystem for Linux (WSL)
-if (uname -a | grep --quiet --regexp='\<Microsoft\>' --regexp='\<WSL\>'); then
+SHELL_IS_WSL_BASH=$(uname -a | grep --quiet --regexp='\<Microsoft\>' --regexp='\<WSL\>'; echo $?)
+if [[ ${SHELL_IS_WSL_BASH} -eq 0 ]]; then
 
     # Change the ls colors so that other-writable directories will not be highlighted in green, and instead appear as
     # normal directories. This is done because files on the Windows drives will not have proper permissions.
@@ -511,10 +512,6 @@ if (uname -a | grep --quiet --regexp='\<Microsoft\>' --regexp='\<WSL\>'); then
 
     # The location of the Window User's home directory in the WSL (assumes that the usernames match).
     export WINDOWS_HOME="${C_DRIVE}/Users/${USER}"
-
-    # Add in paths to common Windows binaries.
-    export PATH="${PATH}:${C_DRIVE}/Windows/System32/"
-    export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
 
     # Runs a native Windows program from within the WSL in a separate command window, taking some steps to ensure smooth
     # interoperability. These mainly involve handling path differences.
@@ -552,17 +549,14 @@ fi
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Determine if the shell is being run under Git Bash (Windows).
-if (uname -s | grep --quiet '^MINGW'); then
+SHELL_IS_GIT_BASH=$(uname -s | grep --quiet '^MINGW'; echo $?)
+if [[ ${SHELL_IS_GIT_BASH} -eq 0 ]]; then
 
     # The location where the C drive is mounted in Git Bash.
     export C_DRIVE='/c/'
 
     # The location of the Window User's home directory in Git Bash.
     export WINDOWS_HOME="${HOME}"
-
-    # Add in paths to common Windows binaries.
-    export PATH="${PATH}:${C_DRIVE}/Windows/System32/"
-    export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
 
     # Runs a native Windows from within Git Bash in a separate command window, taking some steps to ensure smooth
     # interoperability. This mainly involves path differences and handling embedded spaces.
@@ -584,15 +578,23 @@ if (uname -s | grep --quiet '^MINGW'); then
         # Run the command in a separate command window.
         cmd.exe /C "start cmd.exe /K ${new_cmd[*]}"
     }
+fi
 
-    # Setup aliases for common Windows commands. These call the run Windows function to invoke them.
+#-----------------------------------------------------------------------------------------------------------------------
+# Common Windows Settings
+#-----------------------------------------------------------------------------------------------------------------------
+
+# Set common settings if Bash is running under a Windows-based shell (either WSL or Git Bash).
+if [[ ${SHELL_IS_WSL_BASH} -eq 0 || ${SHELL_IS_GIT_BASH} -eq 0 ]]; then
+
+    # Add in paths to common Windows binaries.
+    export PATH="${PATH}:${C_DRIVE}/Windows/System32/"
+    export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
+
+    # Setup aliases for common basic Windows commands. These call the run Windows function to invoke them.
     alias start='run-windows'
-    WINDOWS_COMMAND_ALIASES=(cmd powershell msbuild vsmsbuild quickbuild pacman build drop)
-    WINDOWS_COMMANDS=(cmd.exe 'powershell.exe -NoExit' msbuild vsmsbuild quickbuild pacman build drop.exe)
-    for ((i=0; i < ${#WINDOWS_COMMAND_ALIASES[@]}; i++))
-    do
-        eval "alias ${WINDOWS_COMMAND_ALIASES[${i}]}='run-windows ${WINDOWS_COMMANDS[${i}]}'"
-    done
+    alias cmd='run-windows cmd.exe'
+    alias powershell='run-windows powershell.exe -NoExit'
 fi
 
 #-----------------------------------------------------------------------------------------------------------------------
