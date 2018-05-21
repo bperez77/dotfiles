@@ -108,3 +108,10 @@
     # Checks that the Gitignore file is properly configured. This command will print out any files that are tracked by
     # Git, but are listed as being a file that should be ignored by the Gitignore file.
     check-gitignore = ls-files -i --exclude-standard
+
+    # Lists all branches in the repository by the last time a commit was pushed to the branch. A terse summary of each
+    # commit is displayed and pretty formatted. Assumes that the remote name is the default of 'origin'.
+    recent-branches = for-each-ref --sort=committerdate --format='  %(color:cyan)%(refname:strip=3)%(color:reset) - %(color:bold)%(color:yellow)%(committerdate:relative)%(color:reset) (%(color:green)%(authorname)%(color:reset)) (%(contents:lines=1))' refs/remotes/origin
+
+    # Same as the `recent-branches` alias, except that the branches are listed in descending order.
+    recent-branches-desc = !git recent-branches --sort=-committerdate
