@@ -1,16 +1,20 @@
-# config - SSH configuration settings
+#-----------------------------------------------------------------------------------------------------------------------
 #
-# This file is read by SSH whenever it is run by the user, and configures
-# settings for SSH and short-hand aliases for host names.
+# SSH Configuration File
 #
-# Creation Date: Wednesday, February 03, 2016 at 1:33:24 PM EDT
+# Author:           Brandon Perez <bmperez@alumni.cmu.edu>
+# Creation Date:    Wednesday, June 26, 2013 at 2:24:58 PM EDT
+#
+# This file is read and parsed whenever SSH is run, and it configures the settings for SSH and any short-hand aliases
+# for host names.
+#
+#-----------------------------------------------------------------------------------------------------------------------
 
-################################################################################
-# Configuration Options (For All Hosts)
-################################################################################
+#-----------------------------------------------------------------------------------------------------------------------
+# Global Configuration Options (For All Hosts)
+#-----------------------------------------------------------------------------------------------------------------------
 
 Host *
-    # This option sends a request to the server after the given time if no data
-    # has been received from it (the session is idle). This prevents servers
-    # from thiking the client is not alive and closing the connection.
+    # This option sends a request to the server after the given time if no data has been received from it (the session
+    # is idle). This prevents servers from thiking the client is not alive and killing the connection.
     ServerAliveInterval 60
