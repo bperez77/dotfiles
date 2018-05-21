@@ -557,6 +557,9 @@ if (uname -s | grep --quiet '^MINGW'); then
     # The location where the C drive is mounted in Git Bash.
     export C_DRIVE='/c/'
 
+    # The location of the Window User's home directory in Git Bash.
+    export WINDOWS_HOME="${HOME}"
+
     # Add in paths to common Windows binaries.
     export PATH="${PATH}:${C_DRIVE}/Windows/System32/"
     export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
