@@ -84,6 +84,9 @@
 
 [alias]
 
+    # List all of the currently configured Git aliases available to the user.
+    ls-aliases = config --get-regexp '^alias\\.'
+
     # Pull changes from the remote and rebase the local branch on top of them. Any local, unpushed changes will appear
     # after the remote's commits, and no merge commit will be generated. Keep any local merge commits during the rebase.
     pullr = pull --rebase=preserve
