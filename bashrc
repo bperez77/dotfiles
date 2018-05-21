@@ -516,7 +516,7 @@ if (uname -a | grep --quiet --regexp='\<Microsoft\>' --regexp='\<WSL\>'); then
     export PATH="${PATH}:${C_DRIVE}/Windows/System32/"
     export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
 
-    # Runs a native Windows program from within the WSL in a separate window, taking some steps to ensure smooth
+    # Runs a native Windows program from within the WSL in a separate command window, taking some steps to ensure smooth
     # interoperability. These mainly involve handling path differences.
     function run-windows
     {
@@ -561,18 +561,21 @@ if (uname -s | grep --quiet '^MINGW'); then
     export PATH="${PATH}:${C_DRIVE}/Windows/System32/"
     export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
 
-    # Runs a native Windows command/binary from within Git Bash. This starts the command in a new command window, to
-    # handle idiosyncrasies of running in Git Bash.
+    # Runs a native Windows from within Git Bash in a separate command window, taking some steps to ensure smooth
+    # interoperability. This mainly involves path differences and handling embedded spaces.
     function run-windows
     {
         local cmd=("${@}")
 
-        # Ensure that each part of the command is explicitly surrounded by quotes, so that spaces embedded within
-        # arguments are preserved.
-        local new_cmd="${cmd[0]} "
+        # If applicable, convert the program's path from a Unix-style to a Windows-style path and replace a drive path
+        # with the equivalent Windows drive letter.
+        local new_cmd="$(echo ${cmd[0]} | sed -e 's|^/\([a-zA-Z]\)/\+|\1:\\|' -e 's|/|\\|g') "
+
+        # Ensure that each part of the command is explicitly surrounded by quotes, so embedded spaces are preserved, and
+        # replace any drive paths with the equivalent Windows drive letter.
         for elem in "${cmd[@]:1}"
         do
-            new_cmd+="\"${elem}\" "
+            new_cmd+="\"$(echo ${elem} | sed -e 's|^/\([a-zA-Z]\)/\+|\1:\\|')\" "
         done
 
         # Run the command in a separate command window.
