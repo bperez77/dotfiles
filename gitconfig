@@ -44,8 +44,8 @@
 
     # Set common whitespace problems to be noticed for commands such as git diff and git apply. Detect extraneous
     # whitespace at the end of a line, extra lines at the end of a file, space before tab characters, and when tab
-    # characters are used for indentiation as errors.
-    whitespace = blank-at-eol,blank-at-eof,space-before-tab,tab-in-indent
+    # characters are used for indentiation as errors. Also, set the default tabwidth to 4.
+    whitespace = blank-at-eol,blank-at-eof,space-before-tab,tab-in-indent,tabwidth=4
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Command Settings
@@ -55,6 +55,9 @@
 
     # Display line numbers by default with the matches when using git grep.
     lineNumber = true
+
+    # The number of worker threads to use when performing the grep.
+    threads = !$((2 * $(getconf _NPROCESSORS_ONLN)))
 
 [status]
 
