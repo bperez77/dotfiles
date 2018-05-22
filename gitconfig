@@ -5,8 +5,7 @@
 # Author:           Brandon Perez <bmperez@alumni.cmu.edu>
 # Creation Date:    Wednesday, February 12, 2014 at 1:54:33 PM EDT
 #
-# This file is read and parsed whenever any git command is run, and sets the global settings and command aliases for
-# Git.
+# This file is read and parsed whenever any Git command is run, and sets the global settings and command aliases.
 #
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -120,3 +119,12 @@
 
     # Same as the `recent-branches` alias, except that the branches are listed in descending order.
     recent-branches-desc = !git recent-branches --sort=-committerdate
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Local Machine-Specific Settings
+#----------------------------------------------------------------------------------------------------------------------
+
+[include]
+
+    # Include any local, machine-specific settings if there's a Git config file for it.
+    path = .gitconfig_local
