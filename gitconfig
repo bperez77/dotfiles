@@ -22,7 +22,7 @@
 
 [color]
 
-    # Use colors for commands (e.g. grep, diff, etc.) whenever possible, except when the output is not to a terminal.
+    # Use colors for commands (e.g. Grep, Diff, etc.) whenever possible, except when the output is not to a terminal.
     ui = true
 
 [push]
@@ -44,7 +44,7 @@
     autocrlf = input
 
     # Set common whitespace problems to be noticed for commands such as git diff and git apply. Detect extraneous
-    # whitespace a the end of a line, extra lines at the end of a file, space before tab characters, and when tab
+    # whitespace at the end of a line, extra lines at the end of a file, space before tab characters, and when tab
     # characters are used for indentiation as errors.
     whitespace = blank-at-eol,blank-at-eof,space-before-tab,tab-in-indent
 
@@ -54,7 +54,7 @@
 
 [grep]
 
-    # Display line numbers by deafult with the matches when using git grep.
+    # Display line numbers by default with the matches when using git grep.
     lineNumber = true
 
 [status]
@@ -67,10 +67,15 @@
     # Include commit that pertain to the file before it was renamed by default when using git log.
     follow = true
 
+[tool]
+
+    # Set the default diff tool to be Meld (used by the difftool command).
+    diff = meld
+
 [filter "lfs"]
 
     # Setup Git large file storage (LFS) as a file filter. Git LFS is used to handle the storage of large files,
-    # particularily binaries. Setup the clean, smudge, and process aliases for the filter driver.
+    # particularity binaries. Setup the clean, smudge, and process aliases for the filter driver.
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f
     process = git-lfs filter-process
@@ -110,7 +115,7 @@
     check-gitignore = ls-files -i --exclude-standard
 
     # Lists all branches in the repository by the last time a commit was pushed to the branch. A terse summary of each
-    # commit is displayed and pretty formatted. Assumes that the remote name is the default of 'origin'.
+    # commit is displayed and formatted. Assumes that the remote name is the default of 'origin'.
     recent-branches = for-each-ref --sort=committerdate --format='  %(color:cyan)%(refname:strip=3)%(color:reset) - %(color:bold)%(color:yellow)%(committerdate:relative)%(color:reset) (%(color:green)%(authorname)%(color:reset)) (%(contents:lines=1))' refs/remotes/origin
 
     # Same as the `recent-branches` alias, except that the branches are listed in descending order.
