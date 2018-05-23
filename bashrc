@@ -519,14 +519,19 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 ]]; then
     {
         local cmd=("${@}")
 
-        # If applicable, convert the program's path from a Unix-style to a Windows-style path and replace a drive path
-        # with the equivalent Windows drive letter, making sure to preserved any embedded spaces.
-        local new_cmd=("$(echo ${cmd[0]} | sed -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g' -e 's|/|\\|g')")
+        # If the program path only has one component, leave it as. Otherwise, resolve symbolic links in the path. Then,
+        # convert the path to Windows-style, replace WSL drive paths with drive letters, and preserve embedded spaces.
+        if [[ "$(dirname "${cmd[0]}")" == '.' ]]; then
+            local program="${cmd[0]}"
+        else
+            local program="$(readlink -m "${cmd[0]}")"
+        fi
+        local new_cmd=("$(echo ${program} | sed -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g' -e 's|/|\\|g')")
 
         # Replace any drive paths in each element of the command with the Windows drive letter.
         for elem in "${cmd[@]:1}"
         do
-            new_cmd+=("$(echo ${elem} | sed -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g')")
+            new_cmd+=("$(readlink -m "${elem}" | sed -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g')")
         done
 
         # Run the command in a separate command window. This is done because the WSL does not have a good pseudoterminal
