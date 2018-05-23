@@ -521,14 +521,14 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 ]]; then
 
         # Resolve any symbolic links in the program path, convert the path from Unix-style to Windows-style, replace WSL
         # drive paths with Windows drive letters, and preserve any embedded spaces and special characters in the path.
-        local new_cmd=("$(realpath -m --relative-base="$(pwd)" "${cmd[0]}" | sed -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g' \
-                -e 's|/|\\|g')")
+        local new_cmd=("$(realpath -m --relative-base="$(pwd)" -- "${cmd[0]}" | sed \
+                -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g' -e 's|/|\\|g')")
 
         # Replace any drive paths in each element of the command with the Windows drive letter. Resolve symbolic links in
         # any arguments based on paths (if the argument is not a path, this will have no effect).
         for elem in "${cmd[@]:1}"
         do
-            new_cmd+=("$(realpath -m --relative-base="$(pwd)" "${elem}" | sed -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g')")
+            new_cmd+=("$(realpath -m --relative-base="$(pwd)" -- "${elem}" | sed -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g')")
         done
 
         # Run the command in a separate command window. This is done because the WSL does not have a good pseudoterminal
