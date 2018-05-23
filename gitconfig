@@ -21,8 +21,13 @@
 
 [color]
 
-    # Use colors for commands (e.g. Grep, Diff, etc.) whenever possible, except when the output is not to a terminal.
-    ui = true
+    # Always use colors for commands (e.g. Grep, Diff, etc.), even if the output is not to a terminal. This means colors
+    # codes will be outputted when piped to another command, but also when writing to a file.
+    ui = always
+
+    # Override the default color settings for Diff. Don't display color codes if the output is not a terminal. This is
+    # important for creating patch files with Diff, as color codes will cause issues if they are put in the patch file.
+    diff = true
 
 [push]
 
