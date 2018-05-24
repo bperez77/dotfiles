@@ -123,6 +123,10 @@
     # commit hash, author, and the first line of each commit, along with the change summary.
     sslog = log --stat --pretty=short
 
+    # SHow the Git history is a visualized graph/tree format that displays the underlying structure of the dependencies
+    # between commits. This is useful for showing merges, such as branhces that have been merged into the current one.
+    tree = log --graph --decorate --pretty=oneline --abbrev-commit
+
     # Update the committer and author timestamps of the most recent commit to the current time.
     commit-update-now = !GIT_COMMITTER_DATE="\"`date`\"" git commit --amend --date "\"`date`\""
 
