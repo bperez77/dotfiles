@@ -56,6 +56,11 @@
 # Command Settings
 #-----------------------------------------------------------------------------------------------------------------------
 
+[blame]
+
+    # Use relative date format (e.g. 2 days ago) by default when using Blame.
+    date = relative
+
 [grep]
 
     # Display line numbers by default with the matches when using git grep.
@@ -70,6 +75,10 @@
     submoduleSummary = true
 
 [log]
+
+    # Use a more human-readable custom date format for Git log messages. This is displayed as "Weekday, Month, Day, Year
+    # at Hour:Minutes:Second AM|PM Timezone".
+    date = "format:%A, %B %d, %Y at %r %Z"
 
     # Include commit that pertain to the file before it was renamed by default when using git log.
     follow = true
