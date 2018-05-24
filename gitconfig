@@ -19,22 +19,6 @@
     name = Brandon Perez
     email = bmperez@alumni.cmu.edu
 
-[color]
-
-    # Always use colors for commands (e.g. Grep, Diff, etc.), even if the output is not to a terminal. This means colors
-    # codes will be outputted when piped to another command, but also when writing to a file.
-    ui = always
-
-    # Override the default color settings for Diff. Don't display color codes if the output is not a terminal. This is
-    # important for creating patch files with Diff, as color codes will cause issues if they are put in the patch file.
-    diff = true
-
-[push]
-
-    # If no refspec is given, then push the local branch to the upstream branch on the remote that it is set to track.
-    # Additionally, this enforces that the name of the local and remote branches must match.
-    default = simple
-
 [core]
 
     # Use Vim as the default editor, which is utilized for things such as writing commit messages.
@@ -51,6 +35,16 @@
     # whitespace at the end of a line, extra lines at the end of a file, space before tab characters, and when tab
     # characters are used for indentiation as errors. Also, set the default tabwidth to 4.
     whitespace = blank-at-eol,blank-at-eof,space-before-tab,tab-in-indent,tabwidth=4
+
+[color]
+
+    # Always use colors for commands (e.g. Grep, Diff, etc.), even if the output is not to a terminal. This means colors
+    # codes will be outputted when piped to another command, but also when writing to a file.
+    ui = always
+
+    # Override the default color settings for Diff. Don't display color codes if the output is not a terminal. This is
+    # important for creating patch files with Diff, as color codes will cause issues if they are put in the patch file.
+    diff = true
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Command Settings
@@ -69,25 +63,6 @@
     # Use the maximum number of useful worker threads when performing a Grep.
     threads = 0
 
-[status]
-
-    # Include a summary of all submodules in the repository by default in the information displayed by git status.
-    submoduleSummary = true
-
-[log]
-
-    # Use a more human-readable custom date format for Git log messages. This is displayed as "Weekday, Month, Day, Year
-    # at Hour:Minutes:Second AM|PM Timezone".
-    date = "format:%A, %B %d, %Y at %r %Z"
-
-    # Include commit that pertain to the file before it was renamed by default when using git log.
-    follow = true
-
-[tool]
-
-    # Set the default diff tool to be Meld (used by the difftool command).
-    diff = meld
-
 [filter "lfs"]
 
     # Setup Git large file storage (LFS) as a file filter. Git LFS is used to handle the storage of large files,
@@ -99,14 +74,53 @@
     # Indicates that the filter must always succeed. Any failure means the operation must be aborted.
     required = true
 
+[log]
+
+    # Use a more human-readable custom date format for Git log messages. This is displayed as "Weekday, Month, Day, Year
+    # at Hour:Minutes:Second AM|PM Timezone".
+    date = "format:%A, %B %d, %Y at %r %Z"
+
+    # Include commit that pertain to the file before it was renamed by default when using git log.
+    follow = true
+
+[push]
+
+    # If no refspec is given, then push the local branch to the upstream branch on the remote that it is set to track.
+    # Additionally, this enforces that the name of the local and remote branches must match.
+    default = simple
+
+[status]
+
+    # Include a summary of all submodules in the repository by default in the information displayed by git status.
+    submoduleSummary = true
+
+[tool]
+
+    # Set the default diff tool to be Meld (used by the difftool command).
+    diff = meld
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Git Command Aliases
 #-----------------------------------------------------------------------------------------------------------------------
 
 [alias]
 
+    # Checks that the Gitignore file is properly configured. This command will print out any files that are tracked by
+    # Git, but are listed as being a file that should be ignored by the Gitignore file.
+    check-gitignore = ls-files -i --exclude-standard
+
+    # Update the committer and author timestamps of the most recent commit to the current time.
+    commit-update-now = !GIT_COMMITTER_DATE="\"`date`\"" git commit --amend --date "\"`date`\""
+
     # List all of the currently configured Git aliases available to the user.
     ls-aliases = config --get-regexp '^alias\\.'
+
+    # Lists all branches in the repository by the last time a commit was pushed to the branch. A terse summary of each
+    # commit is displayed and formatted. Assumes that the remote name is the default of 'origin'.
+    recent-branches = for-each-ref --sort=committerdate --format='  %(color:cyan)%(refname:strip=3)%(color:reset) - %(color:bold)%(color:yellow)%(committerdate:relative)%(color:reset) (%(color:green)%(authorname)%(color:reset)) (%(contents:lines=1))' refs/remotes/origin
+
+    # Same as the `recent-branches` alias, except that the branches are listed in descending order.
+    recent-branches-desc = !git recent-branches --sort=-committerdate
 
     # Prune any branches that have been deleted from the remote, deleting the local copy of the remote branch. This is
     # useful becuase it reduces the number of available options when tab completing branch names.
@@ -126,20 +140,6 @@
     # SHow the Git history is a visualized graph/tree format that displays the underlying structure of the dependencies
     # between commits. This is useful for showing merges, such as branhces that have been merged into the current one.
     tree = log --graph --decorate --pretty=oneline --abbrev-commit
-
-    # Update the committer and author timestamps of the most recent commit to the current time.
-    commit-update-now = !GIT_COMMITTER_DATE="\"`date`\"" git commit --amend --date "\"`date`\""
-
-    # Checks that the Gitignore file is properly configured. This command will print out any files that are tracked by
-    # Git, but are listed as being a file that should be ignored by the Gitignore file.
-    check-gitignore = ls-files -i --exclude-standard
-
-    # Lists all branches in the repository by the last time a commit was pushed to the branch. A terse summary of each
-    # commit is displayed and formatted. Assumes that the remote name is the default of 'origin'.
-    recent-branches = for-each-ref --sort=committerdate --format='  %(color:cyan)%(refname:strip=3)%(color:reset) - %(color:bold)%(color:yellow)%(committerdate:relative)%(color:reset) (%(color:green)%(authorname)%(color:reset)) (%(contents:lines=1))' refs/remotes/origin
-
-    # Same as the `recent-branches` alias, except that the branches are listed in descending order.
-    recent-branches-desc = !git recent-branches --sort=-committerdate
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Local Machine-Specific Settings
