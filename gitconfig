@@ -63,11 +63,11 @@
 
 [grep]
 
-    # Display line numbers by default with the matches when using git grep.
+    # Display line numbers by default with the matches when using Grep.
     lineNumber = true
 
-    # The number of worker threads to use when performing the grep.
-    threads = !$((2 * $(getconf _NPROCESSORS_ONLN)))
+    # Use the maximum number of useful worker threads when performing a Grep.
+    threads = 0
 
 [status]
 
