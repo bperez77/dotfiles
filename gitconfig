@@ -61,6 +61,19 @@
     # changes that are not going to be committed (i.e. unstaged changes).
     verbose = 2
 
+[diff]
+
+    # Replaces the standard "a/" and "b/" prefix pair for Diff with prefixes that represent what is being compared. For
+    # example, a plain diff compares the (i)ndex and (w)ork tree.
+    mnemonicPrefix = true
+
+    # The number of files to consider when performing copy and rename detection for diffs. This is set to the largest
+    # integer to be a near-unlimited size.
+    renameLimit = 2147483647
+
+    # In addition to detecting file renames, also detect file copies when running Diff.
+    renames = copies
+
 [grep]
 
     # Display line numbers by default with the matches when using Grep.
