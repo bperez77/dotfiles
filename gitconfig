@@ -74,6 +74,9 @@
     # In addition to detecting file renames, also detect file copies when running Diff.
     renames = copies
 
+    # Set the default visual/GUI diff tool to be Meld. This is used by the difftool command.
+    tool = meld
+
 [grep]
 
     # Display line numbers by default with the matches when using Grep.
@@ -112,11 +115,6 @@
 
     # Include a summary of all submodules in the repository by default in the information displayed by git status.
     submoduleSummary = true
-
-[tool]
-
-    # Set the default diff tool to be Meld (used by the difftool command).
-    diff = meld
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Git Command Aliases
