@@ -24,7 +24,7 @@
     # Use Vim as the default editor, which is utilized for things such as writing commit messages.
     editor = vim
 
-    # Allow for parallel index preloading to speed up operations like git diff. Good for filesystems with poor caching.
+    # Allow for parallel index preloading to speed up operations like Diff. Good for filesystems with poor caching.
     preloadIndex = true
 
     # Convert newline characters to this machine's locale's line endings, but keep the original when pushing changes to
@@ -54,6 +54,12 @@
 
     # Use relative date format (e.g. 2 days ago) by default when using Blame.
     date = relative
+
+[commit]
+
+    # In the generated commit message, show the diff of the changes that are going to be committed and the diff of
+    # changes that are not going to be committed (i.e. unstaged changes).
+    verbose = 2
 
 [grep]
 
