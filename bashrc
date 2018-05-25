@@ -43,7 +43,7 @@ fi
 export HISTSIZE=-1
 
 # Make the size of the shared history stored in the history file unlimited.
-export HISTFILESIZE==-1
+export HISTFILESIZE=-1
 
 # When adding new entries to the history, erase any duplicate values. Also, ignore any new entries that are a duplicate.
 export HISTCONTROL="erasedups:ignoredups"
