@@ -82,7 +82,7 @@
     # Display line numbers by default with the matches when using Grep.
     lineNumber = true
 
-    # Use the maximum number of useful worker threads when performing a Grep.
+    # The number of worker threads to use when performing a Grep. A value of 0 gives a reasonable number of threads.
     threads = 0
 
 [filter "lfs"]
@@ -115,6 +115,15 @@
 
     # Include a summary of all submodules in the repository by default in the information displayed by git status.
     submoduleSummary = true
+
+[submodule]
+
+    # Recurse into submodules by default when performing any Git commands that deal with submodules. This means that
+    # submodules will automatically updated when pulling, fetching, checking out, etc..
+    recurse = true
+
+    # The number of submodules that are fetched/cloned in parallel. A value of 0 gives a reasonable number of threads.
+    fetchJobs = 0
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Git Command Aliases
@@ -154,7 +163,7 @@
     # commit hash, author, and the first line of each commit, along with the change summary.
     sslog = log --stat --pretty=short
 
-    # SHow the Git history is a visualized graph/tree format that displays the underlying structure of the dependencies
+    # Show the Git history is a visualized graph/tree format that displays the underlying structure of the dependencies
     # between commits. This is useful for showing merges, such as branhces that have been merged into the current one.
     tree = log --graph --decorate --pretty=oneline --abbrev-commit
 
