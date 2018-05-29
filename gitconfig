@@ -63,6 +63,14 @@
 
 [diff]
 
+    # Use the histogram algorithm instead of the default Myers/greedy algorithm for generating diffs. This is an
+    # improved and faster version of the patience algorithm, which improves generated diffs by matching unique lines.
+    algorithm = histogram
+
+    # Enables an (experimental) heuristic that shifts the diff hunk boundaries in a way that is more intuitive. The
+    # heuristic attempts to respect the indentation levels of the files, so diff hunks are proper blocks of code.
+    indentHeuristic = true
+
     # Replaces the standard "a/" and "b/" prefix pair for Diff with prefixes that represent what is being compared. For
     # example, a plain diff compares the (i)ndex and (w)ork tree.
     mnemonicPrefix = true
@@ -76,6 +84,9 @@
 
     # Set the default visual/GUI diff tool to be Meld. This is used by the difftool command.
     tool = meld
+
+    # Highlight whitespace errors in all lines of the diff (old and new). This highlights any whitespace changes.
+    wsErrorHighlight = all
 
 [grep]
 
