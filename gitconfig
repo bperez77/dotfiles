@@ -136,7 +136,7 @@
     check-gitignore = ls-files -i --exclude-standard
 
     # Update the committer and author timestamps of the most recent commit to the current time.
-    commit-update-now = !GIT_COMMITTER_DATE="\"`date`\"" git commit --amend --date "\"`date`\""
+    commit-update-now = !GIT_COMMITTER_DATE="\"`date`\"" git commit --amend --no-edit --date "\"`date`\""
 
     # List all of the currently configured Git aliases available to the user.
     ls-aliases = config --get-regexp '^alias\\.'
