@@ -125,11 +125,30 @@
     # Include commit that pertain to the file before it was renamed by default when using git log.
     follow = true
 
+[merge]
+
+    # Set the default visual/GUI merge tool to be Meld. This is used by the mergetool command.
+    tool = meld
+
+[pack]
+
+    # The number of threads to use when searching for best delta matches when packing objects. A value of zero gives a
+    # reasonable number of threads that is determined by the command.
+    threads = 0
+
 [push]
 
     # If no refspec is given, then push the local branch to the upstream branch on the remote that it is set to track.
     # Additionally, this enforces that the name of the local and remote branches must match.
     default = simple
+
+    # When pushing to the remote, also push any tags present locally but not on the remote by default.
+    followTags = true
+
+[rebase]
+
+    # When performing an interactive rebase, a warning is printed if any commits are removed in the to do list.
+    missingCommitsCheck = warn
 
 [status]
 
