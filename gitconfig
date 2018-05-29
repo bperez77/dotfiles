@@ -152,8 +152,13 @@
 
 [status]
 
-    # Include a summary of all submodules in the repository by default in the information displayed by git status.
-    submoduleSummary = true
+    # Include the number of entries currently in the stash in the information displayed in the status.
+    showStash = true
+
+[stash]
+
+    # When showing a patch with the Show subcommand, show the entry in patch form by default, instead of as a diffstat.
+    showPatch = true
 
 [submodule]
 
@@ -163,6 +168,11 @@
 
     # The number of submodules that are fetched/cloned in parallel. A value of 0 gives a reasonable number of threads.
     fetchJobs = 0
+
+[tag]
+
+    # By default, sort the tags by the date (committer date) of the commit to which they refer in descending order.
+    sort = -committerdate
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Git Command Aliases
