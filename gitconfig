@@ -88,6 +88,15 @@
     # Highlight whitespace errors in all lines of the diff (old and new). This highlights any whitespace changes.
     wsErrorHighlight = all
 
+[fetch]
+
+    # Prune any branches and references that have been deleted from the remote, deleting the local copy of the
+    # reference. This is useful because it reduces the number of options when tab completing branch names.
+    prune = true
+
+    # In addition to pruning references and branches, also prune tags when fetching by default.
+    pruneTags = true
+
 [grep]
 
     # Display line numbers by default with the matches when using Grep.
@@ -158,10 +167,6 @@
 
     # Same as the `recent-branches` alias, except that the branches are listed in descending order.
     recent-branches-desc = !git recent-branches --sort=-committerdate
-
-    # Prune any branches that have been deleted from the remote, deleting the local copy of the remote branch. This is
-    # useful becuase it reduces the number of available options when tab completing branch names.
-    prune-branches = fetch --prune --all
 
     # Pull changes from the remote and rebase the local branch on top of them. Any local, unpushed changes will appear
     # after the remote's commits, and no merge commit will be generated. Keep any local merge commits during the rebase.
