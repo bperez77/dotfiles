@@ -14,19 +14,29 @@
 # Readline Settings
 #----------------------------------------------------------------------------------------------------------------------
 
-import readline
-import rlcompleter
-import atexit
-import os
+def _setup_readline():
+    """Sets up tab completion and persistent command history for the interactive session."""
 
-# Enables tab completion
-readline.parse_and_bind('tab: complete')
+    # General Imports
+    import atexit
+    from os import path
 
-# Sets the python history file to allow previous commands to be recalled
-histfile = os.path.join(os.environ['HOME'], '.pythonhistory')
-try:
-    readline.read_history_file(histfile)
-except IOError:
-    pass
+    # Readline Imports
+    import readline
+    import rlcompleter
 
-atexit.register(readline.write_history_file, histfile)
+    # Enable tab completion to be used in the Python interpreter.
+    readline.parse_and_bind('tab: complete')
+
+    # Read the contents of the Python history file if one currently exists to get the command history.
+    history_path = path.join(path.expanduser('~'), '.python_history')
+    if path.exists(history_path):
+        readline.read_history_file(history_path)
+
+    # When the interpreter exits, write the new history to the history file to enable persistent command history. Note
+    # that this also includes the history that was read from the file, so this is effectively an append operation.
+    atexit.register(readline.write_history_file, history_path)
+
+# Remove setup Readline function so it doesn't pollute the interpreter's namespace
+_setup_readline()
+del _setup_readline
