@@ -45,9 +45,18 @@ _setup_readline()
 del _setup_readline
 
 #----------------------------------------------------------------------------------------------------------------------
-# Imported Default Modules
+# Default Modules and Defined Functions
 #----------------------------------------------------------------------------------------------------------------------
 
-# Provides a prettier version of the `dir` function, for listing the members of an object. Also provides useful
-# functionality like the ability to filter the results with wildcard patterns.
+# Provides an improved version of the `dir` function, for listing the members of an object.
 from see import see
+
+def see_filter(obj, pattern):
+    """Filters the members of the given object using a wildcard pattern or regex.
+
+    This is a shorthand alias for see(obj).filter(pattern). Note that all members of a object begin with a '.'
+    character, so this needs to be in the pattern. Regular expressions can be specified if the string begins with a
+    forward-slash '/'.
+    """
+
+    return see(obj).filter(pattern)
