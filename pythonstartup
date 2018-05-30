@@ -28,6 +28,9 @@ def _setup_readline():
     # Enable tab completion to be used in the Python interpreter.
     readline.parse_and_bind('tab: complete')
 
+    # Set the persistent command history to be unlimited in size.
+    readline.set_history_length(-1)
+
     # Read the contents of the Python history file if one currently exists to get the command history.
     history_path = path.join(path.expanduser('~'), '.python_history')
     if path.exists(history_path):
