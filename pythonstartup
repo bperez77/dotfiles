@@ -40,9 +40,24 @@ def _setup_readline():
     # that this also includes the history that was read from the file, so this is effectively an append operation.
     atexit.register(readline.write_history_file, history_path)
 
-# Remove setup Readline function so it doesn't pollute the interpreter's namespace
+# Remove setup Readline function so it doesn't pollute the interactive session's namespace.
 _setup_readline()
 del _setup_readline
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Prompt Settings
+#-----------------------------------------------------------------------------------------------------------------------
+
+def _setup_prompt():
+    """Modifies the prompt used for the interactive session."""
+
+    # Override the default prompt used for line continuations, so that multiline commands can be copied properly.
+    import sys
+    sys.ps2 = ' ' * 4
+
+# Remove the setup prompt function so it doesn't pollute the interactive session's namespace.
+_setup_prompt()
+del _setup_prompt
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Default Modules and Defined Functions
