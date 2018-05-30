@@ -108,12 +108,16 @@ shopt -s dirspell
 # ANSI color and modifications codes for terminal text. Note that the \[ and \] delimiters tell Bash not to count the
 # characters towards the line length. This is necessary for Bash to properly wrap long lines on the terminal.
 CYAN="\\[$(tput setaf 6)\\]"      # Cyan color for text
-GREEN="\\[$(tput setaf 2)\\]"     # Green color for text (foreground color)
+GREEN="\\[$(tput setaf 2)\\]"     # Green color for text
 NORMAL="\\[$(tput sgr0)\\]"       # Return text to normal
 YELLOW="\\[$(tput setaf 3)\\]"    # Yellow color for text
 
 # Set the terminal prompt. The current user is represented by \u, host by \h, and the current working directory by \w.
-PS1="${GREEN}[\\u@\\h ${YELLOW}\\w${CYAN}\$(__git_ps1)${GREEN}]\\\$ ${NORMAL}"
+export PS1="${GREEN}[\\u@\\h ${YELLOW}\\w${CYAN}\$(__git_ps1)${GREEN}]\\\$ ${NORMAL}"
+
+# Set the prompt used for line continuations in the terminal (for multiline commands) so that multiline commands can be
+# copied properly. The number of spaces is set to the PS1 length so it can align with the previous line.
+export PS2='$(printf " %.s" {1..8})'
 
 #-----------------------------------------------------------------------------------------------------------------------
 # General Environment Variables
