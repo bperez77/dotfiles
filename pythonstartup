@@ -1,16 +1,32 @@
-import readline 
-import rlcompleter 
-import atexit 
-import os 
+#----------------------------------------------------------------------------------------------------------------------
+#
+# Python Startup File
+#
+# Author:           Brandon Perez <bmperez@alumni.cmu.edu>
+# Creation Date:    Tuesday, February 16, 2016 at 11:19:26 AM EDT
+#
+# This file is executed whenever an interactive Python session starts up, and it sets up persistent command history, tab
+# completion, and default imported modules for the session.
+#
+#----------------------------------------------------------------------------------------------------------------------
+
+#----------------------------------------------------------------------------------------------------------------------
+# Readline Settings
+#----------------------------------------------------------------------------------------------------------------------
+
+import readline
+import rlcompleter
+import atexit
+import os
 
 # Enables tab completion
-readline.parse_and_bind('tab: complete') 
+readline.parse_and_bind('tab: complete')
 
 # Sets the python history file to allow previous commands to be recalled
-histfile = os.path.join(os.environ['HOME'], '.pythonhistory') 
-try: 
-    readline.read_history_file(histfile) 
-except IOError: 
-    pass 
+histfile = os.path.join(os.environ['HOME'], '.pythonhistory')
+try:
+    readline.read_history_file(histfile)
+except IOError:
+    pass
 
-atexit.register(readline.write_history_file, histfile) 
+atexit.register(readline.write_history_file, histfile)
