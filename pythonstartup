@@ -40,3 +40,11 @@ def _setup_readline():
 # Remove setup Readline function so it doesn't pollute the interpreter's namespace
 _setup_readline()
 del _setup_readline
+
+#----------------------------------------------------------------------------------------------------------------------
+# Imported Default Modules
+#----------------------------------------------------------------------------------------------------------------------
+
+# Provides a prettier version of the `dir` function, for listing the members of an object. Also provides useful
+# functionality like the ability to filter the results with wildcard patterns.
+from see import see
