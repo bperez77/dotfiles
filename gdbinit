@@ -1,4 +1,4 @@
-#----------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------
 #
 # GDB Initialization File
 #
@@ -8,7 +8,7 @@
 # This file is read whenever a GDB sessions starts up, and it initializes and sets the global settings for GDB. Namely,
 # this file sets up GDB command history that is persistent across sessions.
 #
-#----------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------
 
 # Save the command history whenever a GDB session is closed. This enables persistent command history across sessions.
 set history save
