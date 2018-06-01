@@ -49,7 +49,7 @@ export HISTFILESIZE=-1
 export HISTCONTROL="erasedups:ignoredups"
 
 # Create the list of commands to ignore when they are used without any arguments (including options without arguments).
-IGNORED_NOARG_COMMANDS=(python make ls ll dir cd 'git log' 'git clean' 'git status' 'git pull' 'git diff')
+IGNORED_NOARG_COMMANDS=(make ls ll dir cd 'git log' 'git clean' 'git status' 'git pull' 'git diff')
 for cmd in "${IGNORED_NOARG_COMMANDS[@]}"
 do
     IGNORED_COMMANDS+=":*([ \t])${cmd}*([0-9-_.])*([ \t])"
