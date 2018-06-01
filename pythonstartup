@@ -83,7 +83,7 @@ def _setup_prompt():
     sys.ps1 = _get_ps1_prompt()
 
     # Override the default prompt used for line continuations, so that multiline commands can be copied properly.
-    sys.ps2 = ' ' * 4
+    sys.ps2 = ' ' * 8
 
 # Remove the setup prompt function so it doesn't pollute the interactive session's namespace.
 _setup_prompt()
