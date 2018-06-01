@@ -70,8 +70,8 @@ def _get_ps1_prompt():
         color_dict = {'normal': '', 'green': '', 'yellow': ''}
 
     # Include the python version in the PS1 prompt
-    return ('{green}[{normal}{yellow}Python-{0.major}.{0.minor}.{0.micro}{normal}{green}] >>> '
-            '{normal}'.format(version_info, **color_dict))
+    return '{green}[{yellow}Python-{0.major}.{0.minor}.{0.micro}{green}]>>> {normal}'.format(version_info,
+            **color_dict)
 
 def _setup_prompt():
     """Modifies the prompt used for the interactive session."""
