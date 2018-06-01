@@ -48,31 +48,46 @@ del _setup_readline
 # Prompt Settings
 #-----------------------------------------------------------------------------------------------------------------------
 
+def _get_ps1_prompt():
+
+    # General Imports
+    import curses
+    import os
+    from sys import version_info
+
+    # If Python is being run on a Linux system, then colorize the prompt.
+    if os.name.lower() == 'posix':
+        # Get ANSI color and modification codes for terminal text. Note that the \001 and \002 delimiters tell readline
+        # not to the characters towards the line length. This is necessary to wrap long lines properly.
+        curses.setupterm()
+        get_color = lambda color: curses.tparm(curses.tigetstr('setaf'), color).decode('utf-8')
+        color_dict = {
+                'normal':   '\001{}\002'.format(curses.tigetstr('sgr0').decode('utf-8')),
+                'green':    '\001{}\002'.format(get_color(curses.COLOR_GREEN)),
+                'yellow':   '\001{}\002'.format(get_color(curses.COLOR_YELLOW)),
+        }
+    else:
+        color_dict = {'normal': '', 'green': '', 'yellow': ''}
+
+    # Include the python version in the PS1 prompt
+    return ('{green}[{normal}{yellow}Python-{0.major}.{0.minor}.{0.micro}{normal}{green}] >>> '
+            '{normal}'.format(version_info, **color_dict))
+
 def _setup_prompt():
     """Modifies the prompt used for the interactive session."""
 
     # General Imports
-    import os
     import sys
+
+    # Override the default prompt used in the interactive session, printed at the beginning of each line.
+    sys.ps1 = _get_ps1_prompt()
 
     # Override the default prompt used for line continuations, so that multiline commands can be copied properly.
     sys.ps2 = ' ' * 4
 
-    # If we're running on a Linux system, colorize the default PS1 prompt as green.
-    if os.name.lower() == 'posix':
-        import curses
-
-        # Get ANSI color and modification codes for terminal text. Note that the \001 and \002 delimiters tell readline
-        # not to characters towards line length. This is necessary to wrap long lines properly.
-        curses.setupterm()
-
-        green_color = '\001{}\002'.format(curses.tparm(curses.tigetstr('setaf'), curses.COLOR_GREEN).decode('utf-8'))
-        normal = '\001{}\002'.format(curses.tigetstr('sgr0').decode('utf-8'))
-        sys.ps1 = '{}>>> {}'.format(green_color, normal)
-
 # Remove the setup prompt function so it doesn't pollute the interactive session's namespace.
 _setup_prompt()
-del _setup_prompt
+del _get_ps1_prompt, _setup_prompt
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Default Modules and Defined Functions
