@@ -452,51 +452,6 @@ alias mount-gdrive="sudo google-drive-ocamlfuse -o default_permissions,allow_oth
 alias umount-gdrive="sudo fusermount -u ${GDRIVE_MOUNT}"
 
 #-----------------------------------------------------------------------------------------------------------------------
-# Xilinx Tool Aliases
-#-----------------------------------------------------------------------------------------------------------------------
-
-# The (typical) IP addresses for this machine and the Zedboard when connected over Ethernet with network sharing.
-export HOST_IP_ADDR=10.42.0.1
-export ZYNQ_IP_ADDR=10.42.0.196
-
-# Aliases for connecting to a Xilinx Zynq device shell over UART (via USB) and over SSH (via Ethernet).
-alias zynq-console='sudo minicom --device /dev/ttyACM0'
-alias zynq-ssh="ssh root@${ZYNQ_IP_ADDR}"
-
-# Synchronizes against an outstanding file writes and then unmounts the SD card with the boot image and root filesystem.
-alias boot-umount='sync && umount /media/bmperez/boot /media/bmperez/rootfs'
-
-# Flashes a Zynq device's FPGA with a new hardware image (bit file) over a local Ethernet connection.
-function zynq-remote-flash
-{
-    local nargs=${#}
-    if [[ ${nargs} -lt 1 || ${nargs} -gt 2 ]]; then
-        echo 'Error: Improper number of command line arguments specified.'
-        echo 'Usage: zynq-remote-flash <bit_image_file> [zynq_ip_addr]'
-        return 1
-    fi
-
-    # Send the new bit image image to the Zynq board, reconfiguring the FPGA.
-    local bit_image_file="${1}"
-    local zynq_ip_addr="${2:-${ZYNQ_IP_ADDR}}"
-
-    scp "${bit_image_file}" root@"${zynq_ip_addr}":/dev/xdevcfg
-}
-
-# Create functions for the Xilinx tools that runs them as GUI commands. Also, launch the commands  in a temporary
-# directory so the log files do not clutter the current working directory, as these tools generate a lot of them.
-VIVADO_LOG_DIR='/tmp/'
-VIVADO_COMMANDS=(vivado xsdk vivado_hls)
-for cmd in "${VIVADO_COMMANDS[@]}"
-do
-    eval "function ${cmd} {
-        cd '${VIVADO_LOG_DIR}'
-        nohup ${cmd} \"${@}\" &> /dev/null &
-        cd - &> /dev/null
-    }"
-done
-
-#-----------------------------------------------------------------------------------------------------------------------
 # Windows Subsystem for Linux (WSL) Settings
 #-----------------------------------------------------------------------------------------------------------------------
 
