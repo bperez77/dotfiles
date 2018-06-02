@@ -22,6 +22,16 @@ $include "/etc/inputrc"
 # Readline Settings
 #-----------------------------------------------------------------------------------------------------------------------
 
+# Indicate to the Readline library that it should never ring the terminal's bell. This means that no sounds will be made
+# when there are multiple matches for a completion.
+set bell-style none
+
+# When closing an open parenthesis, highlight the matching parenthesis briefly.
+set blink-matching-paren on
+
+# When listing completions, highlight the common prefix that the completions have in common in a different color.
+set colored-completion-prefix on
+
 # Colorize files listed through tab completion based on their type, similar to how the Ls command does.
 set colored-stats on
 
