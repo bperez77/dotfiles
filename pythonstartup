@@ -17,6 +17,11 @@
 def _setup_readline():
     """Sets up tab completion and persistent command history for the interactive session."""
 
+    # The readline library is only supported on Linux and Mac system.
+    import platform
+    if platform.system().lower() != 'linux':
+        return
+
     # General Imports
     import atexit
     from os import path
@@ -49,18 +54,21 @@ del _setup_readline
 #-----------------------------------------------------------------------------------------------------------------------
 
 def _get_ps1_prompt():
+    """Constructs the PS1 prompt used for the interactive session. This is the line printed at the beginning of each
+    line in the interpreter."""
 
     # General Imports
-    import curses
-    import os
+    import platform
     from sys import version_info
 
     # If Python is being run on a Linux system, then colorize the prompt.
-    if os.name.lower() == 'posix':
+    if platform.system().lower() == 'linux':
         # Get ANSI color and modification codes for terminal text. Note that the \001 and \002 delimiters tell readline
         # not to the characters towards the line length. This is necessary to wrap long lines properly.
+        import curses
         curses.setupterm()
         get_color = lambda color: curses.tparm(curses.tigetstr('setaf'), color).decode('utf-8')
+
         color_dict = {
                 'normal':   '\001{}\002'.format(curses.tigetstr('sgr0').decode('utf-8')),
                 'green':    '\001{}\002'.format(get_color(curses.COLOR_GREEN)),
