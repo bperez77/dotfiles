@@ -32,24 +32,24 @@ set blink-matching-paren on
 # When listing completions, highlight the common prefix that the completions have in common in a different color.
 set colored-completion-prefix on
 
-# Colorize files listed through tab completion based on their type, similar to how the Ls command does.
+# Colorize files listed through completion based on their type, similar to how the Ls command does.
 set colored-stats on
 
-# Ignore the case of words when matching a tab completion.
+# Ignore the case of words when matching a completion.
 set completion-ignore-case on
 
-# When tab completing a symlink that points to a directory, add the trailing slash so tab completion can continue after
+# When completing a symlink that points to a directory, add the trailing slash so completion can continue after
 # the symlinked directory.
 set mark-symlinked-directories on
 
-# When tab completing in the middle of a word, skip text that is already listed, so only new values are filled in.
+# When completing in the middle of a word, skip text that is already listed, so only new values are filled in.
 set skip-completed-text on
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Keyboard Shortcuts and Bindings
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Scroll through the tab completion options one by one with the CTRL-f key combination.
+# Scroll through the completion options one by one with the CTRL-f key combination.
 Control-f: menu-complete
 
 # In addition to CTRL-Left and CTRL-Right, setup Shift-Left and Shift-Right to navigate backward and forward a word.
