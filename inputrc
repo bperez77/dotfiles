@@ -28,12 +28,12 @@ set colored-stats on
 # Ignore the case of words when matching a tab completion.
 set completion-ignore-case on
 
-# When tab completing in the middle of a word, skip text that is already listed, so only new values are filled in.
-set skip-completed-text on
-
 # When tab completing a symlink that points to a directory, add the trailing slash so tab completion can continue after
 # the symlinked directory.
 set mark-symlinked-directories on
+
+# When tab completing in the middle of a word, skip text that is already listed, so only new values are filled in.
+set skip-completed-text on
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Keyboard Shortcuts and Bindings
