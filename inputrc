@@ -73,3 +73,8 @@ Control-f: menu-complete
 # Setup the shift keys to navigate forward and back a word
 "\e[1;2C": forward-word
 "\e[1;2D": backward-word
+
+# When scrolling through history with the up and down arrow keys, search for the current command that is typed, rather
+# than linearly scrolling through history. Thus, ssh <up arrow> will scroll through all SSH commands.
+"\e[A": history-search-backward
+"\e[B": history-search-forward
