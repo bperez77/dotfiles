@@ -66,9 +66,6 @@ set skip-completed-text         on
 # Keyboard Shortcuts and Bindings
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Scroll through the completion options one by one with the Ctrl-f key combination.
-Control-f:  menu-complete
-
 # Setup Ctrl-Left and Ctrl-Right to move backward and forward a word. A word consist of only letters and digits, so
 # words are delimited by any non-alphanumeric characters. All three escape sequences are required to handle Ctrl.
 "\e[1;5D":  backward-word
@@ -82,6 +79,9 @@ Control-f:  menu-complete
 # shell metacharacters, so they can contain non-alphanumeric characters.
 "\e[1;2D":  shell-backward-word
 "\e[1;2C":  shell-forward-word
+
+# Scroll through the completion options one by one with the Ctrl-f key combination.
+Control-f:  menu-complete
 
 # When scrolling through history with the up and down arrow keys, search for the current command that is typed, rather
 # than linearly scrolling through history. Thus, ssh <up arrow> will scroll through all SSH commands.
