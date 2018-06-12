@@ -76,6 +76,14 @@ export PROMPT_COMMAND="history -a; ${PROMPT_COMMAND}"
 # exit status, or 0 if all commands are successful. Normally, the exit code simply comes from the last command.
 set -o pipefail
 
+# If a command name matches a directory, then automatically cd into that directory. This saves needing to prefix
+# directory names with cd; they can be typed directly into the shell to change the directory.
+shopt -s autocd
+
+# If the argument to cd does not match a directory name, then it is treated as a variable if its name matches one. This
+# saves needing to type the $ before the variable name when changing the directory to a variable's value.
+shopt -s cdable_vars
+
 # Fix simple spelling errors when using the change directory command.
 shopt -s cdspell
 
