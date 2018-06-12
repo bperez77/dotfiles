@@ -24,57 +24,57 @@ $include "/etc/inputrc"
 
 # Indicate to the Readline library that it should never ring the terminal's bell. This means that no sounds will be made
 # when there are multiple matches for a completion.
-set bell-style none
+set bell-style                  none
 
 # When closing an open parenthesis, highlight the matching parenthesis briefly.
-set blink-matching-paren on
+set blink-matching-paren        on
 
 # When listing completions, highlight the common prefix that the completions have in common in a different color.
-set colored-completion-prefix on
+set colored-completion-prefix   on
 
 # Colorize files listed through completion based on their type, similar to how the Ls command does.
-set colored-stats on
+set colored-stats               on
 
 # Ignore the case of words when matching a completion.
-set completion-ignore-case on
+set completion-ignore-case      on
 
 # When matching a case-insensitive completion, also treat underscores and hyphens in words as equivalent.
-set completion-map-case on
+set completion-map-case         on
 
 # When pasting text into the terminal, insert the text as a single string instead of treating each character as if had
 # come from the keyboard. This prevents pasted characters from being interpreted as editing commands. For example, if
 # pasted text has an embedded newline, this will prevent the line from automatically being entered in the terminal.
-set enable-bracketed-paste on
+set enable-bracketed-paste      on
 
 # When completing a symlink that points to a directory, add the trailing slash so completion can continue after
 # the symlinked directory.
-set mark-symlinked-directories on
+set mark-symlinked-directories  on
 
 # If a word has a partial completion, the common prefix is completed and all matches are listed immediately. This is
 # opposed to the default, where the first tab key press will complete the prefix and ring the bell and the second
 # consecutive tab key press will list all possible completions. This makes it so only one tab key press is required.
-set show-all-if-ambiguous on
+set show-all-if-ambiguous       on
 
 # Similar to the previous option, if a word has no partial completions but multiple possible completion, all the
 # possible completions are listed immediately instead of ringing the bell.
-set show-all-if-unmodified on
+set show-all-if-unmodified      on
 
 # When completing in the middle of a word, skip text that is already listed, so only new values are filled in.
-set skip-completed-text on
+set skip-completed-text         on
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Keyboard Shortcuts and Bindings
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Scroll through the completion options one by one with the CTRL-f key combination.
-Control-f: menu-complete
+Control-f:  menu-complete
 
 # In addition to CTRL-Left and CTRL-Right, setup Shift-Left and Shift-Right to navigate backward and forward a word.
 # Setup the shift keys to navigate forward and back a word
-"\e[1;2C": forward-word
-"\e[1;2D": backward-word
+"\e[1;2C":  forward-word
+"\e[1;2D":  backward-word
 
 # When scrolling through history with the up and down arrow keys, search for the current command that is typed, rather
 # than linearly scrolling through history. Thus, ssh <up arrow> will scroll through all SSH commands.
-"\e[A": history-search-backward
-"\e[B": history-search-forward
+"\e[A":     history-search-backward
+"\e[B":     history-search-forward
