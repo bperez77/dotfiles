@@ -76,18 +76,18 @@ export PROMPT_COMMAND="history -a; ${PROMPT_COMMAND}"
 # exit status, or 0 if all commands are successful. Normally, the exit code simply comes from the last command.
 set -o pipefail
 
-# Append to the history file on exit, rather than overwriting it. This ensures that the history is saved across
-# multiple sessions of the shell.
-shopt -s cmdhist
-
-# Save any multi-line commands to the history file as a single entry, so it can be easily recalled and used again.
-shopt -s histappend
+# Fix simple spelling errors when using the change directory command.
+shopt -s cdspell
 
 # Check the window size after each command, and adjust the text as necessary (for window resizes).
 shopt -s checkwinsize
 
-# Enable tab completion of hostnames from the /etc/hosts file, after an '@' character.
-shopt -s hostcomplete
+# Append to the history file on exit, rather than overwriting it. This ensures that the history is saved across
+# multiple sessions of the shell.
+shopt -s cmdhist
+
+# Fix simple spelling errors when using tab completion on directories.
+shopt -s dirspell
 
 # Allow for the extended globbing patterns for the command-line, which allow for lists of glob patterns to be used.
 shopt -s extglob
@@ -95,11 +95,11 @@ shopt -s extglob
 # Allow for the recursive '**' glob pattern, which matches to 0 or more subdirectories (in a file expansion context).
 shopt -s globstar
 
-# Fix simple spelling errors when using the change directory command.
-shopt -s cdspell
+# Save any multi-line commands to the history file as a single entry, so it can be easily recalled and used again.
+shopt -s histappend
 
-# Fix simple spelling errors when using tab completion on directories.
-shopt -s dirspell
+# Enable tab completion of hostnames from the /etc/hosts file, after an '@' character.
+shopt -s hostcomplete
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Bash Command-Line Prompt
