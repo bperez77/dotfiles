@@ -26,6 +26,10 @@ $include "/etc/inputrc"
 # when there are multiple matches for a completion.
 set bell-style                  none
 
+# By default, Readline binds the control characters treated specially by the kernel's terminal driver to their Readline
+# equivalents. This allows for user-specified bindings to override these, such as Ctrl-W.
+set bind-tty-special-chars      off
+
 # When closing an open parenthesis, highlight the matching parenthesis briefly.
 set blink-matching-paren        on
 
@@ -75,13 +79,17 @@ set skip-completed-text         on
 "\e[5C":    forward-word
 "\e\e[C":   forward-word
 
-# Setup Shift-Left and Shift-Right to move backward and forward a shell word. Shell words are delimited by non-quoted
-# shell metacharacters, so they can contain non-alphanumeric characters.
+# Move forward and backward a shell word with Shift-Left and Shift-Right. Shell words are delimited by non-quoted shell
+# metacharacters, so they can contain non-alphanumeric characters.
 "\e[1;2D":  shell-backward-word
 "\e[1;2C":  shell-forward-word
 
-# Scroll through the completion options one by one with the Ctrl-f key combination.
-Control-f:  menu-complete
+# Kill (delete) and yank the previous word with Ctrl-W and the previous shell word with Alt-W.
+"\C-w":     backward-kill-word
+"\ew":      shell-backward-kill-word
+
+# Scroll through the completion options one by one with the Ctrl-F key combination.
+"\C-f":     menu-complete
 
 # When scrolling through history with the up and down arrow keys, search for the current command that is typed, rather
 # than linearly scrolling through history. Thus, ssh <up arrow> will scroll through all SSH commands.
