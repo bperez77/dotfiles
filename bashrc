@@ -481,23 +481,46 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 ]]; then
     # The location of the Window User's home directory in the WSL (assumes that the usernames match).
     export WINDOWS_HOME="${C_DRIVE}/Users/${USER}"
 
-    # Runs a native Windows program from within the WSL in a separate command window, taking some steps to ensure smooth
-    # interoperability. These mainly involve handling path differences.
-    function run-windows
+    # Converts a command for a native Windows program launched from the WSL to one that is suitable to be run. The new
+    # command is returned as statement that evaluates to an array (e.g. eval "var=$(convert-wsl-cmd <cmd ...>)").
+    function convert-wsl-cmd
     {
-        local cmd=("${@}")
-
         # Resolve any symbolic links in the program path, convert the path from Unix-style to Windows-style, replace WSL
         # drive paths with Windows drive letters, and preserve any embedded spaces and special characters in the path.
-        local new_cmd=("$(realpath -m --relative-base="$(pwd)" -- "${cmd[0]}" | sed \
-                -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g' -e 's|/|\\|g')")
+        local cmd=("${@}")
+        local new_cmd="($(realpath -m --relative-base="$(pwd)" -- "${cmd[0]}" | sed \
+                -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g' -e 's|/|\\|g')"
 
         # Replace any drive paths in each element of the command with the Windows drive letter. Resolve symbolic links in
         # any arguments based on paths (if the argument is not a path, this will have no effect).
         for elem in "${cmd[@]:1}"
         do
-            new_cmd+=("$(realpath -m --relative-base="$(pwd)" -- "${elem}" | sed -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g')")
+            new_cmd+=" \"$(realpath -m --relative-base="$(pwd)" -- "${elem}" | sed \
+                    -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g')\""
         done
+
+        # Return the converted command by printing the statement that evaluates to the equivalent array.
+        new_cmd+=")"
+        echo ${new_cmd}
+    }
+
+    # Runs a native Windows program from within the WSL in the same command window, ensuring smooth interoperability.
+    function run-windows-cmd
+    {
+        # Convert the command and its arguments to Windows style.
+        local cmd=("${@}")
+        eval "local new_cmd=$(convert-wsl-cmd "${cmd[@]}")"
+
+        # Run the command in the same command window.
+        cmd.exe /C "${new_cmd[@]}"
+    }
+
+    # Starts a native Windows program from within the WSL in a separate command window, ensuring smooth interoperability.
+    function start-windows-cmd
+    {
+        # Convert the command and its arguments to Windows style.
+        local cmd=("${@}")
+        eval "local new_cmd=$(convert-wsl-cmd "${cmd[@]}")"
 
         # Run the command in a separate command window. This is done because the WSL does not have a good pseudoterminal
         # (PTY) interface, so colors will not show up properly and the command output can sometimes be truncated.
@@ -519,14 +542,13 @@ if [[ ${SHELL_IS_GIT_BASH} -eq 0 ]]; then
     # The location of the Window User's home directory in Git Bash.
     export WINDOWS_HOME="${HOME}"
 
-    # Runs a native Windows from within Git Bash in a separate command window, taking some steps to ensure smooth
-    # interoperability. This mainly involves path differences and handling embedded spaces.
-    function run-windows
+    # Converts a command for a native Windows program launched from Git Bash to one that is suitable to be run. The new
+    # command is returned as a string on stdout.
+    function convert-git-bash-cmd
     {
-        local cmd=("${@}")
-
         # If applicable, convert the program's path from a Unix-style to a Windows-style path and replace a drive path
         # with the equivalent Windows drive letter.
+        local cmd=("${@}")
         local new_cmd="$(echo ${cmd[0]} | sed -e 's|^/\([a-zA-Z]\)/\+|\1:\\|' -e 's|/|\\|g') "
 
         # Ensure that each part of the command is explicitly surrounded by quotes, so embedded spaces are preserved, and
@@ -536,7 +558,29 @@ if [[ ${SHELL_IS_GIT_BASH} -eq 0 ]]; then
             new_cmd+="\"$(echo ${elem} | sed -e 's|^/\([a-zA-Z]\)/\+|\1:\\|')\" "
         done
 
-        # Run the command in a separate command window.
+        # Return the converted command by printing it to standard output.
+        echo ${new_cmd}
+    }
+
+    # Runs a native windows command from within Git Bash in the same command window, ensuring smooth interoperability.
+    function run-windows-cmd
+    {
+        # Convert the command and its arguments to Windows style.
+        local cmd=("${@}")
+        local new_cmd="$(convert-git-bash-cmd "${cmd[@]}")"
+
+        # Run the command in the same window
+        cmd.exe /C "${new_cmd}"
+    }
+
+    # Starts a native Windows program from within Git Bash in a separate window, ensuring smooth interoperability.
+    function start-windows-cmd
+    {
+        # Convert the command and its arguments to Windows style.
+        local cmd=("${@}")
+        local new_cmd="$(convert-git-bash-cmd "${cmd[@]}")"
+
+        # Run the command in a separate command window because Git Bash also does not have a good PTY interface.
         cmd.exe /C "start cmd.exe /K ${new_cmd[*]}"
     }
 fi
@@ -553,9 +597,9 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 || ${SHELL_IS_GIT_BASH} -eq 0 ]]; then
     export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
 
     # Setup aliases for common basic Windows commands. These call the run Windows function to invoke them.
-    alias start='run-windows'
-    alias cmd='run-windows cmd.exe'
-    alias powershell='run-windows powershell.exe -NoExit'
+    alias start='start-windows-cmd'
+    alias cmd='start-windows-cmd cmd.exe'
+    alias powershell='start-windows-cmd powershell.exe -NoExit'
 fi
 
 #-----------------------------------------------------------------------------------------------------------------------
