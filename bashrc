@@ -188,8 +188,8 @@ alias g++-debug="g++ ${GCC_DEBUG_FLAGS}"
 alias valgrind-debug='valgrind --track-origins=yes --track-fds=yes --leak-check=full'
 
 # Runs the Python linter command and only displays error and warning messages (style guidelines are ignored).
-alias pylint-dbg='python -m pylint --reports=no --disable=C,R'
-alias pylint3-dbg='python3 -m pylint --reports=no --disable=C,R'
+alias pylint-dbg='python -m pylint --reports=no --score=no --disable=C,R'
+alias pylint3-dbg='python3 -m pylint --reports=no --score=no --disable=C,R'
 
 # Aliases for running Makefiles to cross-compile C/C++ code for ARM and Android.
 alias make-arm='make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-'
