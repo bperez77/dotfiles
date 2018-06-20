@@ -488,14 +488,14 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 ]]; then
         # Resolve any symbolic links in the program path, convert the path from Unix-style to Windows-style, replace WSL
         # drive paths with Windows drive letters, and preserve any embedded spaces and special characters in the path.
         local cmd=("${@}")
-        local new_cmd="($(realpath -m --relative-base="$(pwd)" -- "${cmd[0]}" | sed \
+        local new_cmd="($(realpath --quiet --canonicalize-missing --relative-base="$(pwd)" -- "${cmd[0]}" | sed \
                 -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g' -e 's|/|\\|g')"
 
         # Replace any drive paths in each element of the command with the Windows drive letter. Resolve symbolic links in
         # any arguments based on paths (if the argument is not a path, this will have no effect).
         for elem in "${cmd[@]:1}"
         do
-            new_cmd+=" \"$(realpath -m --relative-base="$(pwd)" -- "${elem}" | sed \
+            new_cmd+=" \"$(realpath --canonicalize-missing --relative-base="$(pwd)" -- "${elem}" | sed \
                     -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g')\""
         done
 
@@ -580,7 +580,8 @@ if [[ ${SHELL_IS_GIT_BASH} -eq 0 ]]; then
         local cmd=("${@}")
         local new_cmd="$(convert-git-bash-cmd "${cmd[@]}")"
 
-        # Run the command in a separate command window because Git Bash also does not have a good PTY interface.
+        # Run the command in a separate command window because Git Bash also does not have a good PTY interface. The K
+        # switch is used so that the command prompt window stays open after the command completes.
         cmd.exe /C "start cmd.exe /K ${new_cmd[*]}"
     }
 fi
@@ -597,9 +598,9 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 || ${SHELL_IS_GIT_BASH} -eq 0 ]]; then
     export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
 
     # Setup aliases for common basic Windows commands. These call the run Windows function to invoke them.
-    alias start='start-windows-cmd'
-    alias cmd='start-windows-cmd cmd.exe'
-    alias powershell='start-windows-cmd powershell.exe -NoExit'
+    alias cmd='start-windows-cmd'
+    alias start='run-windows-cmd start'
+    alias powershell='run-windows-cmd start powershell.exe -NoExit'
 fi
 
 #-----------------------------------------------------------------------------------------------------------------------
