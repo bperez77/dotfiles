@@ -45,6 +45,9 @@ set completion-ignore-case      on
 # When matching a case-insensitive completion, also treat underscores and hyphens in words as equivalent.
 set completion-map-case         on
 
+# Don't display any string when in Emacs editing mode, which is the default.
+set emacs-mode-string           ""
+
 # When pasting text, insert the text as a single string instead of treating each character as if had come from the
 # keyboard. This prevents pasted characters from being interpreted as editing commands. For example, if
 # pasted text has an embedded newline, this will prevent the line from automatically being entered in the terminal.
@@ -66,12 +69,23 @@ set show-all-if-ambiguous       on
 # possible completions are listed immediately instead of ringing the bell.
 set show-all-if-unmodified      on
 
+# Show a string at the beginning of the last line of the prompt indicating if Readline is in Emacs, Vi command, or Vi
+# insert mode. These strings can be defined by the user.
+set show-mode-in-prompt         on
+
 # When completing in the middle of a word, skip text that is already listed, so only new values are filled in.
 set skip-completed-text         on
 
+# The strings displayed in the prompt when Readline is in Vi command or insert mode, respectively.
+set vi-cmd-mode-string          "(normal) "
+set vi-ins-mode-string          "(insert) "
+
 #-----------------------------------------------------------------------------------------------------------------------
-# Keyboard Shortcuts and Bindings
+# Emacs Mode Bindings
 #-----------------------------------------------------------------------------------------------------------------------
+
+# Indicates that the following bindings are for Emacs editing mode. This is the default, but is done to be explicit.
+set keymap  emacs
 
 # Setup Ctrl-Left and Ctrl-Right to move backward and forward a word. A word consist of only letters and digits, so
 # words are delimited by any non-alphanumeric characters. All three escape sequences are required to handle Ctrl.
@@ -98,3 +112,16 @@ set skip-completed-text         on
 # than linearly scrolling through history. Thus, ssh <up arrow> will scroll through all SSH commands.
 "\e[A":     history-search-backward
 "\e[B":     history-search-forward
+
+# Switch to Vi command (movement) mode with Alt-V.
+"\ev":      vi-movement-mode
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Vi Mode Bindings
+#-----------------------------------------------------------------------------------------------------------------------
+
+# Indicates that the following bindings are for both Vi command (movement) and insert editing modes.
+set keymap  vi
+
+# Switch to Emacs editing mode with Alt-E.
+"\ee":      emacs-editing-mode
