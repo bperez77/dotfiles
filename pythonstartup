@@ -142,9 +142,10 @@ def wildcard_import_file(python_file_path):
 
     # Emulate a wildcard import by importing all user-defined or specified variables into the global namespace. This is
     # either the `__all__` attribute, or all names that don't start with an underscore if `__all__` is not defined.
-    import_variables = {name: variable for (name, variable) in module.__dict__.items() if not name.startswith('_')}
-    module_user_defined = getattr(module, '__all__', import_variables)
-    globals().update(module_user_defined)
+    default_import_variables = [name for name in module.__dict__.keys() if not name.startswith('_')]
+    module_user_defined = getattr(module, '__all__', default_import_variables)
+    module_variables = {name: getattr(module, name) for name in module_user_defined}
+    globals().update(module_variables)
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Machine-Local Settings
