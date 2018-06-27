@@ -45,10 +45,13 @@ set completion-ignore-case      on
 # When matching a case-insensitive completion, also treat underscores and hyphens in words as equivalent.
 set completion-map-case         on
 
-# When pasting text into the terminal, insert the text as a single string instead of treating each character as if had
-# come from the keyboard. This prevents pasted characters from being interpreted as editing commands. For example, if
+# When pasting text, insert the text as a single string instead of treating each character as if had come from the
+# keyboard. This prevents pasted characters from being interpreted as editing commands. For example, if
 # pasted text has an embedded newline, this will prevent the line from automatically being entered in the terminal.
-set enable-bracketed-paste      on
+# This is only enabled for Bash (for other programs, you may want to paste multiple lines of code).
+$if Bash
+    set enable-bracketed-paste  on
+$endif
 
 # When completing a symlink that points to a directory, add the trailing slash so completion can continue after
 # the symlinked directory.
