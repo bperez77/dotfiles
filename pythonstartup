@@ -117,3 +117,48 @@ def see_filter(obj, pattern):
     """
 
     return see(obj).filter(pattern)
+
+def wildcard_import_file(python_file_path):
+    """Emulates a wildcard import of the Python file at the given path, if it exists.
+
+    This follows the behavior of a wildcard import (i.e. `from module import *`). If the module defines `__all__`, then
+    only those names are imported. Otherwise, all names are imported which do not start with an underscore.
+    """
+
+    # General Imports
+    import importlib
+    from os import path
+
+    # If there is no local Python startup file, then we do nothing.
+    if not path.exists(python_file_path):
+        return
+
+    # Otherwise, dynamically import the module with import lib's facilities.
+    python_file_name = path.splitext(path.basename(python_file_path))[0]
+    module_loader = importlib.machinery.SourceFileLoader(python_file_name, python_file_path)
+    module_spec = importlib.util.spec_from_loader(module_loader.name, module_loader)
+    module = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(module)
+
+    # Emulate a wildcard import by importing all user-defined or specified variables into the global namespace. This is
+    # either the `__all__` attribute, or all names that don't start with an underscore if `__all__` is not defined.
+    import_variables = {name: variable for (name, variable) in module.__dict__.items() if not name.startswith('_')}
+    module_user_defined = getattr(module, '__all__', import_variables)
+    globals().update(module_user_defined)
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Machine-Local Settings
+#-----------------------------------------------------------------------------------------------------------------------
+
+def _import_local_startup():
+    """Imports the local Python startup file, if one exists."""
+
+    # General Imports
+    from os import path
+
+    local_pythonstartup_path = path.join(path.expanduser('~'), '.pythonstartup_local')
+    wildcard_import_file(local_pythonstartup_path)
+
+# Import the local Python startup file if one exists.
+_import_local_startup()
+del _import_local_startup
