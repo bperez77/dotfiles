@@ -35,4 +35,4 @@
 !*.vim
 !/vim/**/*.txt
 !/vim/**/*.py
-!/vimrc
+!/vim/vimrc
