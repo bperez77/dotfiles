@@ -63,7 +63,7 @@ do
 done
 
 # Set the list of commands to ignore for new history entries, focusing on the items described above.
-export HISTIGNORE="${HISTIGNORE}:${IGNORED_COMMANDS}"
+export HISTIGNORE="${HISTIGNORE}:${IGNORED_COMMANDS}:*([ \t])"
 
 # Set the format of the timestamps used in the history file.
 export HISTTIMEFORMAT='%D:%T'
