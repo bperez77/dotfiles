@@ -495,8 +495,13 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 ]]; then
         # letter (do not convert the path from Unix-style to Windows-style).
         for elem in "${cmd[@]:1}"
         do
-            new_cmd+=" '$(wslpath -m -- "$(realpath --quiet --canonicalize-missing --relative-base="$(pwd)" -- \
-                    "${elem}")")'"
+            # Do not apply real path any URL strings to, as this will convert double slashes into a single slash.
+            if [[ ! "${elem}" =~ ^(file?|ftp|http|https|ssh)://.* ]]; then
+                new_cmd+=" '$(wslpath -m -- "$(realpath --quiet --canonicalize-missing --relative-base="$(pwd)" -- \
+                        "${elem}")")'"
+            else
+                new_cmd+=" '${elem}'"
+            fi
         done
 
         # Return the converted command by printing the statement that evaluates to the equivalent array.
