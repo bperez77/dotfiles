@@ -558,8 +558,7 @@ if [[ ${SHELL_IS_GIT_BASH} -eq 0 ]]; then
         local cmd=("${@}")
         local new_cmd="$(echo ${cmd[0]} | sed -e 's|^/\([a-zA-Z]\)/\+|\1:\\|' -e 's|/|\\|g') "
 
-        # Ensure that each part of the command is explicitly surrounded by quotes, so embedded spaces are preserved, and
-        # replace any drive paths with the equivalent Windows drive letter.
+        # Replace any drive paths in each element of the command with the equivalent Windows drive letter.
         for elem in "${cmd[@]:1}"
         do
             new_cmd+="\"$(echo ${elem} | sed -e 's|^/\([a-zA-Z]\)/\+|\1:\\|')\" "
@@ -589,7 +588,7 @@ if [[ ${SHELL_IS_GIT_BASH} -eq 0 ]]; then
 
         # Run the command in a separate command window because Git Bash also does not have a good PTY interface. The K
         # switch is used so that the command prompt window stays open after the command completes.
-        cmd.exe /C "start cmd.exe /K ${new_cmd[*]}"
+        cmd.exe /C "start cmd.exe /K ${new_cmd}"
     }
 fi
 
