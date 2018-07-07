@@ -492,13 +492,14 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 ]]; then
                 "${cmd[0]}")")'"
 
         # Resolve any symbolic links in each element of the command, and replace any drive paths with the Windows drive
-        # letter (do not convert the path from Unix-style to Windows-style).
+        # letter (do not convert the path from Unix-style to Windows-style). If the path is not representable, then
+        # leave it as is. This is useful for Windows command switches (e.g. /D).
         for elem in "${cmd[@]:1}"
         do
             # Do not apply real path any URL strings to, as this will convert double slashes into a single slash.
             if [[ ! "${elem}" =~ ^(file?|ftp|http|https|ssh)://.* ]]; then
                 new_cmd+=" '$(wslpath -m -- "$(realpath --quiet --canonicalize-missing --relative-base="$(pwd)" -- \
-                        "${elem}")")'"
+                        "${elem}")" 2> /dev/null || echo "${elem}")'"
             else
                 new_cmd+=" '${elem}'"
             fi
