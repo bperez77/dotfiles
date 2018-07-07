@@ -486,18 +486,17 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 ]]; then
     # command is returned as statement that evaluates to an array (e.g. eval "var=$(convert-wsl-cmd <cmd ...>)").
     function convert-wsl-cmd
     {
-        # Resolve any symbolic links in the program path, convert the path from Unix-style to Windows-style, replace WSL
-        # drive paths with Windows drive letters, and preserve any embedded spaces and special characters in the path.
+        # Resolve any symbolic links in the program path, and convert the path from a Unix-style to Windows-style.
         local cmd=("${@}")
-        local new_cmd="($(realpath --quiet --canonicalize-missing --relative-base="$(pwd)" -- "${cmd[0]}" | sed \
-                -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\\\|g' -e 's|/|\\\\|g')"
+        local new_cmd="('$(wslpath -w -- "$(realpath --quiet --canonicalize-missing --relative-base="$(pwd)" -- \
+                "${cmd[0]}")")'"
 
-        # Replace any drive paths in each element of the command with the Windows drive letter. Resolve symbolic links in
-        # any arguments based on paths (if the argument is not a path, this will have no effect).
+        # Resolve any symbolic links in each element of the command, and replace any drive paths with the Windows drive
+        # letter (do not convert the path from Unix-style to Windows-style).
         for elem in "${cmd[@]:1}"
         do
-            new_cmd+=" \"$(realpath --quiet --canonicalize-missing --relative-base="$(pwd)" -- "${elem}" | sed \
-                    -e 's|^/mnt/\([a-zA-Z]\)/*|\1:\\|g')\""
+            new_cmd+=" '$(wslpath -m -- "$(realpath --quiet --canonicalize-missing --relative-base="$(pwd)" -- \
+                    "${elem}")")'"
         done
 
         # Return the converted command by printing the statement that evaluates to the equivalent array.
@@ -524,7 +523,8 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 ]]; then
         eval "local new_cmd=$(convert-wsl-cmd "${cmd[@]}")"
 
         # Run the command in a separate command window. This is done because the WSL does not have a good pseudoterminal
-        # (PTY) interface, so colors will not show up properly and the command output can sometimes be truncated.
+        # (PTY) interface, so colors will not show up properly and the command output can sometimes be truncated. The K
+        # switch is used so that the command prompt window stays open after the command completes.
         cmd.exe /C start cmd.exe /K "${new_cmd[@]}"
     }
 fi
