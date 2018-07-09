@@ -194,6 +194,7 @@ alias pylint3-dbg='python3 -m pylint --reports=no --score=no --disable=C,R'
 
 # Aliases for running Makefiles to cross-compile C/C++ code for ARM and Android.
 alias make-arm='make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-'
+alias make-aarch64='make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-'
 alias make-android='make ARCH=arm CROSS_COMPILE=arm-linux-androideabi-'
 
 # Setup the tag generation command to recursively traverse all subdirectories, use class/hierarchy qualified tags to
