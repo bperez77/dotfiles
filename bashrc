@@ -6,7 +6,7 @@
 # Creation Date:    Monday, May 29, 2013 at 10:45:40 AM EDT
 #
 # This file is executed when a BASH shell is started up, and sets the settings, command aliases, and environment
-# variables for the shell session
+# variables for the shell session.
 #
 #-----------------------------------------------------------------------------------------------------------------------
 
