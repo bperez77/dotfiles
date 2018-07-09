@@ -58,8 +58,9 @@ del _setup_readline
 #-----------------------------------------------------------------------------------------------------------------------
 
 def _get_color(color):
-    """Gets the string code to represent the given color or modifier in the terminal by its name name (e.g red, green,
-    nomral, bold, etc). The returned string also has the appropriate delimiters to be used in Python prompt string."""
+    """Gets the string code to represent the given color or modifier in the terminal by its name name (e.g green,
+    magenta_background, normal, bold, etc). The returned string also has the appropriate delimiters so the color can be
+    used in a Python prompt string."""
 
     # If Python is not being run on a Linux system, then the curses library is unavailable, so colors cannot be used.
     import platform
@@ -74,10 +75,12 @@ def _get_color(color):
 
     # Get ANSI color and modification codes for terminal text for the various colors and modifiers.
     get_color = lambda color: curses.tparm(curses.tigetstr('setaf'), color).decode('utf-8')
+    get_background = lambda color: curses.tparm(curses.tigetstr('setab'), color).decode('utf-8')
     color_dict = {
-            'normal':   '{}'.format(curses.tigetstr('sgr0').decode('utf-8')),
-            'green':    '{}'.format(get_color(curses.COLOR_GREEN)),
-            'yellow':   '{}'.format(get_color(curses.COLOR_YELLOW)),
+            'green':                get_color(curses.COLOR_GREEN),
+            'magenta_background':   get_background(curses.COLOR_MAGENTA),
+            'normal':               curses.tigetstr('sgr0').decode('utf-8'),
+            'yellow':               get_color(curses.COLOR_YELLOW),
     }
 
     # Return the string code for the given color. Note that the \001 and \002 delimiters tell Readline not
@@ -88,13 +91,13 @@ def _get_color(color):
         raise KeyError('"{}" is not a valid color or modifier.'.format(color))
 
 def _setup_prompt():
-    """Modifies the prompt used for the interactive session."""
+    """Modifies the PS1 and PS2 prompts used for the interactive session."""
 
     # General Imports
     import sys
 
     # Create a dictionary for colors to use in the format strings
-    colors = ('green', 'normal', 'yellow')
+    colors = ('green', 'magenta_background', 'normal', 'yellow')
     color_dict = {color_name: _get_color(color_name) for color_name in colors}
 
     # Override the default prompt used in the interactive session, printed at the beginning of each line, and set it up
@@ -103,7 +106,7 @@ def _setup_prompt():
             version=sys.version_info, **color_dict)
 
     # Override the default prompt used for line continuations, so that multi-line commands can be copied properly.
-    sys.ps2 = ' ' * 8
+    sys.ps2 = '{magenta_background}{spaces}{normal}'.format(spaces=' ' * 8, **color_dict)
 
 # Remove the setup prompt function so it doesn't pollute the interactive session's namespace.
 _setup_prompt()
