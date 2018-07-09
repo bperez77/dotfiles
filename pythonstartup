@@ -113,11 +113,19 @@ _setup_prompt()
 del _get_color, _setup_prompt
 
 #-----------------------------------------------------------------------------------------------------------------------
-# Default Modules and Defined Functions
+# Default Modules
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Provides an improved version of the `dir` function, for listing the members of an object.
 from see import see
+
+# Import the various container types and iteration tools so they can be used from the interpreter.
+from collections import *
+from itertools import *
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Defined Functions
+#-----------------------------------------------------------------------------------------------------------------------
 
 def see_filter(obj, pattern):
     """Filters the members of the given object using a wildcard pattern or regex.
