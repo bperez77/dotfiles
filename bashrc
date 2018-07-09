@@ -117,7 +117,7 @@ shopt -s hostcomplete
 # characters towards prompt's length. This is necessary for Bash to properly wrap long lines on the terminal.
 CYAN="\\[$(tput setaf 6)\\]"                # Cyan color for text.
 GREEN="\\[$(tput setaf 2)\\]"               # Green color for text.
-PURPLE_BACKGROUND="\\[$(tput setab 5)\\]"   # Purple color for the terminal background.
+MAGENTA_BACKGROUND="\\[$(tput setab 5)\\]"  # Magenta color for the terminal background.
 NORMAL="\\[$(tput sgr0)\\]"                 # Return text to normal.
 YELLOW="\\[$(tput setaf 3)\\]"              # Yellow color for text.
 
@@ -125,8 +125,8 @@ YELLOW="\\[$(tput setaf 3)\\]"              # Yellow color for text.
 export PS1="${GREEN}[\\u@\\h ${YELLOW}\\w${CYAN}\$(__git_ps1)${GREEN}]\\\$ ${NORMAL}"
 
 # Set the prompt used for line continuations in the terminal (for multiline commands) so that multiline commands can be
-# copied properly. The number of spaces is set to the PS1 length so it can align with the previous line.
-export PS2="$(printf "${PURPLE_BACKGROUND} %.s" {1..8} && printf "${NORMAL}")"
+# copied properly.
+export PS2="${MAGENTA_BACKGROUND}$(printf " %.s" {1..8})${NORMAL}"
 
 #-----------------------------------------------------------------------------------------------------------------------
 # General Environment Variables
