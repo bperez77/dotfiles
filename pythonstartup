@@ -105,8 +105,10 @@ def _setup_prompt():
     sys.ps1 = '{green}[{yellow}Python-{version.major}.{version.minor}.{version.micro}{green}]>>> {normal}'.format(
             version=sys.version_info, **color_dict)
 
-    # Override the default prompt used for line continuations, so that multi-line commands can be copied properly.
-    sys.ps2 = '{magenta_background}{spaces}{normal}'.format(spaces=' ' * 8, **color_dict)
+    # Override the default prompt used for line continuations, so that multi-line commands can be copied properly. Align
+    # the lines with the PS1 prompt length, so function definitions look nice.
+    ps1_len = len('[Python-{version.major}.{version.minor}.{version.micro}]>>> '.format(version=sys.version_info))
+    sys.ps2 = '{magenta_background}{space:<{ps2_len}}{normal} '.format(ps2_len=ps1_len - 1, space=' ', **color_dict)
 
 # Remove the setup prompt function so it doesn't pollute the interactive session's namespace.
 _setup_prompt()
