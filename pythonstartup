@@ -57,33 +57,35 @@ del _setup_readline
 # Prompt Settings
 #-----------------------------------------------------------------------------------------------------------------------
 
-def _get_ps1_prompt():
-    """Constructs the PS1 prompt used for the interactive session. This is the line printed at the beginning of each
-    line in the interpreter."""
+def _get_color(color):
+    """Gets the string code to represent the given color or modifier in the terminal by its name name (e.g red, green,
+    nomral, bold, etc). The returned string also has the appropriate delimiters to be used in Python prompt string."""
 
-    # General Imports
+    # If Python is not being run on a Linux system, then the curses library is unavailable, so colors cannot be used.
     import platform
-    from sys import version_info
+    if platform.system().lower() != 'linux':
+        return ''
 
-    # If Python is being run on a Linux system, then colorize the prompt.
-    if platform.system().lower() == 'linux':
-        # Get ANSI color and modification codes for terminal text. Note that the \001 and \002 delimiters tell readline
-        # not to the characters towards the line length. This is necessary to wrap long lines properly.
-        import curses
-        curses.setupterm()
-        get_color = lambda color: curses.tparm(curses.tigetstr('setaf'), color).decode('utf-8')
+    # Otherwise, if the current terminal does not support color codes, then they cannot be used.
+    import curses
+    curses.setupterm()
+    if curses.tigetstr('setaf') is None:
+        return ''
 
-        color_dict = {
-                'normal':   '\001{}\002'.format(curses.tigetstr('sgr0').decode('utf-8')),
-                'green':    '\001{}\002'.format(get_color(curses.COLOR_GREEN)),
-                'yellow':   '\001{}\002'.format(get_color(curses.COLOR_YELLOW)),
-        }
+    # Get ANSI color and modification codes for terminal text for the various colors and modifiers.
+    get_color = lambda color: curses.tparm(curses.tigetstr('setaf'), color).decode('utf-8')
+    color_dict = {
+            'normal':   '{}'.format(curses.tigetstr('sgr0').decode('utf-8')),
+            'green':    '{}'.format(get_color(curses.COLOR_GREEN)),
+            'yellow':   '{}'.format(get_color(curses.COLOR_YELLOW)),
+    }
+
+    # Return the string code for the given color. Note that the \001 and \002 delimiters tell Readline not
+    # to count the characters towards the line length. This is necessary to wrap long lines properly.
+    if color in color_dict:
+        return '\001{}\002'.format(color_dict[color])
     else:
-        color_dict = {'normal': '', 'green': '', 'yellow': ''}
-
-    # Include the python version in the PS1 prompt
-    return '{green}[{yellow}Python-{0.major}.{0.minor}.{0.micro}{green}]>>> {normal}'.format(version_info,
-            **color_dict)
+        raise KeyError('"{}" is not a valid color or modifier.'.format(color))
 
 def _setup_prompt():
     """Modifies the prompt used for the interactive session."""
@@ -91,15 +93,21 @@ def _setup_prompt():
     # General Imports
     import sys
 
-    # Override the default prompt used in the interactive session, printed at the beginning of each line.
-    sys.ps1 = _get_ps1_prompt()
+    # Create a dictionary for colors to use in the format strings
+    colors = ('green', 'normal', 'yellow')
+    color_dict = {color_name: _get_color(color_name) for color_name in colors}
 
-    # Override the default prompt used for line continuations, so that multiline commands can be copied properly.
+    # Override the default prompt used in the interactive session, printed at the beginning of each line, and set it up
+    # to display the version of Python being used.
+    sys.ps1 = '{green}[{yellow}Python-{version.major}.{version.minor}.{version.micro}{green}]>>> {normal}'.format(
+            version=sys.version_info, **color_dict)
+
+    # Override the default prompt used for line continuations, so that multi-line commands can be copied properly.
     sys.ps2 = ' ' * 8
 
 # Remove the setup prompt function so it doesn't pollute the interactive session's namespace.
 _setup_prompt()
-del _get_ps1_prompt, _setup_prompt
+del _get_color, _setup_prompt
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Default Modules and Defined Functions
