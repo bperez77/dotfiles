@@ -24,7 +24,7 @@ filetype indent plugin on
 " Allow backspacing over the end of a line, automatic indentation, and the start of insert.
 set backspace=eol,indent,start
 
-" Instead of inserting a tab character, pressing the tab key inserts spaces, governed by the soft tab stop.
+" When pressing the tab key, insert spaces instead of a tab character, the number of which is given by soft tab stop.
 set expandtab
 
 " When performing a search, highlight all matching instances of the search term in the file. This highlight remains
@@ -50,12 +50,13 @@ set showcmd
 " Highlight matching delimiters when the cursor is over one them (e.g braces, parenthesis, etc.).
 set showmatch
 
+" The number of spaces that are used when pressing the tab key. This also affects the behavior when pressing the
+" backspace key, so it deletes the equivalent number of spaces when pressed.
+set softtabstop=4
+
 " When performing a horizontal or vertical split, open the window below or to the right of the current window.
 set splitbelow
 set splitright
-
-" The number of spaces that a tab character represents, or its width.
-set tabstop=4
 
 " When using Ctags to search for identifiers, search for the tags file from the file's current directory, then all of
 " its parent directories.
