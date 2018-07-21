@@ -14,46 +14,63 @@
 " General Settings
 "-----------------------------------------------------------------------------------------------------------------------
 
-" Enable filetype detection and syntax highlighting.
+" Ensure that modern Vim mode is used, and Vim makes no attempt to be Vi backwards compatible.
+set nocompatible
+
+" Enable syntax highlighting, filetype detection, filetype specific indentation, and plugins.
 syntax on
 filetype indent plugin on
 
-" Ensure that we are in modern vim mode, not backwards-compatible vi mode.
-set nocompatible
-set backspace=indent,eol,start
+" Allow backspacing over the end of a line, automatic indentation, and the start of insert.
+set backspace=eol,indent,start
 
-" Helpful information: cursor position in the bottom right, line numbers on the left, path name in the title, and
-" command being typed in the bottom right.
-set ruler
-set number
-set title
-set showcmd
-
-" Make tabs 4 spaces instead of a tab character.
-set tabstop=4
-set shiftwidth=4
+" Instead of inserting a tab character, pressing the tab key inserts spaces, governed by the soft tab stop.
 set expandtab
 
-" Make vim highlight all instances of a search term.
+" When performing a search, highlight all matching instances of the search term in the file. This highlight remains
+" persistent until the next search or when it is explicitly disabled.
 set hlsearch
 
-" Set tab completion to scroll through available matches alphabetically, and enable the menu to display file matches.
-set wildmode=full
-set wildmenu
+" Show the line number for each line on the left-hand side of the Vim window.
+set number
+
+" Show information about the current cursor position in the bottom right of the Vim window. This includes the line
+" number and character/column position of the cursor and the relative position in the overall file.
+set ruler
+
+" Set the default shell to Bash.
+set shell=bash
+
+" The number of spaces that are used for each step of manual or automatic indentation.
+set shiftwidth=4
+
+" Show the (normal-mode) command being typed in the last line of the screen.
+set showcmd
 
 " Highlight matching delimiters when the cursor is over one them (e.g braces, parenthesis, etc.).
 set showmatch
 
-" Open window splits below and to the right (as opposed to vim's unnatural default).
+" When performing a horizontal or vertical split, open the window below or to the right of the current window.
 set splitbelow
 set splitright
 
-" Set the default shell to bash.
-set shell=bash
+" The number of spaces that a tab character represents, or its width.
+set tabstop=4
 
 " When using Ctags to search for identifiers, search for the tags file from the file's current directory, then all of
 " its parent directories.
 set tags=./tags;
+
+" Update the title of the screen (terminal window) based on the file is being edited, setting it to its name.
+set title
+
+" When performing tab completion, complete the next full match and also start a wild menu if it is enabled. This updates
+" the completion text to the next full match.
+set wildmode=full
+
+" When performing tab completion, list all available tab completions at the bottom of the screen. The available
+" completions can be scrolled throw by pressed tab repeatedly.
+set wildmenu
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Color Settings
