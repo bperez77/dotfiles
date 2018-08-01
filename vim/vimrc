@@ -21,6 +21,10 @@ set nocompatible
 syntax on
 filetype indent plugin on
 
+" Change the current working directory to be the parent directory of the current file being edited. This is enabled to
+" make it easier to switch to other files in the same directory as the file being edited.
+set autochdir
+
 " Allow backspacing over the end of a line, automatic indentation, and the start of insert.
 set backspace=eol,indent,start
 
@@ -30,6 +34,10 @@ set expandtab
 " When performing a search, highlight all matching instances of the search term in the file. This highlight remains
 " persistent until the next search or when it is explicitly disabled.
 set hlsearch
+
+" Make the Vim search behave like searching does in a web browser does. When a search command is typed, matches against
+" the current search string are highlighted and updated as more of the command is typed.
+set incsearch
 
 " Show the line number for each line on the left-hand side of the Vim window.
 set number
