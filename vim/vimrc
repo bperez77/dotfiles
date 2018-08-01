@@ -88,107 +88,20 @@ set wildmenu
 " Ensure that the color scheme is always the default from Ubuntu 14.04.
 colorscheme default
 
-" Use the PeachPuff color scheme's color for highlighting searches. This looks much better for white text.
-highlight Search term=reverse ctermbg=3 guibg=Gold2
+" Use the peach puff color scheme's color for highlighting searches. This looks much better for white text.
+highlight Search        term=reverse ctermbg=3 guibg=Gold2
 
 " Overwrite Vim's awful color scheme when using the Vim diff tool. This produces a much visually better looking diff.
-highlight DiffAdd ctermfg=White ctermbg=DarkGreen guifg=White guibg=DarkGreen
-highlight DiffDelete ctermfg=White ctermbg=DarkRed guifg=White guibg=DarkRed
-highlight DiffChange ctermfg=White ctermbg=DarkMagenta guifg=White guibg=DarkMagenta
-highlight DiffText ctermfg=White ctermbg=DarkBlue guifg=White guibg=DarkBlue
-
-"-----------------------------------------------------------------------------------------------------------------------
-" Syntax Settings (Auto Commands)
-"-----------------------------------------------------------------------------------------------------------------------
-
-" Auto commands that associate non-standard extensions with filetype.
-augroup filetype_associations
-    autocmd!
-
-    " Associate 15-411 lab test files with the C0 filetype.
-    autocmd BufRead,BufNewFile *.l1 *.l2 *.l3 *.l4 *.l5 *.l6 set filetype=c0
-
-    " Associate configuration files with their closest language.
-    autocmd BufRead,BufNewFile *.lalrpop set filetype=rust
-    autocmd BufRead,BufNewFile *.json set filetype=javascript
-
-    " Set Arduino files to have C++ syntax highlighting.
-    autocmd BufRead,BufNewFile *.ino set filetype=cpp
-
-    " Set Kbuild files to have Makefile syntax highlighting.
-    autocmd BufRead,BufNewFile Kbuild set filetype=make
-augroup END
-
-"-----------------------------------------------------------------------------------------------------------------------
-" Auto Commands
-"-----------------------------------------------------------------------------------------------------------------------
-
-" Strip whitespace from the end of lines when writing files.
-augroup strip_whitespace
-    autocmd!
-    autocmd BufWritePre * SquashBlankLines | DeleteTrailingLines | StripWhitespace
-augroup END
+highlight DiffAdd       ctermfg=White ctermbg=DarkGreen guifg=White guibg=DarkGreen
+highlight DiffDelete    ctermfg=White ctermbg=DarkRed guifg=White guibg=DarkRed
+highlight DiffChange    ctermfg=White ctermbg=DarkMagenta guifg=White guibg=DarkMagenta
+highlight DiffText      ctermfg=White ctermbg=DarkBlue guifg=White guibg=DarkBlue
 
 " When the color column is enabled, color it blue.
-highlight ColorColumn ctermbg=DarkBlue ctermfg=white guibg=#592929
-
-" Function to set the default text width if it is not already specified.
-function! SetDefaultTW()
-    if &textwidth == 0 || &filetype == ""
-        set textwidth=120
-    endif
-endfunction
-
-" Function to set the over length marker to be 1 past the text width.
-function! SetOverLength()
-    if &textwidth != 0
-        execute 'match OverLength /\%' . (&textwidth + 1) . 'v.\+/'
-    endif
-endfunction
-
-" Auto commands that deal with line length restrictions.
-augroup line_length
-    autocmd!
-
-    " By default, the text width is 120 if not specified.
-    autocmd BufRead,BufNewFile * call SetDefaultTW()
-
-    " For C-like file types, the line length restriction is 80 characters.
-    autocmd FileType c,cpp,python,rust,cuda,make,asm set textwidth=80
-
-    " For ConqueTerm windows, there is no limit to the text width.
-    autocmd FileType conque_term set textwidth=0
-
-    " Set OverLength to be one past the text width.
-    autocmd FileType * call SetOverLength()
-augroup END
-
-" Highlight any characters past the line length limit in red.
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-
-" Autocommands that deal with changing settings for comments.
-augroup comments
-    autocmd!
-
-    " Enable C style comments for C-like languages.
-    autocmd FileType rust,cuda,c0,verilog_systemverilog setlocal
-        \ formatoptions+=croql
-
-    " Disable automatic extension of '//' style comments.
-    autocmd FileType c,cpp,rust,cuda,c0,verilog_systemverilog setlocal
-        \ comments-=:// comments+=f://
-augroup END
-
-" Autocommands that enable spellchecks for markdown and git commit files.
-augroup spellcheck
-    autocmd!
-    autocmd Filetype * setlocal spell spelllang=en_us
-    autocmd Filetype matlab,text,conque_term,conf,cmake,gitconfig,asm,help,tcl,
-        \sshconfig,bib,gitrebase setlocal spelllang=
-augroup END
+highlight ColorColumn   ctermbg=DarkBlue ctermfg=white guibg=#592929
 
 "-----------------------------------------------------------------------------------------------------------------------
-" Command Aliases
+" Aliases, Commands, and Functions
 "-----------------------------------------------------------------------------------------------------------------------
 
 " Allow for capital letters for common commands.
@@ -220,6 +133,95 @@ command! -bar StripWhitespace execute 'normal! mz' | silent! %s/\s\+$//e | noh |
 command! -bar DeleteTrailingLines execute 'normal! mz' | silent! %s/\($\n\s*\)\+\%$//e | noh | silent! normal! `z
 command! -bar SquashBlankLines execute 'normal! mz' | silent! %s/\(\s*\n\s*\n\)\(\s*\n\)\+/\1/e | noh |
         \ silent! normal! `z
+
+" Function to set the default text width if it is not already specified.
+function! SetDefaultTW()
+    if &textwidth == 0 || &filetype == ""
+        set textwidth=120
+    endif
+endfunction
+
+" Function to set the over length marker to be 1 past the text width.
+function! SetOverLength()
+    if &textwidth != 0
+        execute 'match OverLength /\%' . (&textwidth + 1) . 'v.\+/'
+    endif
+endfunction
+
+"-----------------------------------------------------------------------------------------------------------------------
+" General Auto Commands
+"-----------------------------------------------------------------------------------------------------------------------
+
+" Auto commands that deal with striping whitespace when saving files.
+augroup StripWhitespace
+    autocmd!
+
+    autocmd BufWritePre * SquashBlankLines
+    autocmd BufWritePre * DeleteTrailingLines
+    autocmd BufWritePre * StripWhitespace
+augroup END
+
+" Auto commands that deal with line length restrictions.
+augroup LineLength
+    autocmd!
+
+    " By default, the text width is 120 if not specified.
+    autocmd BufRead,BufNewFile * call SetDefaultTW()
+
+    " For C-like file types, the line length restriction is 80 characters.
+    autocmd FileType c,cpp,python,rust,cuda,make,asm set textwidth=80
+
+    " For ConqueTerm windows, there is no limit to the text width.
+    autocmd FileType conque_term set textwidth=0
+
+    " Set over length to be one past the text width.
+    autocmd FileType * call SetOverLength()
+augroup END
+
+" Highlight any characters past the line length limit in red.
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+
+" Autocommands that enable spellchecks for markdown and git commit files.
+augroup SpellCheck
+    autocmd!
+    autocmd Filetype * setlocal spell spelllang=en_us
+    autocmd Filetype matlab,text,conque_term,conf,cmake,gitconfig,asm,help,tcl,
+        \sshconfig,bib,gitrebase setlocal spelllang=
+augroup END
+
+"-----------------------------------------------------------------------------------------------------------------------
+" Syntax Auto Commands
+"-----------------------------------------------------------------------------------------------------------------------
+
+" Autocommands that deal with changing settings for comments.
+augroup LanguageComments
+    autocmd!
+
+    " Enable C style comments for C-like languages.
+    autocmd FileType rust,cuda,c0,verilog_systemverilog setlocal formatoptions+=croql
+
+    " Disable automatic extension of '//' style comments.
+    autocmd FileType c,cpp,rust,cuda,c0,verilog_systemverilog setlocal comments-=:// comments+=f://
+augroup END
+
+" Auto commands that associate non-standard extensions with their corresponding file types.
+" TODO: Move these to the after directory.
+augroup FiletypeAssociations
+    autocmd!
+
+    " Associate 15-411 lab test files with the C0 filetype.
+    autocmd BufRead,BufNewFile *.l1 *.l2 *.l3 *.l4 *.l5 *.l6 set filetype=c0
+
+    " Associate configuration files with their closest language.
+    autocmd BufRead,BufNewFile *.lalrpop set filetype=rust
+    autocmd BufRead,BufNewFile *.json set filetype=javascript
+
+    " Associate Arduino files to have C++ syntax highlighting.
+    autocmd BufRead,BufNewFile *.ino set filetype=cpp
+
+    " Associate Kbuild files with the Makefile filetype.
+    autocmd BufRead,BufNewFile Kbuild set filetype=make
+augroup END
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Keyboard Shortcuts
