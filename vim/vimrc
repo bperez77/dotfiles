@@ -173,9 +173,6 @@ augroup LineLength
 
     " For ConqueTerm windows, there is no limit to the text width.
     autocmd FileType conque_term set textwidth=0
-
-    " Set over length to be one past the text width.
-    autocmd FileType * call SetOverLength()
 augroup END
 
 " Highlight any characters past the line length limit in red.
@@ -269,6 +266,12 @@ vnoremap <silent> <expr> P <sid>Repl()
 set pastetoggle=<F2>
 noremap <F3> :setlocal spell! spelllang=en_us<CR>
 inoremap <F3> :setlocal spell! spelllang=en_us<CR>
+
+" Quick shortcuts to disable and enable highlighting overlength lines
+noremap <F4> :call SetOverLength()<CR>
+inoremap <F4> :call SetOverLength()<CR>
+noremap <F5> :match none<CR>
+inoremap <F5> :match none<CR>
 
 " Quick shortcut to disable highlighting over length lines.
 noremap <F8> :match none<CR>
