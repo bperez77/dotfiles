@@ -184,9 +184,7 @@ highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 " Autocommands that enable spellchecks for markdown and git commit files.
 augroup SpellCheck
     autocmd!
-    autocmd Filetype * setlocal spell spelllang=en_us
-    autocmd Filetype matlab,text,conque_term,conf,cmake,gitconfig,asm,help,tcl,
-        \sshconfig,bib,gitrebase setlocal spelllang=
+    autocmd FileType gitcommit,markdown setlocal spell spelllang=en_us
 augroup END
 
 "-----------------------------------------------------------------------------------------------------------------------
@@ -270,6 +268,7 @@ vnoremap <silent> <expr> P <sid>Repl()
 " Shortcuts to toggle paste mode and spellcheck.
 set pastetoggle=<F2>
 noremap <F3> :setlocal spell! spelllang=en_us<CR>
+inoremap <F3> :setlocal spell! spelllang=en_us<CR>
 
 " Quick shortcut to disable highlighting over length lines.
 noremap <F8> :match none<CR>
