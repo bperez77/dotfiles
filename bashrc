@@ -145,7 +145,10 @@ export THRS=$((2 * $(getconf _NPROCESSORS_ONLN)))
 # Paths
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Add the bin directory to the path, where any miscellaneous executables may be.
+# Add the locally installed executables to the path.
+export PATH="${PATH}:${HOME}/.local/bin"
+
+# Add the bin directory to the path, where any miscellaneous user-created executables may be.
 export PATH="${PATH}:${HOME}/bin/"
 
 # Add the paths for the installed Arduino studio, MATLAB, Altera Quartus, and Eagle programs to the path
