@@ -532,9 +532,8 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 ]]; then
         local cmd=("${@}")
         eval "local new_cmd=$(convert-wsl-cmd "${cmd[@]}")"
 
-        # Run the command in a separate command window. This is done because the WSL does not have a good pseudoterminal
-        # (PTY) interface, so colors will not show up properly and the command output can sometimes be truncated. The K
-        # switch is used so that the command prompt window stays open after the command completes.
+        # Run the command in a separate command window. The K switch is used so that the command prompt window stays
+        # open after the command completes.
         cmd.exe /C start cmd.exe /K "${new_cmd[@]}"
     }
 fi
@@ -607,10 +606,15 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 || ${SHELL_IS_GIT_BASH} -eq 0 ]]; then
     export PATH="${PATH}:${C_DRIVE}/Windows/System32/"
     export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
 
-    # Setup aliases for common basic Windows commands. These call the run Windows function to invoke them.
-    alias cmd='start-windows-cmd'
+    # Setup aliases for common Windows commands. The cmd-start alias runs the command in a new window.
+    alias cmd='run-windows-cmd'
+    alias cmd-start='start-windows-cmd'
     alias start='run-windows-cmd start'
     alias powershell='run-windows-cmd start powershell.exe -NoExit'
+
+    # Alias for the make link command. Note that symbolic links created with mklink are usualable both by the WSL and
+    # Windows. However, links created with ln appear as junctions to Windows, and thus aren't usable.
+    alias mklink='run-windows-cmd mklink'
 fi
 
 #-----------------------------------------------------------------------------------------------------------------------
