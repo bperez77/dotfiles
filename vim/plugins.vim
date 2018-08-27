@@ -42,6 +42,12 @@ call plug#begin('~/.vim/installed-plugins')
     " A plugin for adding support for ISPC (Intel SPMD Program Compiler) files to Vim.
     Plug 'jez/vim-ispc'
 
+    " A plugin for adding support for Protocol Buffer files to Vim, used for a class. This is locally installed..
+    Plug 'uarun/vim-protobuf'
+
+    " A plugin for adding support for Windows PowerShell files to Vim.
+    Plug 'PProvost/vim-ps1'
+
     " A plugin for adding support for Rust files to Vim.
     Plug 'rust-lang/rust.vim'
 
