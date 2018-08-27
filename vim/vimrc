@@ -363,15 +363,3 @@ iabbrev <expr> _sxhd "" .
     \"<CR>" .
     \"FIXME: Insert Longer Description Here<CR>" .
     \"\"\"\"<CR>"
-
-"-----------------------------------------------------------------------------------------------------------------------
-" External Plugin Settings
-"-----------------------------------------------------------------------------------------------------------------------
-
-" ConqueTerm is a program that allows you to run shells and REPL's inside vim
-" When entering a shell buffer, automatically go to insert mode, allow for
-" CTRL-W to switch out of a ConqueTerm instance, and continue text output even
-" when the focus is not on the ConqueTerm buffer.
-let g:ConqueTerm_InsertOnEnter = 1
-let g:ConqueTerm_CWInsert = 1
-let g:ConqueTerm_ReadUnfocused = 1

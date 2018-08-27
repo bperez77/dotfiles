@@ -46,6 +46,38 @@ call plug#begin('~/.vim/installed-plugins')
     Plug 'rust-lang/rust.vim'
 
     " A plugin for adding support for Verilog and SystemVerilog files to Vim.
-    Plug 'vhda/verilog_systemverilog.vim', {'for': 'verilog_systemverilog'}
+    Plug 'vhda/verilog_systemverilog.vim'
 
 call plug#end()
+
+"-----------------------------------------------------------------------------------------------------------------------
+" ConqueTerm Plugin Settings
+"-----------------------------------------------------------------------------------------------------------------------
+
+" When entering a ConqueTerm buffer, automatically go into insert mode.
+let g:ConqueTerm_InsertOnEnter = 1
+
+" Allow the CTRL-W shortcut to navigate out of a ConqueTerm buffer, even in insert mode. Note, this overrides the shell
+" shortcut CTRL-W, which deletes the previous word.
+let g:ConqueTerm_CWInsert = 1
+
+" Continue showing the output of any commands being run in ConqueTerm, even when the buffer is not being focused on
+" (e.g. you're focused on another buffer).
+let g:ConqueTerm_ReadUnfocused = 1
+
+" Tell ConqueTerm to always use Python3. This suppresses a warning about the Python 2 interface being unavailable.
+let g:ConqueTerm_PyVersion = 3
+
+" Set the terminal ConqueTerm should be identified as. The xterm terminal has better features than the default (vt100).
+let g:ConqueTerm_Term = 'xterm-256color'
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" SystemVerilog File Settings
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Disable the default indenting behavior for assign statements, instead indenting by a fixed amount.
+let g:verilog_indent_assign_fix = 1
+
+" Disable the default indenting behavior for the clothing parenthesis of the modules, function, etc. are indented,
+" instead adding no additional parenthesis to the closing parenthesis.
+let g:verilog_disable_indent_lst = ['eos']
