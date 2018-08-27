@@ -32,7 +32,20 @@ runtime! macros/matchit.vim
 " fully-qualified URL or path.
 call plug#begin('~/.vim/installed-plugins')
 
+    " A plugin that acts as a terminal emulator for Vim. This allows for various REPLs/shells to be opened and
+    " interacted with from Vim, such as a Bash shell, a Python REPL, etc., so commands can be run.
+    Plug 'lrvick/Conque-Shell'
+
+    " A plugin for adding support for C0 files to Vim, used for a class. This is a locally installed plugin.
+    Plug '~/.vim/manual-plugins/c0.vim'
+
+    " A plugin for adding support for ISPC (Intel SPMD Program Compiler) files to Vim.
+    Plug 'jez/vim-ispc'
+
     " A plugin for adding support for Rust files to Vim.
     Plug 'rust-lang/rust.vim'
+
+    " A plugin for adding support for Verilog and SystemVerilog files to Vim.
+    Plug 'vhda/verilog_systemverilog.vim', {'for': 'verilog_systemverilog'}
 
 call plug#end()
