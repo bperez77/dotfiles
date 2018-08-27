@@ -31,8 +31,12 @@
 !/pythonstartup
 !/ssh_config
 
-# Allow for the Vim RC file and the various configuration files under the Vim directory.
+# Allow for the Vimrc file and the various configuration files under the Vim directory.
 !*.vim
 !/vim/**/*.txt
 !/vim/**/*.py
 !/vim/vimrc
+
+# Ignore the Vim-Plug file and any plugins installed with the manager.
+/vim/autoload/plug.vim
+/vim/installed-plugins
