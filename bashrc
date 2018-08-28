@@ -129,6 +129,13 @@ export PS1="${GREEN}[\\u@\\h ${YELLOW}\\w${CYAN}\$(__git_ps1)${GREEN}]\\\$ ${NOR
 export PS2="${MAGENTA_BACKGROUND}$(printf " %.s" {1..8})${NORMAL}"
 
 #-----------------------------------------------------------------------------------------------------------------------
+# Tab Completion Settings
+#-----------------------------------------------------------------------------------------------------------------------
+
+# Setup the Vman command from the Vim SuperMan plugin to have the same completion behavior as Man.
+complete -o default -o nospace -F _man vman
+
+#-----------------------------------------------------------------------------------------------------------------------
 # General Environment Variables
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -150,6 +157,9 @@ export PATH="${PATH}:${HOME}/.local/bin"
 
 # Add the bin directory to the path, where any miscellaneous user-created executables may be.
 export PATH="${PATH}:${HOME}/bin/"
+
+# Add the path to the Vman command from Vim's SuperMan plugin.
+export PATH="${PATH}:${HOME}/.vim/installed-plugins/vim-superman/bin/"
 
 # Add the paths for the installed Arduino studio, MATLAB, Altera Quartus, and Eagle programs to the path
 export PATH="${PATH}:/usr/bin/Arduino/arduino"

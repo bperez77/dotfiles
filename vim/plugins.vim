@@ -47,6 +47,10 @@ call plug#begin('~/.vim/installed-plugins')
     " things such as opening `git blame` for the current file. Used by the Vim Airline plugin to get branch names.
     Plug 'tpope/vim-fugitive'
 
+    " A plugin that adds in highlighting of matching keywords used by the MatchIt plugin. This is the same behavior that
+    " occurs for character delimiters that are matched by Vim.
+    Plug 'vimtaku/hl_matchit.vim'
+
     " A plugin for adding support for ISPC (Intel SPMD Program Compiler) files to Vim.
     Plug 'jez/vim-ispc'
 
@@ -58,6 +62,10 @@ call plug#begin('~/.vim/installed-plugins')
 
     " A plugin for adding support for Rust files to Vim.
     Plug 'rust-lang/rust.vim'
+
+    " A plugin that allows man pages to be viewed from Vim. This is already possible natively with Vim; this plugin sets
+    " up a 'vman' command that can used to do it from the terminal.
+    Plug 'jez/vim-superman'
 
     " A plugin for adding support for Verilog and SystemVerilog files to Vim.
     Plug 'vhda/verilog_systemverilog.vim'
@@ -95,6 +103,14 @@ let g:ConqueTerm_PyVersion = 3
 
 " Set the terminal ConqueTerm should be identified as. The xterm terminal has better features than the default (vt100).
 let g:ConqueTerm_Term = 'xterm-256color'
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Highlight MatchIt Plugin Settings
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Enable highlighting MatchIt keywords by default. This ensures that the plugin is unconditionally enabled when Vim
+" starts up.
+let g:hl_matchit_enable_on_vim_startup = 1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SystemVerilog Plugin Settings
