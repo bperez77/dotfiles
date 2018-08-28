@@ -5,7 +5,7 @@
 " Author:           Brandon Perez <bmperez@alumni.cmu.edu>
 " Creation Date:    Sunday, August 26, 2018 at 10:58:17 PM PDT
 "
-" This file contains all of all the pluging utilized by Vim. This file sets up the plugins to be loaded and also sets
+" This file contains all of all the plugins utilized by Vim. This file sets up the plugins to be loaded and also sets
 " any settings for the plugin.
 "
 "-----------------------------------------------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ endif
 " Plugins
 "-----------------------------------------------------------------------------------------------------------------------
 
-" This begins the start of installed plugins using Vim-Plug. Plugins come from Github, unless they have a
+" This begins the start of installed plugins using Vim-Plug. Plugins come from GitHub, unless they have a
 " fully-qualified URL or path.
 call plug#begin('~/.vim/installed-plugins')
 
@@ -94,23 +94,15 @@ let g:ConqueTerm_CWInsert = 1
 " (e.g. you're focused on another buffer).
 let g:ConqueTerm_ReadUnfocused = 1
 
-" Tell ConqueTerm to always use Python3. This suppresses a warning about the Python 2 interface being unavailable.
+" Tell ConqueTerm to always use Python 3. This suppresses a warning about the Python 2 interface being unavailable.
 let g:ConqueTerm_PyVersion = 3
 
-" Set the terminal ConqueTerm should be identified as. The xterm terminal has better features than the default (vt100).
+" Set the terminal ConqueTerm should be identified as. The xterm terminal has better features than the default (VT100).
 let g:ConqueTerm_Term = 'xterm-256color'
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Highlight MatchIt Plugin Settings
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Enable highlighting MatchIt keywords by default. This ensures that the plugin is unconditionally enabled when Vim
-" starts up.
-let g:hl_matchit_enable_on_vim_startup = 1
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"-----------------------------------------------------------------------------------------------------------------------
 " SystemVerilog Plugin Settings
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"-----------------------------------------------------------------------------------------------------------------------
 
 " Disable the default indenting behavior for assign statements, instead indenting by a fixed amount.
 let g:verilog_indent_assign_fix = 1
