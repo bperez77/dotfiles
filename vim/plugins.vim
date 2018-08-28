@@ -24,10 +24,6 @@ endif
 " Plugins
 "-----------------------------------------------------------------------------------------------------------------------
 
-" A plugins that extends matching delimiters to language keywords, usch as begin and end in SystemVerilog. This allows
-" one to use the '%' key to jump between these keywords.
-runtime! macros/matchit.vim
-
 " This begins the start of installed plugins using Vim-Plug. Plugins come from Github, unless they have a
 " fully-qualified URL or path.
 call plug#begin('~/.vim/installed-plugins')
@@ -47,12 +43,12 @@ call plug#begin('~/.vim/installed-plugins')
     " things such as opening `git blame` for the current file. Used by the Vim Airline plugin to get branch names.
     Plug 'tpope/vim-fugitive'
 
-    " A plugin that adds in highlighting of matching keywords used by the MatchIt plugin. This is the same behavior that
-    " occurs for character delimiters that are matched by Vim.
-    Plug 'vimtaku/hl_matchit.vim'
-
     " A plugin for adding support for ISPC (Intel SPMD Program Compiler) files to Vim.
     Plug 'jez/vim-ispc'
+
+    " A plugin that serves as a replacement for Vim's standard MatchIt plugin, extending it with better behavior, and
+    " adds in highlighting of matching keywords delimiters, similar to how Vim treats matching character delimiters.
+    Plug 'andymass/vim-matchup'
 
     " A plugin for adding support for Protocol Buffer files to Vim, used for a class. This is locally installed..
     Plug 'uarun/vim-protobuf'
