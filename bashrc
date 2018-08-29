@@ -180,7 +180,10 @@ export PATH="${PATH}:${XILINX_ROOT}/SDK/${XILINX_VERSION}/gnu/arm/lin/bin/"
 export PATH="${PATH}:${XILINX_ROOT}/SDK/${XILINX_VERSION}/bin/"
 export PATH="${PATH}:${XILINX_ROOT}/Vivado_HLS/${XILINX_VERSION}/bin/"
 
-# Add the programs for the Go language and any installed Go programs to the path.
+# Add the Rust toolchain and any installed Rust programs with Cargo to the path.
+export PATH="${PATH}:${HOME}/.cargo/bin"
+
+# Add the Go toolchain and any installed Go programs to the path.
 export PATH="${PATH}:${GOPATH}/bin"
 
 # Add the programs for the manually installed C0 and SML/NJ languages to the path.
