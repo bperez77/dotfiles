@@ -35,6 +35,11 @@ if [[ -f '/etc/bash_completion' ]] && (! shopt -oq posix); then
     source '/etc/bash_completion'
 fi
 
+# Source the FZF fuzzy finder settings if there is a FZF Bash file.
+if [[ -f "${HOME}/.fzf.bash" ]]; then
+    source "${HOME}/.fzf.bash"
+fi
+
 #-----------------------------------------------------------------------------------------------------------------------
 # History and Shell Options
 #-----------------------------------------------------------------------------------------------------------------------

@@ -39,6 +39,11 @@ call plug#begin('~/.vim/installed-plugins')
     " things such as opening `git blame` for the current file. Used by the Vim Airline plugin to get branch names.
     Plug 'tpope/vim-fugitive'
 
+    " Adds a fuzzy finder (FZF) to Vim, providing commands to perform fuzzy searches. A fuzzy finder is used to find
+    " files based on partial strings. FZF is also command-line tool, the first Plug line installs this tool.
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+    Plug 'junegunn/fzf.vim'
+
     " Adds support for the ISPC (Intel SPMD Program Compiler) language to Vim.
     Plug 'jez/vim-ispc'
 
