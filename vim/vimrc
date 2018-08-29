@@ -131,9 +131,9 @@ command! Vex Vexplore!
 command! -bar -nargs=* Sh execute ':silent !' . <q-args> | execute ':redraw!'
 
 " Provide short aliases for spawning a BASH shell with ConqueTerm.
-command! -bar Sbash ConqueTermSplit bash
-command! -bar Vbash ConqueTermVSplit bash
-command! -bar Bash ConqueTerm bash
+command! -bar Sbash terminal ++noclose bash
+command! -bar Vbash vertical ++noclose bash
+command! -bar Bash terminal ++noclose ++curwin bash
 
 " Sets up a command to be run when the file is saved, and clears the command.
 command! -bar -nargs=* OnWrite autocmd BufWritePost * !<args>
@@ -183,9 +183,6 @@ augroup LineLength
 
     " For C-like file types, the line length restriction is 80 characters.
     autocmd FileType c,cpp,python,rust,cuda,make,asm setlocal textwidth=80
-
-    " For ConqueTerm windows, there is no limit to the text width.
-    autocmd FileType conque_term setlocal textwidth=0
 augroup END
 
 " Highlight any characters past the line length limit in red.
