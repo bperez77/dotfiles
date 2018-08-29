@@ -8,6 +8,9 @@
 " This file is executed when a new Vim session starts (typically when opening a file), and it sets up the settings,
 " shortcuts, plugins, and abbreviations for the Vim session.
 "
+" This file contains the general settings for Vim. For plugin settings, see plugins.vim. For language-specific settings,
+" see the after/syntax directory.
+"
 "-----------------------------------------------------------------------------------------------------------------------
 
 "-----------------------------------------------------------------------------------------------------------------------
@@ -179,10 +182,10 @@ augroup LineLength
     autocmd BufRead,BufNewFile * call SetDefaultTW()
 
     " For C-like file types, the line length restriction is 80 characters.
-    autocmd FileType c,cpp,python,rust,cuda,make,asm set textwidth=80
+    autocmd FileType c,cpp,python,rust,cuda,make,asm setlocal textwidth=80
 
     " For ConqueTerm windows, there is no limit to the text width.
-    autocmd FileType conque_term set textwidth=0
+    autocmd FileType conque_term setlocal textwidth=0
 augroup END
 
 " Highlight any characters past the line length limit in red.
@@ -215,17 +218,17 @@ augroup FiletypeAssociations
     autocmd!
 
     " Associate 15-411 lab test files with the C0 filetype.
-    autocmd BufRead,BufNewFile *.l1 *.l2 *.l3 *.l4 *.l5 *.l6 set filetype=c0
+    autocmd BufRead,BufNewFile *.l1 *.l2 *.l3 *.l4 *.l5 *.l6 setlocal filetype=c0
 
     " Associate configuration files with their closest language.
-    autocmd BufRead,BufNewFile *.lalrpop set filetype=rust
-    autocmd BufRead,BufNewFile *.json set filetype=javascript
+    autocmd BufRead,BufNewFile *.lalrpop setlocal filetype=rust
+    autocmd BufRead,BufNewFile *.json setlocal filetype=javascript
 
     " Associate Arduino files to have C++ syntax highlighting.
-    autocmd BufRead,BufNewFile *.ino set filetype=cpp
+    autocmd BufRead,BufNewFile *.ino setlocal filetype=cpp
 
     " Associate Kbuild files with the Makefile filetype.
-    autocmd BufRead,BufNewFile Kbuild set filetype=make
+    autocmd BufRead,BufNewFile Kbuild setlocal filetype=make
 augroup END
 
 "-----------------------------------------------------------------------------------------------------------------------
