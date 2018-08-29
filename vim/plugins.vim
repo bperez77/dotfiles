@@ -28,38 +28,35 @@ endif
 " fully-qualified URL or path.
 call plug#begin('~/.vim/installed-plugins')
 
-    " A plugin that provides a nicer and prettier status and tabline for Vim. This is highly customizable and the
-    " default includes the line number, git branch, what Vim mode you're currently in, etc.
+    " Provides a nicer and prettier status and tabline for Vim. This is highly customizable and the default includes the
+    " line number, git branch, what Vim mode you're currently in, etc.
     Plug 'vim-airline/vim-airline'
 
-    " A plugin for adding support for C0 files to Vim, used for a class. This is a locally installed plugin.
+    " Adds support for C0 files to Vim, used for the 15-122 class. This is a locally installed plugin.
     Plug '~/.vim/manual-plugins/c0.vim'
 
-    " A plugin that provides commands for interacting with Git and other version control software. This allows you do
+    " Provides commands for interacting with Git and other version control software. This allows you do
     " things such as opening `git blame` for the current file. Used by the Vim Airline plugin to get branch names.
     Plug 'tpope/vim-fugitive'
 
-    " A plugin for adding support for ISPC (Intel SPMD Program Compiler) files to Vim.
+    " Adds support for the ISPC (Intel SPMD Program Compiler) language to Vim.
     Plug 'jez/vim-ispc'
 
-    " A plugin that serves as a replacement for Vim's standard MatchIt plugin, extending it with better behavior, and
-    " adds in highlighting of matching keywords delimiters, similar to how Vim treats matching character delimiters.
+    " Serves as a replacement for Vim's standard MatchIt plugin, extending it with better behavior, and adds in
+    " highlighting of matching keywords delimiters, similar to how Vim treats matching character delimiters.
     Plug 'andymass/vim-matchup'
 
-    " A plugin for adding support for Protocol Buffer files to Vim, used for a class. This is locally installed..
-    Plug 'uarun/vim-protobuf'
-
-    " A plugin for adding support for Windows PowerShell files to Vim.
+    " Adds support for Google's Protocol Buffer language to Vim.
     Plug 'PProvost/vim-ps1'
 
-    " A plugin for adding support for Rust files to Vim.
+    " Adds support for the Rust language to Vim.
     Plug 'rust-lang/rust.vim'
 
-    " A plugin that allows man pages to be viewed from Vim. This is already possible natively with Vim; this plugin sets
-    " up a 'Vman' command that can used to do it from the terminal.
+    " Allows man pages to be viewed with Vim. This is already possible natively with Vim; this plugin sets up a 'Vman'
+    " command that can used to do it from the terminal.
     Plug 'jez/vim-superman'
 
-    " A plugin for adding support for Verilog and SystemVerilog files to Vim.
+    " Adds better and more comprehensive support for the Verilog and SystemVerilog languages to Vim.
     Plug 'vhda/verilog_systemverilog.vim'
 
 call plug#end()
