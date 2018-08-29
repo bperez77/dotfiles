@@ -35,6 +35,9 @@ set autochdir
 " Allow backspacing over the end of a line, automatic indentation, and the start of insert.
 set backspace=eol,indent,start
 
+" Prevent Vim from making any annoying bell sounds.
+set belloff=all
+
 " When pressing the tab key, insert spaces instead of a tab character, the number of which is given by soft tab stop.
 set expandtab
 
