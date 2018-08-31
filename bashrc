@@ -153,6 +153,20 @@ export GOPATH="${GOPATH}:${HOME}/.go"
 # A good heuristic for the number of threads to use when compiling code in parallel (especially with Makefiles).
 export THRS=$((2 * $(getconf _NPROCESSORS_ONLN)))
 
+# Lists of files to ignore for various commands as glob patterns. Each list is a superset of the previous, with the
+# first being targeted at copy commands, the second at general commands, and the third at text search commands.
+COPY_IGNORED_FILES=('*~' '*.bak' '*.mod.c' '*.o' '*.o.*' '*.pyc' '__pycache__' '.*.swp')
+GENERAL_IGNORED_FILES=("${COPY_IGNORED_FILES[@]}" '.git')
+SEARCH_IGNORED_FILES_LIST=("${GENERAL_IGNORED_FILES[@]}" '*.a' '*.bin' '*.exe' '*.lib' '*.so' '*.tar.gz' '*.zip')
+
+# Export the search ignored file list to other programs (i.e. Vim). The value must be exported as a string.
+export SEARCH_IGNORED_FILES="${SEARCH_IGNORED_FILES_LIST[@]}"
+
+# Change the default command used to generate for the file list for the FZF command and CTRL-T shortcut to use RipGrep.
+FZF_IGNORE="$(echo ${GENERAL_IGNORED_FILES[@]} | sed -e 's/[^ ]\+/--iglob "!&"/g')"
+export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --no-ignore ${FZF_IGNORE[@]}"
+export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Paths
 #-----------------------------------------------------------------------------------------------------------------------
@@ -286,8 +300,7 @@ alias dd='dd status=progress'
 alias dmesg='dmesg --ctime --color=always'
 
 # Setup the remote sync command to preserve file metadata, show incremental progress, and exclude files by default.
-RSYNC_EXCLUDED_FILES=('.*.swp' '*.o' '*~' '*.pyc' '__pycache__')
-RSYNC_EXCLUDE=("${RSYNC_EXCLUDED_FILES[@]/#/--exclude }")
+RSYNC_EXCLUDE="$(echo ${COPY_IGNORED_FILES[@]} | sed -e 's/[^ ]\+/--exclude "&"/g')"
 alias rsync="rsync --recursive --archive --hard-links --acls --xattrs --checksum --human-readable --human-readable \
         --info=progress2 ${RSYNC_EXCLUDE[@]}"
 
