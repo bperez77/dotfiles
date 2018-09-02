@@ -156,11 +156,11 @@ export THRS=$((2 * $(getconf _NPROCESSORS_ONLN)))
 # Lists of glob patterns to use for ignoring files and directories for copy commands and file finding commands.
 COPY_IGNORE_GLOBS=('*~' '*.bak' '*.mod.c' '*.o' '*.o.*' '*.pyc' '__pycache__' '.*.swp')
 FIND_IGNORE_GLOBS=('.git' '.hg' '.svn')
+export FIND_IGNORE_LIST="${FIND_IGNORE_GLOBS[@]}"
 
 # Change the default command used to generate for the file list for the FZF command and CTRL-T shortcut to use Ripgrep.
-RIPGREP_IGNORE="$(echo ${FIND_IGNORE_GLOBS[@]} | sed -e 's/[^ ]\+/--iglob "!&"/g')"
-export FZF_DEFAULT_COMMAND="rg --files --follow --hidden --no-ignore --text ${RIPGREP_IGNORE[@]}"
-export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
+RIPGREP_IGNORE="$(echo ${FIND_IGNORE_GLOBS[@]} | sed -e "s/[^ ]\\+/--iglob '!&'/g")"
+export FZF_CTRL_T_COMMAND="rg --files --follow --hidden --no-ignore --text ${RIPGREP_IGNORE[@]} 2> /dev/null"
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Paths
@@ -286,6 +286,41 @@ alias cp='cp --archive --interactive'
 # Setup a shorter alias for Vim, and setup an alias for Emacs to open in the terminal, instead of a GUI window.
 alias vi='vim'
 alias emacs='emacs24 --no-window-system'
+
+# Setup the Ripgrep command to follow symlinks and include most files in its search by default.
+alias rg="rg --follow --hidden --no-ignore ${RIPGREP_IGNORE}"
+alias ripgrep='rg'
+
+# Perform a Ripgrep search only on files not ignored by Git. This search is performed from the root of the Git
+# repository. This command assumes that no other paths are specified.
+function rg-git
+{
+    # Check that the pattern was specified by the user, and use the Ripgrep command to generate the usage.
+    local nargs=${#}
+    if [[ ${nargs} -eq 0 ]]; then
+        rg
+        return $?
+    fi
+
+    # Determine if the current working directory is under a Git repository, and get the relative path to the root.
+    local git_root=$(git rev-parse --show-cdup)
+    if [[ $? -ne 0 ]]; then
+        exit_code=${?}
+        printf "Error: Current working directory is not under a Git repository.\n" 1>&2
+        return ${exit_code}
+    fi
+
+    local args=("${@}")
+    command rg --follow "${args[@]}" ${git_root}
+}
+alias ripgrep-git='rg-git'
+
+# Setup the default FZF search to use Ripgrep and search all files except the defined ignored globs.
+alias fzf="command rg --files --follow --hidden --no-ignore --text ${RIPGREP_IGNORE[@]} 2> /dev/null | fzf"
+
+# Perform a fuzzy file search with FZF only on files not ignored by Git. This search is performed from the root of the
+# Git repository.
+alias fzf-git='rg-git --files 2> /dev/null | command fzf'
 
 # Setup the dd command to show progress of the data movement by default.
 alias dd='dd status=progress'
