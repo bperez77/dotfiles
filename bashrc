@@ -316,11 +316,11 @@ function rg-git
 alias ripgrep-git='rg-git'
 
 # Setup the default FZF search to use Ripgrep and search all files except the defined ignored globs.
-alias fzf="command rg --files --follow --hidden --no-ignore --text ${RIPGREP_IGNORE[@]} 2> /dev/null | fzf"
+alias fzf="command rg --files --follow --hidden --no-ignore --text ${RIPGREP_IGNORE[@]} 2> /dev/null | fzf --multi"
 
 # Perform a fuzzy file search with FZF only on files not ignored by Git. This search is performed from the root of the
 # Git repository.
-alias fzf-git='rg-git --files 2> /dev/null | command fzf'
+alias fzf-git='rg-git --files 2> /dev/null | command fzf --multi'
 
 # Setup the dd command to show progress of the data movement by default.
 alias dd='dd status=progress'
