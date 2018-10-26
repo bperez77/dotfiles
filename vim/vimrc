@@ -14,6 +14,13 @@
 "-----------------------------------------------------------------------------------------------------------------------
 
 "-----------------------------------------------------------------------------------------------------------------------
+" General Variables
+"-----------------------------------------------------------------------------------------------------------------------
+
+" The directory where this Vimrc file is located. The expression handles symbolic links and gives an absolute path.
+let g:vim_directory = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+
+"-----------------------------------------------------------------------------------------------------------------------
 " Plugins
 "-----------------------------------------------------------------------------------------------------------------------
 
@@ -40,6 +47,13 @@ set backspace=eol,indent,start
 
 " Prevent Vim from making any annoying bell sounds.
 set belloff=all
+
+" Change the directory where Vim's temporary backup, swap, and undo files are stored. These are created by Vim when it
+" opens a file. This changes from the default of the current working directory, which helps the working directory clean.
+" Note that the trailing '//' ensures that the file names are unique, by including the full path.
+let &backupdir  = g:vim_directory . "/backup_files//"
+let &directory  = g:vim_directory . "/backup_files//"
+let &undodir    = g:vim_directory . "/backup_files//"
 
 " When pressing the tab key, insert spaces instead of a tab character, the number of which is given by soft tab stop.
 set expandtab
