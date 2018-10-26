@@ -46,6 +46,9 @@ call plug#begin(g:vim_plugin_directory)
     " Adds support for C0 files to Vim, used for the 15-122 class. This is a locally installed plugin.
     Plug g:vim_manual_plugin_directory . '/c0.vim'
 
+    " Adds commands for easily aligning text to Vim, such as algining a set of lines along an equals character.
+    Plug 'junegunn/vim-easy-align'
+
     " Provides commands for interacting with Git and other version control software. This allows you do
     " things such as opening `git blame` for the current file. Used by the Vim Airline plugin to get branch names.
     Plug 'tpope/vim-fugitive'
@@ -91,6 +94,14 @@ let g:airline_powerline_fonts       = 1
 
 " Don't display the language being used for spell checking when spell mode is displayed in the tagline.
 let g:airline_detect_spelllang      = 0
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Easy Align Plugin Settings
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Use 'ga' as the key stroke shortcut for the easy align command. This creates shortcuts for normal and visual mode.
+nmap ga <Plug>(EasyAlign)
+vmap ga <Plug>(EasyAlign)
 
 "-----------------------------------------------------------------------------------------------------------------------
 " SystemVerilog Plugin Settings
