@@ -72,6 +72,10 @@ call plug#begin(g:vim_plugin_directory)
     " command that can used to do it from the terminal.
     Plug 'jez/vim-superman'
 
+    " Adds a table mode to Vim that allows for the creation and formatting of nice tables in Vim, particularily for
+    " Markdown tables.
+    Plug 'dhruvasagar/vim-table-mode'
+
     " Adds better and more comprehensive support for the Verilog and SystemVerilog languages to Vim.
     Plug 'vhda/verilog_systemverilog.vim'
 
@@ -83,18 +87,31 @@ call plug#end()
 
 " Use the fancier Powerline fonts for the tagline being displayed, instead of the default Unicode fonts. This is the
 " font used when examples are given on line. Note, this requires the Powerline patched fonts to be installed.
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts       = 1
 
 " Don't display the language being used for spell checking when spell mode is displayed in the tagline.
-let g:airline_detect_spelllang = 0
+let g:airline_detect_spelllang      = 0
 
 "-----------------------------------------------------------------------------------------------------------------------
 " SystemVerilog Plugin Settings
 "-----------------------------------------------------------------------------------------------------------------------
 
 " Disable the default indenting behavior for assign statements, instead indenting by a fixed amount.
-let g:verilog_indent_assign_fix = 1
+let g:verilog_indent_assign_fix     = 1
 
 " Disable the default indenting behavior for the clothing parenthesis of the modules, function, etc. are indented,
 " instead adding no additional parenthesis to the closing parenthesis.
-let g:verilog_disable_indent_lst = ['eos']
+let g:verilog_disable_indent_lst    = ['eos']
+
+"-----------------------------------------------------------------------------------------------------------------------
+" Table Mode Plugin Settings
+"-----------------------------------------------------------------------------------------------------------------------
+
+" Change the separators used at the corners of the table to a bar character, so it is Markdown compatible.
+let g:table_mode_corner             = '|'
+
+" Auto command that enable table mode. This enables table mode for the selected file types.
+augroup TableModeEnable
+    autocmd!
+    autocmd FileType markdown :TableModeEnable
+augroup END
