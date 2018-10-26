@@ -11,11 +11,22 @@
 "-----------------------------------------------------------------------------------------------------------------------
 
 "-----------------------------------------------------------------------------------------------------------------------
+" General Variables
+"-----------------------------------------------------------------------------------------------------------------------
+
+" The directory where plugins that come from online repository sources are installed.
+let g:vim_plugin_directory          = g:vim_directory . '/installed-plugins'
+
+" The directory where local plugins that are on the filesystem are located.
+let g:vim_manual_plugin_directory   = g:vim_directory . '/manual-plugins'
+
+"-----------------------------------------------------------------------------------------------------------------------
 " Vim-Plug Setup
 "-----------------------------------------------------------------------------------------------------------------------
 
 " If the Vim-Plug plugin manager is not installed, download it and install it.
-if empty(glob('~/.vim/autoload/plug.vim'))
+let s:vim_plug_path                 = g:vim_directory . '/autoload/plug.vim'
+if empty(glob(s:vim_plug_path))
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
             \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 endif
@@ -26,14 +37,14 @@ endif
 
 " This begins the start of installed plugins using Vim-Plug. Plugins come from GitHub, unless they have a
 " fully-qualified URL or path.
-call plug#begin('~/.vim/installed-plugins')
+call plug#begin(g:vim_plugin_directory)
 
     " Provides a nicer and prettier status and tabline for Vim. This is highly customizable and the default includes the
     " line number, git branch, what Vim mode you're currently in, etc.
     Plug 'vim-airline/vim-airline'
 
     " Adds support for C0 files to Vim, used for the 15-122 class. This is a locally installed plugin.
-    Plug '~/.vim/manual-plugins/c0.vim'
+    Plug g:vim_manual_plugin_directory . '/c0.vim'
 
     " Provides commands for interacting with Git and other version control software. This allows you do
     " things such as opening `git blame` for the current file. Used by the Vim Airline plugin to get branch names.
