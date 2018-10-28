@@ -65,7 +65,7 @@ call plug#begin(g:vim_plugin_directory)
     " highlighting of matching keywords delimiters, similar to how Vim treats matching character delimiters.
     Plug 'andymass/vim-matchup'
 
-    " Adds support for Google's Protocol Buffer language to Vim.
+    " Adds support for the PowerShell language to Vim.
     Plug 'PProvost/vim-ps1'
 
     " Adds support for the Rust language to Vim.
