@@ -146,7 +146,7 @@ command! -bar -nargs=* Sh execute ':silent !' . <q-args> | execute ':redraw!'
 
 " Provide short aliases for spawning a BASH shell with ConqueTerm.
 command! -bar Sbash terminal ++noclose bash
-command! -bar Vbash vertical ++noclose bash
+command! -bar Vbash vertical terminal ++noclose bash
 command! -bar Bash terminal ++noclose ++curwin bash
 
 " Sets up a command to be run when the file is saved, and clears the command.
