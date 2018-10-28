@@ -8,8 +8,8 @@
 " This file is executed when a new Vim session starts (typically when opening a file), and it sets up the settings,
 " shortcuts, plugins, and abbreviations for the Vim session.
 "
-" This file contains the general settings for Vim. For plugin settings, see plugins.vim. For language-specific settings,
-" see the after/syntax directory.
+" This file contains the general settings for Vim. For plugin settings, see plugins.vim. For language/file type specific
+" settings, see the after directory.
 "
 "-----------------------------------------------------------------------------------------------------------------------
 
@@ -221,25 +221,6 @@ augroup LanguageComments
 
     " Disable automatic extension of '//' style comments.
     autocmd FileType c,cpp,rust,cuda,c0,verilog_systemverilog setlocal comments-=:// comments+=f://
-augroup END
-
-" Auto commands that associate non-standard extensions with their corresponding file types.
-" TODO: Move these to the after directory.
-augroup FiletypeAssociations
-    autocmd!
-
-    " Associate 15-411 lab test files with the C0 filetype.
-    autocmd BufRead,BufNewFile *.l1 *.l2 *.l3 *.l4 *.l5 *.l6 setlocal filetype=c0
-
-    " Associate configuration files with their closest language.
-    autocmd BufRead,BufNewFile *.lalrpop setlocal filetype=rust
-    autocmd BufRead,BufNewFile *.json setlocal filetype=javascript
-
-    " Associate Arduino files to have C++ syntax highlighting.
-    autocmd BufRead,BufNewFile *.ino setlocal filetype=cpp
-
-    " Associate Kbuild files with the Makefile filetype.
-    autocmd BufRead,BufNewFile Kbuild setlocal filetype=make
 augroup END
 
 "-----------------------------------------------------------------------------------------------------------------------
