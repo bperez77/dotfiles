@@ -55,7 +55,7 @@ call plug#begin(g:vim_plugin_directory)
 
     " Adds a fuzzy finder (FZF) to Vim, providing commands to perform fuzzy searches. A fuzzy finder is used to find
     " files based on partial strings. FZF is also command-line tool, the first Plug line installs this tool.
-    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all --no-update-rc' }
+    Plug 'junegunn/fzf', { 'do': './install --all --no-update-rc' }
     Plug 'junegunn/fzf.vim'
 
     " Adds support for the ISPC (Intel SPMD Program Compiler) language to Vim.
