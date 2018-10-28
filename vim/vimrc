@@ -66,6 +66,10 @@ set hlsearch
 " the current search string are highlighted and updated as more of the command is typed.
 set incsearch
 
+" Set the default Shell file type to be Bash. Vim treats all shell files under a generic Shell file type. Thus, when a
+" shell file with an unknown type is encountered, a default must be used.
+let g:is_bash   = 1
+
 " Show the line number for each line on the left-hand side of the Vim window.
 set number
 
