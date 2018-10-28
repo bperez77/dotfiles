@@ -10,5 +10,9 @@
 "
 "-----------------------------------------------------------------------------------------------------------------------
 
+" Disable the changing of the current working directory to the directory of the file being edited. This is not very
+" useful for Git commit files, since it will nest you inside the .git directory.
+setlocal noautochdir
+
 " Enable spell checking (US English) for Git commit files.
 setlocal spell spelllang=en_us
