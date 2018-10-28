@@ -124,5 +124,5 @@ let g:table_mode_corner             = '|'
 " Auto command that enable table mode. This enables table mode for the selected file types.
 augroup TableModeEnable
     autocmd!
-    autocmd FileType markdown :TableModeEnable
+    autocmd FileType markdown silent TableModeEnable
 augroup END
