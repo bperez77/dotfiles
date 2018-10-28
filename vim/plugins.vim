@@ -55,7 +55,7 @@ call plug#begin(g:vim_plugin_directory)
 
     " Adds a fuzzy finder (FZF) to Vim, providing commands to perform fuzzy searches. A fuzzy finder is used to find
     " files based on partial strings. FZF is also command-line tool, the first Plug line installs this tool.
-    Plug 'junegunn/fzf', { 'do': './install --all --no-update-rc' }
+    Plug 'junegunn/fzf', {'do': './install --all --no-update-rc'}
     Plug 'junegunn/fzf.vim'
 
     " Adds support for the ISPC (Intel SPMD Program Compiler) language to Vim.
@@ -64,6 +64,10 @@ call plug#begin(g:vim_plugin_directory)
     " Serves as a replacement for Vim's standard MatchIt plugin, extending it with better behavior, and adds in
     " highlighting of matching keywords delimiters, similar to how Vim treats matching character delimiters.
     Plug 'andymass/vim-matchup'
+
+    " Allows Vim to be used as a pager, adding a 'less mode' to Vim. Additionally, the plugin includes Vim variants of
+    " the Cat (vimcat) and Less (vimpager) command line tools that include syntax highlighting for the viewed files.
+    Plug 'rkitover/vimpager', {'do': 'make PREFIX=$(pwd) install'}
 
     " Adds support for the PowerShell language to Vim.
     Plug 'PProvost/vim-ps1'

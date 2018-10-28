@@ -163,7 +163,7 @@ RIPGREP_IGNORE="$(echo ${FIND_IGNORE_GLOBS[@]} | sed -e "s/[^ ]\\+/--iglob '!&'/
 export FZF_CTRL_T_COMMAND="rg --files --follow --hidden --no-ignore --text ${RIPGREP_IGNORE[@]} 2> /dev/null"
 
 #-----------------------------------------------------------------------------------------------------------------------
-# Paths
+# Path Variables
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Add the locally installed executables to the path.
@@ -174,6 +174,10 @@ export PATH="${PATH}:${HOME}/bin/"
 
 # Add the path to the Vman command from Vim's SuperMan plugin.
 export PATH="${PATH}:${HOME}/.vim/installed-plugins/vim-superman/bin/"
+
+# Add the path and manual path to the VimCat and VimPager commands from Vim's Pager plugin.
+export PATH="${PATH}:${HOME}/.vim/installed-plugins/vimpager/bin"
+export MANPATH="${MANPATH}:${HOME}/.vim/installed-plugins/vimpager/share/man"
 
 # Add the paths for the installed Arduino studio, MATLAB, Altera Quartus, and Eagle programs to the path
 export PATH="${PATH}:/usr/bin/Arduino/arduino"
