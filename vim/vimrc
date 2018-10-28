@@ -202,12 +202,6 @@ augroup END
 " Highlight any characters past the line length limit in red.
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 
-" Autocommands that enable spellchecks for markdown and git commit files.
-augroup SpellCheck
-    autocmd!
-    autocmd FileType gitcommit,markdown setlocal spell spelllang=en_us
-augroup END
-
 "-----------------------------------------------------------------------------------------------------------------------
 " Syntax Auto Commands
 "-----------------------------------------------------------------------------------------------------------------------
