@@ -144,11 +144,11 @@ complete -o default -o nospace -F _man vman
 # General Environment Variables
 #-----------------------------------------------------------------------------------------------------------------------
 
+# The directory where all user-local installed programs and related files are located.
+export USER_LOCAL_DIRECTORY="${HOME}/.local"
+
 # The startup file to use before running Python. This enables persistent Python command history and tab completion.
 export PYTHONSTARTUP="${HOME}/.pythonstartup"
-
-# Add locally installed Go programs for the user to the list of paths for Go programs and their binaries.
-export GOPATH="${GOPATH}:${HOME}/.go"
 
 # A good heuristic for the number of threads to use when compiling code in parallel (especially with Makefiles).
 export THRS=$((2 * $(getconf _NPROCESSORS_ONLN)))
@@ -166,26 +166,21 @@ export FZF_CTRL_T_COMMAND="rg --files --follow --hidden --no-ignore --text ${RIP
 # Path Variables
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Add the locally installed executables to the path.
-export PATH="${PATH}:${HOME}/.local/bin"
+# Add the user-local installed executables and programs to the executable, manual, and library paths.
+export PATH="${PATH}:${USER_LOCAL_DIRECTORY}/bin"
+export MANPATH="${MANPATH}:${USER_LOCAL_DIRECTORY}/share/man"
+export LD_LIBRARY_PATH="${MANPATH}:${USER_LOCAL_DIRECTORY}/lib"
 
-# Add the bin directory to the path, where any miscellaneous user-created executables may be.
+# Add the bin directory to the executable path, where any miscellaneous user-created executables may be.
 export PATH="${PATH}:${HOME}/bin/"
 
-# Add the path to the Vman command from Vim's SuperMan plugin.
-export PATH="${PATH}:${HOME}/.vim/installed-plugins/vim-superman/bin/"
-
-# Add the path and manual path to the VimCat and VimPager commands from Vim's Pager plugin.
-export PATH="${PATH}:${HOME}/.vim/installed-plugins/vimpager/bin"
-export MANPATH="${MANPATH}:${HOME}/.vim/installed-plugins/vimpager/share/man"
-
-# Add the paths for the installed Arduino studio, MATLAB, Altera Quartus, and Eagle programs to the path
+# Add the paths for the installed Arduino studio, MATLAB, Altera Quartus, and Eagle programs to the executable path.
 export PATH="${PATH}:/usr/bin/Arduino/arduino"
 export PATH="${PATH}:/usr/local/MATLAB/R2015a/bin/"
 export PATH="${PATH}:/opt/Altera/15.1/quartus/bin/"
 export PATH="${PATH}:/opt/eagle-7.5.0/bin/"
 
-# Add the various Xilinx tools (Vivado, HLS, SDK, cross-compiler) to the path.
+# Add the various Xilinx tools (Vivado, HLS, SDK, cross-compiler) to the executable path.
 XILINX_ROOT='/opt/Xilinx/'
 XILINX_VERSION='2017.2'
 export PATH="${PATH}:${XILINX_ROOT}/Vivado/${XILINX_VERSION}/bin/"
@@ -193,13 +188,15 @@ export PATH="${PATH}:${XILINX_ROOT}/SDK/${XILINX_VERSION}/gnu/arm/lin/bin/"
 export PATH="${PATH}:${XILINX_ROOT}/SDK/${XILINX_VERSION}/bin/"
 export PATH="${PATH}:${XILINX_ROOT}/Vivado_HLS/${XILINX_VERSION}/bin/"
 
-# Add the Rust toolchain and any installed Rust programs with Cargo to the path.
+# Add the Rust toolchain and any Rust programs installed with Cargo to the executable path.
 export PATH="${PATH}:${HOME}/.cargo/bin"
 
-# Add the Go toolchain and any installed Go programs to the path.
-export PATH="${PATH}:${GOPATH}/bin"
+# Add the user-local Go programs and libraries to Go path, and add the installed binaries to the executable path.
+GO_USER_DIRECTORY="${HOME}/.go"
+export GOPATH="${GOPATH}:${GO_USER_DIRECTORY}"
+export PATH="${PATH}:${GO_USER_DIRECTORY}/bin"
 
-# Add the programs for the manually installed C0 and SML/NJ languages to the path.
+# Add the programs for the manually installed C0 and SML/NJ languages to the executable path.
 export PATH="${PATH}:/usr/share/smlnj/bin/"
 export PATH="${PATH}:/usr/share/cc0/bin/"
 

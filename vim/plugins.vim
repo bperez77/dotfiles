@@ -36,7 +36,8 @@ endif
 "-----------------------------------------------------------------------------------------------------------------------
 
 " This begins the start of installed plugins using Vim-Plug. Plugins come from GitHub, unless they have a
-" fully-qualified URL or path.
+" fully-qualified URL or path. When possible, any plugins that create command-line programs have the programs and man
+" pages placed in directory where user-local programs and realted files are placed, so no new paths need added.
 call plug#begin(g:vim_plugin_directory)
 
     " Provides a nicer and prettier status and tabline for Vim. This is highly customizable and the default includes the
@@ -65,9 +66,9 @@ call plug#begin(g:vim_plugin_directory)
     " highlighting of matching keywords delimiters, similar to how Vim treats matching character delimiters.
     Plug 'andymass/vim-matchup'
 
-    " Allows Vim to be used as a pager, adding a 'less mode' to Vim. Additionally, the plugin includes Vim variants of
+    " Allows Vim to be used as a pager, adding a less mode to Vim. Additionally, the plugin includes Vim variants of
     " the Cat (vimcat) and Less (vimpager) command line tools that include syntax highlighting for the viewed files.
-    Plug 'rkitover/vimpager', {'do': 'make PREFIX=$(pwd) install'}
+    Plug 'rkitover/vimpager', {'do': 'make PREFIX=${USER_LOCAL_DIRECTORY} install'}
 
     " Adds support for the PowerShell language to Vim.
     Plug 'PProvost/vim-ps1'
@@ -75,9 +76,9 @@ call plug#begin(g:vim_plugin_directory)
     " Adds support for the Rust language to Vim.
     Plug 'rust-lang/rust.vim'
 
-    " Allows man pages to be viewed with Vim. This is already possible natively with Vim; this plugin sets up a 'Vman'
-    " command that can used to do it from the terminal.
-    Plug 'jez/vim-superman'
+    " Allows man pages to be viewed with Vim. This is already possible natively with Vim; this plugin sets up a Vim
+    " variant of the Man command that renders the Man pages more nicely.
+    Plug 'jez/vim-superman', {'do': 'mkdir -p ${USER_LOCAL_DIRECTORY} && cp -ar bin ${USER_LOCAL_DIRECTORY}/'}
 
     " Adds a table mode to Vim that allows for the creation and formatting of nice tables in Vim, particularily for
     " Markdown tables.
