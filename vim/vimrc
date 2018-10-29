@@ -104,6 +104,11 @@ set tags=./tags;
 " Update the title of the screen (terminal window) based on the file is being edited, setting it to its name.
 set title
 
+" The list of file patterns to ignore when completing file or directory names. This adds the list of ignore patterns
+" defined by the Bashrc to Vim's standard list of ignores. Note that this also affects globbing functions.
+let s:wildignore_list = substitute($TEXT_IGNORE_LIST, ' ', ',', 'g')
+let &wildignore .= s:wildignore_list
+
 " When performing tab completion, complete the next full match and also start a wild menu if it is enabled. This updates
 " the completion text to the next full match.
 set wildmode=full

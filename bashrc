@@ -153,13 +153,14 @@ export PYTHONSTARTUP="${HOME}/.pythonstartup"
 # A good heuristic for the number of threads to use when compiling code in parallel (especially with Makefiles).
 export THRS=$((2 * $(getconf _NPROCESSORS_ONLN)))
 
-# Lists of glob patterns to use for ignoring files and directories for copy commands and file finding commands.
-COPY_IGNORE_GLOBS=('*~' '*.bak' '*.mod.c' '*.o' '*.o.*' '*.pyc' '__pycache__' '.*.swp')
-FIND_IGNORE_GLOBS=('.git' '.hg' '.svn')
-export FIND_IGNORE_LIST="${FIND_IGNORE_GLOBS[@]}"
+# Lists of glob patterns to use for ignoring files and directories for copy commands, file finding commands, and text
+# editing commands, respectively. The text editing list is exported to Vim for its wild ignore option.
+COPY_IGNORE_LIST='*~ *.bak *.mod.c *.o *.o.* *.pyc __pycache__ .*.swp'
+FIND_IGNORE_LIST='.git .hg .svn'
+export TEXT_IGNORE_LIST="${COPY_IGNORE_LIST} ${FIND_IGNORE_LIST}"
 
 # Change the default command used to generate for the file list for the FZF command and CTRL-T shortcut to use Ripgrep.
-RIPGREP_IGNORE="$(echo ${FIND_IGNORE_GLOBS[@]} | sed -e "s/[^ ]\\+/--iglob '!&'/g")"
+RIPGREP_IGNORE="$(echo ${FIND_IGNORE_LIST[@]} | sed -e "s/[^ ]\\+/--iglob '!&'/g")"
 export FZF_CTRL_T_COMMAND="rg --files --follow --hidden --no-ignore --text ${RIPGREP_IGNORE[@]} 2> /dev/null"
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -330,7 +331,7 @@ alias dd='dd status=progress'
 alias dmesg='dmesg --ctime --color=always'
 
 # Setup the remote sync command to preserve file metadata, show incremental progress, and exclude files by default.
-RSYNC_EXCLUDE="$(echo ${COPY_IGNORE_GLOBS[@]} | sed -e 's/[^ ]\+/--exclude "&"/g')"
+RSYNC_EXCLUDE="$(echo ${COPY_IGNORE_LIST[@]} | sed -e 's/[^ ]\+/--exclude "&"/g')"
 alias rsync="rsync --recursive --archive --hard-links --acls --xattrs --checksum --human-readable --human-readable \
         --info=progress2 ${RSYNC_EXCLUDE[@]}"
 
