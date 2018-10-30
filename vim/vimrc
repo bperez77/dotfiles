@@ -364,3 +364,13 @@ iabbrev <expr> _sxhd "" .
     \"<CR>" .
     \"FIXME: Insert Longer Description Here<CR>" .
     \"\"\"\"<CR>"
+
+"-----------------------------------------------------------------------------------------------------------------------
+" Local Machine-Specific Settings
+"-----------------------------------------------------------------------------------------------------------------------
+
+" Source any local, machine-specific settings if there is a Vim file for it.
+let s:local_vimrc = g:vim_directory . '/vimrc_local.vim'
+if !empty(glob(s:local_vimrc))
+    execute 'source ' . s:local_vimrc
+endif
