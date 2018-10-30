@@ -40,3 +40,6 @@
 # Ignore the Vim-Plug file and any plugins installed with the manager.
 /vim/autoload/plug.vim
 /vim/installed-plugins
+
+# Ignore the local Vimrc file. Typically this will be a symbolic think in the Vim directory.
+/vim/vimrc_local.vim
