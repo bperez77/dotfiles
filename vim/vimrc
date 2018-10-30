@@ -25,7 +25,7 @@ let g:vim_directory = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 "-----------------------------------------------------------------------------------------------------------------------
 
 " Source the installed and used plugins for Vim. Note that this must come first, because it resets syntax settings.
-source ~/.vim/plugins.vim
+execute 'source ' . g:vim_directory . '/plugins.vim'
 
 "-----------------------------------------------------------------------------------------------------------------------
 " General Settings
