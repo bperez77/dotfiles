@@ -15,10 +15,10 @@
 "-----------------------------------------------------------------------------------------------------------------------
 
 " The directory where plugins that come from online repository sources are installed.
-let g:vim_plugin_directory          = g:vim_directory . '/installed-plugins'
+let g:vim_plugin_directory          = g:vim_directory . '/installed_plugins'
 
 " The directory where local plugins that are on the filesystem are located.
-let g:vim_manual_plugin_directory   = g:vim_directory . '/manual-plugins'
+let g:vim_manual_plugin_directory   = g:vim_directory . '/manual_plugins'
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Vim-Plug Setup
