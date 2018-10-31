@@ -190,6 +190,21 @@
     # List all of the currently configured Git aliases available to the user.
     ls-aliases = config --get-regexp '^alias\\.'
 
+    # List all of the authors who have committed to the given file, sorted by the number of commits. If no argument is
+    # specified, then authors across the entire repository are listed. Note that directories can be used, but they will
+    # not respect the follow argument for Git log. Git log was used over Git short log because it doesn't respect the
+    # follow option.
+    ls-authors = "!                                                                                             \
+        ls_authors() {                                                                                          \
+            if [ $# -gt 0 ]; then                                                                               \
+                path_args=\"--follow -- ${GIT_PREFIX:-.}/${1}\";                                                \
+            else                                                                                                \
+                path_args=\"\";                                                                                 \
+            fi &&                                                                                               \
+            git log --format='%aN <%aE>' ${path_args} | sort | uniq --count | sort --numeric-sort --reverse;    \
+        } &&                                                                                                    \
+        ls_authors"
+
     # Lists all branches in the repository by the last time a commit was pushed to the branch. A terse summary of each
     # commit is displayed and formatted. Assumes that the remote name is the default of 'origin'.
     recent-branches = for-each-ref --color=always --sort=committerdate \
