@@ -41,5 +41,8 @@
 /vim/autoload/plug.vim
 /vim/installed-plugins
 
+# Ignore the directory were any generated files by Vim are stored, such as the undo history files.
+/vim/editor_files/undo_files
+
 # Ignore the local Vimrc file. Typically this will be a symbolic think in the Vim directory.
 /vim/vimrc_local.vim

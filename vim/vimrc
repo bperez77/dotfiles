@@ -202,13 +202,25 @@ endfunction
 " General Auto Commands
 "-----------------------------------------------------------------------------------------------------------------------
 
-" Auto commands that deal with striping whitespace when saving files.
+" Auto commands that deal with striping whitespace when saving files. Three types of whitespaces are stripped by default
+" when saving a file. Any set of 2 consecutive lines or more that are empty are squashed into a single line, empty lines
+" at the end of the file are deleted, and any trailing whitespace at the end of a line is stripped.
 augroup StripWhitespace
     autocmd!
 
     autocmd BufWritePre * SquashBlankLines
     autocmd BufWritePre * DeleteTrailingLines
     autocmd BufWritePre * StripWhitespace
+augroup END
+
+" Auto commands that deal with automatically saving views and loading them from file for each buffer. Views store
+" editor context information about the file such as the cursor position and any folds. Note that the '?*' pattern is
+" used to prevent empty file names from being matched, since this views cause an error for empty windows and help pages.
+augroup SaveViews
+    autocmd!
+
+    autocmd BufWinLeave ?* mkview
+    autocmd BufWinEnter ?* silent loadview
 augroup END
 
 " Auto commands that deal with line length restrictions.
