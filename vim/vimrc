@@ -48,12 +48,13 @@ set backspace=eol,indent,start
 " Prevent Vim from making any annoying bell sounds.
 set belloff=all
 
-" Change the directory where Vim's temporary backup, swap, and undo files are stored. These are created by Vim when it
-" opens a file. This changes from the default of the current working directory, which helps the working directory clean.
-" Note that the trailing '//' ensures that the file names are unique, by including the full path.
-let &backupdir  = g:vim_directory . "/backup_files//"
-let &directory  = g:vim_directory . "/backup_files//"
-let &undodir    = g:vim_directory . "/backup_files//"
+" Change the directory where Vim's backup files are stored. These are created by Vim when it opens a file. This changes
+" it from the default of the current working directory, which helps keep the working directory clean. Note that the
+" trailing '//' the file names are unique, by including the full path in the name.
+let &backupdir  = g:vim_directory . "/temporary_files//"
+
+" Change the directory where Vim's swap files are stored. These are created by Vim when it opens a file.
+let &directory  = g:vim_directory . "/temporary_files//"
 
 " When pressing the tab key, insert spaces instead of a tab character, the number of which is given by soft tab stop.
 set expandtab
@@ -103,6 +104,9 @@ set tags=./tags;
 
 " Update the title of the screen (terminal window) based on the file is being edited, setting it to its name.
 set title
+
+" Change the directory where Vim's udno files are stored. These are created when Vim needs to track the undo history.
+let &undodir    = g:vim_directory . "/temporary_files//"
 
 " The list of file patterns to ignore when completing file or directory names. This adds the list of ignore patterns
 " defined by the Bashrc to Vim's standard list of ignores. Note that this also affects globbing functions.
@@ -370,15 +374,11 @@ iabbrev <expr> _sxhd "" .
 "-----------------------------------------------------------------------------------------------------------------------
 
 " If the directories for the backup, swap, and undo files do not exist, then create them.
-if empty(glob(&backupdir))
-    execute 'silent !mkdir --parents ' . &backupdir
-endif
-if empty(glob(&directory))
-    execute 'silent !mkdir --parents ' . &directory
-endif
-if empty(glob(&undodir))
-    execute 'silent !mkdir --parents '  . &undodir
-endif
+for s:directory in [&backupdir, &directory, &undodir]
+    if empty(glob(s:directory))
+        execute 'silent !mkdir --parents ' . s:directory
+    endif
+endfor
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Local Machine-Specific Settings
