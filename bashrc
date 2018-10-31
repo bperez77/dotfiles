@@ -175,6 +175,9 @@ export LD_LIBRARY_PATH="${MANPATH}:${USER_LOCAL_DIRECTORY}/lib"
 # Add the bin directory to the executable path, where any miscellaneous user-created executables may be.
 export PATH="${PATH}:${HOME}/bin/"
 
+# Add the path to Git's diff-highlight program, used for getting word-level highlighting in diffs.
+export PATH="${PATH}:/usr/share/doc/git/contrib/diff-highlight/"
+
 # Add the paths for the installed Arduino studio, MATLAB, Altera Quartus, and Eagle programs to the executable path.
 export PATH="${PATH}:/usr/bin/Arduino/arduino"
 export PATH="${PATH}:/usr/local/MATLAB/R2015a/bin/"
@@ -284,6 +287,8 @@ alias l='ls -C --classify'
 alias rm='rm --interactive'
 alias mv='mv --interactive'
 alias cp='cp --archive --interactive'
+
+alias diff='diff --color=auto --report-identical-files'
 
 # Setup a shorter alias for Vim, and setup an alias for Emacs to open in the terminal, instead of a GUI window.
 alias vi='vim'
