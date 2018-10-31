@@ -108,6 +108,10 @@ set title
 " Change the directory where Vim's udno files are stored. These are created when Vim needs to track the undo history.
 let &undodir    = g:vim_directory . "/temporary_files//"
 
+" Enable the saving of the undo history to file in the undo directory. This allows the undo history to persist across
+" session (the undo history is restored when the file is reopened.
+set undofile
+
 " The list of file patterns to ignore when completing file or directory names. This adds the list of ignore patterns
 " defined by the Bashrc to Vim's standard list of ignores. Note that this also affects globbing functions.
 let s:wildignore_list = substitute($TEXT_IGNORE_LIST, ' ', ',', 'g')
