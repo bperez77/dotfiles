@@ -120,6 +120,9 @@ let &viewdir    = g:vim_directory . '/editor_files/view_files//'
 let s:wildignore_list = substitute($TEXT_IGNORE_LIST, ' ', ',', 'g')
 let &wildignore .= s:wildignore_list
 
+" When completing file or directory names, the case of the name is ignored when selected a match.
+set wildignorecase
+
 " When performing tab completion, complete the next full match and also start a wild menu if it is enabled. This updates
 " the completion text to the next full match.
 set wildmode=full
