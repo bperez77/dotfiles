@@ -366,6 +366,21 @@ iabbrev <expr> _sxhd "" .
     \"\"\"\"<CR>"
 
 "-----------------------------------------------------------------------------------------------------------------------
+" Setup Operations
+"-----------------------------------------------------------------------------------------------------------------------
+
+" If the directories for the backup, swap, and undo files do not exist, then create them.
+if empty(glob(&backupdir))
+    execute 'silent !mkdir --parents ' . &backupdir
+endif
+if empty(glob(&directory))
+    execute 'silent !mkdir --parents ' . &directory
+endif
+if empty(glob(&undodir))
+    execute 'silent !mkdir --parents '  . &undodir
+endif
+
+"-----------------------------------------------------------------------------------------------------------------------
 " Local Machine-Specific Settings
 "-----------------------------------------------------------------------------------------------------------------------
 
