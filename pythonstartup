@@ -155,7 +155,7 @@ def wildcard_import_file(python_file_path):
         return
 
     # Otherwise, dynamically import the module with import lib's facilities.
-    python_file_name = path.splitext(path.basename(python_file_path))[0]
+    (python_file_name, _) = path.splitext(path.basename(python_file_path))
     module_loader = importlib.machinery.SourceFileLoader(python_file_name, python_file_path)
     module_spec = importlib.util.spec_from_loader(module_loader.name, module_loader)
     module = importlib.util.module_from_spec(module_spec)
