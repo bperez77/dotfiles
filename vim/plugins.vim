@@ -27,8 +27,10 @@ let g:vim_manual_plugin_directory   = g:vim_directory . '/manual-plugins'
 " If the Vim-Plug plugin manager is not installed, download it and install it.
 let s:vim_plug_path                 = g:vim_directory . '/autoload/plug.vim'
 if empty(glob(s:vim_plug_path))
-    silent !curl --fail ---location --output s:vim_plug_path
-            \ --create-dirs 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    execute 'silent !curl --fail --location --output ' . s:vim_plug_path .
+            \ ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    echomsg 'The Vim-Plug plugin manager has been installed. Relaunch Vim and run :PlugInstall to install the plugins.'
+    finish
 endif
 
 "-----------------------------------------------------------------------------------------------------------------------
