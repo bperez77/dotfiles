@@ -39,7 +39,7 @@
 
 # Ignore the Vim-Plug file and any plugins installed with the manager.
 /vim/autoload/plug.vim
-/vim/installed-plugins
+/vim/installed_plugins
 
 # Ignore the directory were any generated files by Vim are stored, such as the undo history files.
 /vim/editor_files/undo_files
