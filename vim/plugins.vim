@@ -64,6 +64,10 @@ call plug#begin(g:vim_plugin_directory)
     " Adds support for the ISPC (Intel SPMD Program Compiler) language to Vim.
     Plug 'jez/vim-ispc'
 
+    " Adds some reasonable options when editing very large files with Vim.  Disables syntax highlighting and other
+    " options when the size of file exceeds a configurable minimum.
+    Plug 'vim-scripts/LargeFile'
+
     " Serves as a replacement for Vim's standard MatchIt plugin, extending it with better behavior, and adds in
     " highlighting of matching keywords delimiters, similar to how Vim treats matching character delimiters.
     Plug 'andymass/vim-matchup'
@@ -109,6 +113,14 @@ let g:airline_detect_spelllang      = 0
 " Use 'ga' as the key stroke shortcut for the easy align command. This creates shortcuts for normal and visual mode.
 nmap ga <Plug>(EasyAlign)
 vmap ga <Plug>(EasyAlign)
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Large File Plugin Settings
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" The minimum size a file must be in MB to activate the Large File plugin. Files above this size will have various
+" settings that will slow down editing disabled.
+let g:LargeFile                     = 1
 
 "-----------------------------------------------------------------------------------------------------------------------
 " SystemVerilog Plugin Settings
