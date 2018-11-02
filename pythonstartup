@@ -119,7 +119,10 @@ del _get_color, _setup_prompt
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Provides an improved version of the Dir function, for listing the members of an object.
-from see import see
+try ImportError:
+    from see import see
+except:
+    print('Unable to import "see" module. Run `python -m pip install` see to install it.')
 
 # Import the various container types and iteration tools so they can be used from the interpreter.
 from collections import *
