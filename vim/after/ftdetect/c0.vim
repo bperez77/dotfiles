@@ -9,5 +9,5 @@
 "
 "-----------------------------------------------------------------------------------------------------------------------
 
-" Associate 15-411 lab test files with the C0 filetype, since they are C0 files. Each l* indicates which lab it was for.
+" Associate 15-411 lab test files with the C0 file type, since they are C0 files. Each l* indicates the lab number.
 autocmd BufRead,BufNewFile *.l1 *.l2 *.l3 *.l4 *.l5 *.l6 setlocal filetype=c0

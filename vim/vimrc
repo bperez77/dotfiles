@@ -34,7 +34,7 @@ execute 'source ' . g:vim_directory . '/plugins.vim'
 " Ensure that modern Vim mode is used, and Vim makes no attempt to be Vi backwards compatible.
 set nocompatible
 
-" Enable syntax highlighting, filetype detection, filetype specific indentation, and plugins.
+" Enable syntax highlighting, file type detection, file type specific indentation, and plugins.
 syntax on
 filetype indent plugin on
 
@@ -160,14 +160,14 @@ command! Wq wq
 command! W w
 command! Q q
 
-" Override the default Vexplore behavior to split right instead of left.
+" Override the default Vexplore command behavior to split right instead of left.
 command! Vex Vexplore!
 
 " A command that allows a shell command to be executed silently. Normally, VIM puts itself in the background, then
 " leaves you in the shell.
 command! -bar -nargs=* Sh execute ':silent !' . <q-args> | execute ':redraw!'
 
-" Provide short aliases for spawning a BASH shell with ConqueTerm.
+" Provide short aliases for spawning a Bash shell.
 command! -bar Sbash terminal ++noclose bash
 command! -bar Vbash vertical terminal ++noclose bash
 command! -bar Bash terminal ++noclose ++curwin bash
@@ -177,8 +177,7 @@ command! -bar -nargs=* OnWrite autocmd BufWritePost * !<args>
 command! -bar -nargs=* OnWriteSilent autocmd BufWritePost * Sh <args>
 command! -bar OnWriteClear autocmd! BufWritePost
 
-" Commands that remove trailing blank lines, collapse consecutive blank lines,
-" and strip trailing whitespace.
+" Commands that remove trailing blank lines, collapse consecutive blank lines, and strip trailing whitespace.
 command! -bar StripWhitespace execute 'normal! mz' | silent! %s/\s\+$//e | noh | normal! `z
 command! -bar DeleteTrailingLines execute 'normal! mz' | silent! %s/\($\n\s*\)\+\%$//e | noh | silent! normal! `z
 command! -bar SquashBlankLines execute 'normal! mz' | silent! %s/\(\s*\n\s*\n\)\(\s*\n\)\+/\1/e | noh |
@@ -241,7 +240,7 @@ highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 " Syntax Auto Commands
 "-----------------------------------------------------------------------------------------------------------------------
 
-" Autocommands that deal with changing settings for comments.
+" Auto commands that deal with changing settings for comments.
 augroup LanguageComments
     autocmd!
 
@@ -301,7 +300,7 @@ set pastetoggle=<F2>
 noremap <F3> :setlocal spell! spelllang=en_us<CR>
 inoremap <F3> :setlocal spell! spelllang=en_us<CR>
 
-" Quick shortcuts to disable and enable highlighting overlength lines
+" Quick shortcuts to disable and enable highlighting over length lines.
 noremap <F4> :call SetOverLength()<CR>
 inoremap <F4> :call SetOverLength()<CR>
 noremap <F5> :match none<CR>
@@ -325,7 +324,7 @@ iabbrev <expr> _dts strftime("%c")
 iabbrev <expr> _hdts strftime("%A, %B %d, %Y at %r %Z")
 iabbrev <expr> _ds strftime("%b %d, %Y")
 
-" Shortcut to insert a header gaurd
+" Shortcut to insert a header guard.
 function! Header_Gaurd()
     let basename = toupper(fnamemodify(bufname("%"), ":t:r"))
     let extension = toupper(fnamemodify(bufname("%"), ":e"))

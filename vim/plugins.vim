@@ -39,17 +39,17 @@ endif
 
 " This begins the start of installed plugins using Vim-Plug. Plugins come from GitHub, unless they have a
 " fully-qualified URL or path. When possible, any plugins that create command-line programs have the programs and man
-" pages placed in directory where user-local programs and realted files are placed, so no new paths need added.
+" pages placed in directory where user-local programs and related files are placed, so no new paths need added.
 call plug#begin(g:vim_plugin_directory)
 
-    " Provides a nicer and prettier status and tabline for Vim. This is highly customizable and the default includes the
+    " Provides a nicer and prettier status and tab line for Vim. This is highly customizable and the default includes the
     " line number, git branch, what Vim mode you're currently in, etc.
     Plug 'vim-airline/vim-airline'
 
     " Adds support for C0 files to Vim, used for the 15-122 class. This is a locally installed plugin.
     Plug g:vim_manual_plugin_directory . '/c0.vim'
 
-    " Adds commands for easily aligning text to Vim, such as algining a set of lines along an equals character.
+    " Adds commands for easily aligning text to Vim, such as aligning a set of lines along an equals character.
     Plug 'junegunn/vim-easy-align'
 
     " Provides commands for interacting with Git and other version control software. This allows you do
@@ -73,7 +73,7 @@ call plug#begin(g:vim_plugin_directory)
     Plug 'andymass/vim-matchup'
 
     " Allows Vim to be used as a pager, adding a less mode to Vim. Additionally, the plugin includes Vim variants of
-    " the Cat (vimcat) and Less (vimpager) command line tools that include syntax highlighting for the viewed files.
+    " the Cat (Vimcat) and Less (Vimpager) command line tools that include syntax highlighting for the viewed files.
     Plug 'rkitover/vimpager', {'do': 'make PREFIX=${USER_LOCAL_DIRECTORY} install'}
 
     " Adds support for the PowerShell language to Vim.
@@ -86,7 +86,7 @@ call plug#begin(g:vim_plugin_directory)
     " variant of the Man command that renders the Man pages more nicely.
     Plug 'jez/vim-superman', {'do': 'mkdir -p ${USER_LOCAL_DIRECTORY} && cp -ar bin ${USER_LOCAL_DIRECTORY}/'}
 
-    " Adds a table mode to Vim that allows for the creation and formatting of nice tables in Vim, particularily for
+    " Adds a table mode to Vim that allows for the creation and formatting of nice tables in Vim, particularity for
     " Markdown tables.
     Plug 'dhruvasagar/vim-table-mode'
 
@@ -99,11 +99,11 @@ call plug#end()
 " Airline Plugin Settings
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Use the fancier Powerline fonts for the tagline being displayed, instead of the default Unicode fonts. This is the
+" Use the fancier Powerline fonts for the tag line being displayed, instead of the default Unicode fonts. This is the
 " font used when examples are given on line. Note, this requires the Powerline patched fonts to be installed.
 let g:airline_powerline_fonts       = 1
 
-" Don't display the language being used for spell checking when spell mode is displayed in the tagline.
+" Don't display the language being used for spell checking when spell mode is displayed in the tag line.
 let g:airline_detect_spelllang      = 0
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

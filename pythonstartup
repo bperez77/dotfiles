@@ -17,7 +17,7 @@
 def _setup_readline():
     """Sets up tab completion and persistent command history for the interactive session."""
 
-    # The readline library is only supported on Linux and Mac system.
+    # The Readline library is only supported on Linux and Mac system.
     import platform
     if platform.system().lower() != 'linux':
         return
@@ -36,7 +36,7 @@ def _setup_readline():
     # Set the persistent command history to be unlimited in size.
     readline.set_history_length(-1)
 
-    # Read the contents of the Inputrc initialization file to get the standard readline settings.
+    # Read the contents of the Inputrc initialization file to get the standard Readline settings.
     inputrc_path = path.join(path.expanduser('~'), '.inputrc')
     readline.read_init_file(inputrc_path)
 
@@ -118,7 +118,7 @@ del _get_color, _setup_prompt
 # Default Modules
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Provides an improved version of the `dir` function, for listing the members of an object.
+# Provides an improved version of the Dir function, for listing the members of an object.
 from see import see
 
 # Import the various container types and iteration tools so they can be used from the interpreter.
@@ -130,7 +130,7 @@ from itertools import *
 #-----------------------------------------------------------------------------------------------------------------------
 
 def see_filter(obj, pattern):
-    """Filters the members of the given object using a wildcard pattern or regex.
+    """Filters the members of the given object using a wild card pattern or regex.
 
     This is a shorthand alias for see(obj).filter(pattern). Note that all members of a object begin with a '.'
     character, so this needs to be in the pattern. Regular expressions can be specified if the string begins with a
@@ -140,9 +140,9 @@ def see_filter(obj, pattern):
     return see(obj).filter(pattern)
 
 def wildcard_import_file(python_file_path):
-    """Emulates a wildcard import of the Python file at the given path, if it exists.
+    """Emulates a wild card import of the Python file at the given path, if it exists.
 
-    This follows the behavior of a wildcard import (i.e. `from module import *`). If the module defines `__all__`, then
+    This follows the behavior of a wild card import (i.e. `from module import *`). If the module defines `__all__`, then
     only those names are imported. Otherwise, all names are imported which do not start with an underscore.
     """
 
@@ -161,7 +161,7 @@ def wildcard_import_file(python_file_path):
     module = importlib.util.module_from_spec(module_spec)
     module_spec.loader.exec_module(module)
 
-    # Emulate a wildcard import by importing all user-defined or specified variables into the global namespace. This is
+    # Emulate a wild card import by importing all user-defined or specified variables into the global namespace. This is
     # either the `__all__` attribute, or all names that don't start with an underscore if `__all__` is not defined.
     default_import_variables = [name for name in module.__dict__.keys() if not name.startswith('_')]
     module_user_defined = getattr(module, '__all__', default_import_variables)

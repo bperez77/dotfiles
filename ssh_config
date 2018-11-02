@@ -16,5 +16,5 @@
 
 Host *
     # This option sends a request to the server after the given time if no data has been received from it (the session
-    # is idle). This prevents servers from thiking the client is not alive and killing the connection.
+    # is idle). This prevents servers from thinking the client is not alive and killing the connection.
     ServerAliveInterval 60

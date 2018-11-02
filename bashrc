@@ -137,7 +137,7 @@ export PS2="${MAGENTA_BACKGROUND}$(printf " %.s" {1..8})${NORMAL}"
 # Tab Completion Settings
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Setup the Vman command from the Vim SuperMan plugin to have the same completion behavior as Man.
+# Setup the Vim Man command from the Vim SuperMan plugin to have the same completion behavior as Man.
 complete -o default -o nospace -F _man vman
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -159,7 +159,7 @@ COPY_IGNORE_LIST='*~ *.bak *.mod.c *.o *.o.* *.pyc __pycache__ .*.swp'
 FIND_IGNORE_LIST='.git .hg .svn'
 export TEXT_IGNORE_LIST="${COPY_IGNORE_LIST} ${FIND_IGNORE_LIST}"
 
-# Change the default command used to generate for the file list for the FZF command and CTRL-T shortcut to use Ripgrep.
+# Change the default command used to generate for the file list for the FZF command and Ctrl-T shortcut to use Ripgrep.
 RIPGREP_IGNORE="$(echo ${FIND_IGNORE_LIST[@]} | sed -e "s/[^ ]\\+/--iglob '!&'/g")"
 export FZF_CTRL_T_COMMAND="rg --files --follow --hidden --no-ignore --text ${RIPGREP_IGNORE[@]} 2> /dev/null"
 
@@ -243,32 +243,32 @@ alias git-root='cd $(git rev-parse --show-cdup)'
 alias pdflatex='pdflatex -shell-escape'
 alias latex='latex -shell-escape'
 
-# Setup the readline wrapper so that it maintains a large history, doesn't repeat duplicates, and handles ANSI color
+# Setup the Readline wrapper so that it maintains a large history, doesn't repeat duplicates, and handles ANSI color
 # codes by default.
 alias rlwrap='rlwrap --always-readline --histsize 1000000 --history-no-dupes 2 --ansi-colour-aware'
 
-# Create aliases for commands that wraps them with the readline library. This is useful for commands that utilize a
-# REPL, but do not provide readline functionality. This will give the commands persistent history and tab completion.
+# Create aliases for commands that wraps them with the Readline library. This is useful for commands that utilize a
+# REPL, but do not provide Readline functionality. This will give the commands persistent history and tab completion.
 RLWRAP_COMMANDS=(lua smlnj coin sim240)
 for cmd in "${RLWRAP_COMMANDS[@]}"
 do
     eval "alias ${cmd}='rlwrap --history-filename \"${HOME}/.$(basename ${cmd})_history\" ${cmd}'"
 done
 
-# Matlab does not cooperate well with disowning, so simply launch the command with its output redirected.
+# MATLAB does not cooperate well with disowning, so simply launch the command with its output redirected.
 function matlab
 {
     matlab "$@" &> /dev/null &
 }
 
-# Runs the command-line (no GUI) version of Matlab.
+# Runs the command-line (no GUI) version of MATLAB.
 alias matlab-shell='command matlab -nodisplay'
 
 #-----------------------------------------------------------------------------------------------------------------------
 # General Aliases
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Allow aliases to be used with the sudo command. This is done by adding a space at the end of the alias.
+# Allow aliases to be used with the Sudo command. This is done by adding a space at the end of the alias.
 alias sudo='sudo '
 
 # Setup the ls and various grep commands to use color highlighting by default.
@@ -294,7 +294,7 @@ alias diff='diff --color=auto --report-identical-files'
 alias vi='vim'
 alias emacs='emacs24 --no-window-system'
 
-# Setup the Ripgrep command to follow symlinks and include most files in its search by default.
+# Setup the Ripgrep command to follow symbolic links and include most files in its search by default.
 alias rg="rg --follow --hidden --no-ignore ${RIPGREP_IGNORE}"
 alias ripgrep='rg'
 
@@ -332,7 +332,7 @@ alias fzf-git='rg-git --files 2> /dev/null | command fzf --multi'
 # Setup the dd command to show progress of the data movement by default.
 alias dd='dd status=progress'
 
-# Setup the dmesg command so that the kernel log messages have human-readable timestamps by default.
+# Setup the Dmesg command so that the kernel log messages have human-readable timestamps by default.
 alias dmesg='dmesg --ctime --color=always'
 
 # Setup the remote sync command to preserve file metadata, show incremental progress, and exclude files by default.
@@ -427,7 +427,7 @@ function chroot-full
     # Change the root directory to the specified location, forcing the use of the C locale.
     sudo LC_ALL=C chroot "${fs_root}"
 
-    # Unmount all of the binded mount points from the faked root filesystem.
+    # Unmount all of the bound mount points from the faked root filesystem.
     for mount_point in "${mount_points[@]}"
     do
         exit_status=1
@@ -544,7 +544,7 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 ]]; then
     eval $(dircolors -b)
     export LS_COLORS="${LS_COLORS}:ow=01;34"
 
-    # Set the display variable to the localhost so Xming can be used with X11-forwarding to display GUI applications.
+    # Set the display variable to the local host so Xming can be used with X11-forwarding to display GUI applications.
     export DISPLAY='localhost:0'
 
     # The location where the C drive is mounted in the WSL.
@@ -620,7 +620,7 @@ if [[ ${SHELL_IS_GIT_BASH} -eq 0 ]]; then
     export WINDOWS_HOME="${HOME}"
 
     # Converts a command for a native Windows program launched from Git Bash to one that is suitable to be run. The new
-    # command is returned as a string on stdout.
+    # command is returned as a string on standard output.
     function convert-git-bash-cmd
     {
         # If applicable, convert the program's path from a Unix-style to a Windows-style path and replace a drive path
@@ -679,7 +679,7 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 || ${SHELL_IS_GIT_BASH} -eq 0 ]]; then
     alias start='run-windows-cmd start'
     alias powershell='run-windows-cmd start powershell.exe -NoExit'
 
-    # Alias for the make link command. Note that symbolic links created with mklink are usualable both by the WSL and
+    # Alias for the Mklink command. Note that symbolic links created with Mklink are usual able both by the WSL and
     # Windows. However, links created with ln appear as junctions to Windows, and thus aren't usable.
     alias mklink='run-windows-cmd mklink'
 fi

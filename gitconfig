@@ -33,7 +33,7 @@
 
     # Set common whitespace problems to be noticed for commands such as git diff and git apply. Detect extraneous
     # whitespace at the end of a line, extra lines at the end of a file, space before tab characters, and when tab
-    # characters are used for indentiation as errors. Also, set the default tabwidth to 4.
+    # characters are used for indentation as errors. Also, set the default tab width to 4.
     whitespace = blank-at-eol,blank-at-eof,space-before-tab,tab-in-indent,tabwidth=4
 
 [color]
@@ -72,7 +72,7 @@
     indentHeuristic = true
 
     # Replaces the standard "a/" and "b/" prefix pair for Diff with prefixes that represent what is being compared. For
-    # example, a plain diff compares the (i)ndex and (w)ork tree.
+    # example, a plain diff compares the index (i) and work (w) tree.
     mnemonicPrefix = true
 
     # The number of files to consider when performing copy and rename detection for diffs. This is set to the largest
@@ -82,7 +82,7 @@
     # In addition to detecting file renames, also detect file copies when running Diff.
     renames = copies
 
-    # Set the default visual/GUI diff tool to be Meld. This is used by the difftool command.
+    # Set the default visual/GUI diff tool to be Meld. This is used by the Difftool command.
     tool = meld
 
     # Highlight whitespace errors in all lines of the diff (old and new). This highlights any whitespace changes.
@@ -127,7 +127,7 @@
 
 [merge]
 
-    # Set the default visual/GUI merge tool to be Meld. This is used by the mergetool command.
+    # Set the default visual/GUI merge tool to be Meld. This is used by the Mergetool command.
     tool = meld
 
 [pack]
@@ -164,7 +164,7 @@
 
     # Recurse into submodules by default when performing any Git commands that deal with submodules. This means that
     # submodules will automatically updated when pulling, fetching, checking out, etc..
-    recurse = true
+    reurse = true
 
     # The number of submodules that are fetched/cloned in parallel. A value of 0 gives a reasonable number of threads.
     fetchJobs = 0
@@ -226,7 +226,7 @@
     sslog = log --stat --pretty=short
 
     # Show the Git history is a visualized graph/tree format that displays the underlying structure of the dependencies
-    # between commits. This is useful for showing merges, such as branhces that have been merged into the current one.
+    # between commits. This is useful for showing merges, such as branches that have been merged into the current one.
     tree = log --graph --decorate --pretty=oneline --abbrev-commit
 
 #-----------------------------------------------------------------------------------------------------------------------

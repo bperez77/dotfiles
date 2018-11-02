@@ -53,8 +53,8 @@ $if Bash
     set enable-bracketed-paste  on
 $endif
 
-# When completing a symlink that points to a directory, add the trailing slash so completion can continue after
-# the symlinked directory.
+# When completing a symbolic link that points to a directory, add the trailing slash so completion can continue after
+# the symbolically linked directory.
 set mark-symlinked-directories  on
 
 # If a word has a partial completion, the common prefix is completed and all matches are listed immediately. This is

@@ -9,5 +9,5 @@
 "
 "-----------------------------------------------------------------------------------------------------------------------
 
-" Associate LALRPOP configuration files with the Rust filetype. This is a LR(1) parser generator library for Rust.
+" Associate LALRPOP configuration files with the Rust file type. This is a LR(1) parser generator library for Rust.
 autocmd BufRead,BufNewFile *.lalrpop setlocal filetype=rust
