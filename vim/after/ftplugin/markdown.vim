@@ -12,3 +12,6 @@
 
 " Enable spell checking (US English) for Markdown files.
 setlocal spell spelllang=en_us
+
+" Enable the Vim Table Mode plugin, which allows for easy alignment of tables.
+silent TableModeEnable

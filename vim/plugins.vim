@@ -139,9 +139,3 @@ let g:verilog_disable_indent_lst    = ['eos']
 
 " Change the separators used at the corners of the table to a bar character, so it is Markdown compatible.
 let g:table_mode_corner             = '|'
-
-" Auto command that enable table mode. This enables table mode for the selected file types.
-augroup TableModeEnable
-    autocmd!
-    autocmd FileType markdown silent TableModeEnable
-augroup END
