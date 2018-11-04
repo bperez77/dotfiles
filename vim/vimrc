@@ -18,7 +18,7 @@
 "-----------------------------------------------------------------------------------------------------------------------
 
 " The directory where this Vimrc file is located. The expression handles symbolic links and gives an absolute path.
-let g:vim_directory = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+let g:vim_directory     = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Plugins
@@ -51,10 +51,10 @@ set belloff=all
 " Change the directory where Vim's backup files are stored. These are created by Vim when it opens a file. This changes
 " it from the default of the current working directory, which helps keep the working directory clean. Note that the
 " trailing '//' the file names are unique, by including the full path in the name.
-let &backupdir  = g:vim_directory . '/editor_files/backup_files//'
+let &backupdir          = g:vim_directory . '/editor_files/backup_files//'
 
 " Change the directory where Vim's swap files are stored. These are created by Vim when it opens a file.
-let &directory  = g:vim_directory . '/editor_files/swap_files//'
+let &directory          = g:vim_directory . '/editor_files/swap_files//'
 
 " When pressing the tab key, insert spaces instead of a tab character, the number of which is given by soft tab stop.
 set expandtab
@@ -69,7 +69,7 @@ set incsearch
 
 " Set the default Shell file type to be Bash. Vim treats all shell files under a generic Shell file type. Thus, when a
 " shell file with an unknown type is encountered, a default must be used.
-let g:is_bash   = 1
+let g:is_bash           = 1
 
 " Show the line number for each line on the left-hand side of the Vim window.
 set number
@@ -106,19 +106,19 @@ set tags=./tags;
 set title
 
 " Change the directory where Vim's undo files are stored. These are created when Vim needs to track the undo history.
-let &undodir    = g:vim_directory . '/editor_files/undo_files//'
+let &undodir            = g:vim_directory . '/editor_files/undo_files//'
 
 " Enable the saving of the undo history to file in the undo directory. This allows the undo history to persist across
 " session (the undo history is restored when the file is reopened.
 set undofile
 
 " Change the directory where Vim's view files are stored. This is the same directory as other Vim-generated files.
-let &viewdir    = g:vim_directory . '/editor_files/view_files//'
+let &viewdir            = g:vim_directory . '/editor_files/view_files//'
 
 " The list of file patterns to ignore when completing file or directory names. This adds the list of ignore patterns
 " defined by the Bashrc to Vim's standard list of ignores. Note that this also affects globbing functions.
-let s:wildignore_list = substitute($TEXT_IGNORE_LIST, ' ', ',', 'g')
-let &wildignore .= s:wildignore_list
+let s:wildignore_list   = substitute($TEXT_IGNORE_LIST, ' ', ',', 'g')
+let &wildignore         .= s:wildignore_list
 
 " When completing file or directory names, the case of the name is ignored when selected a match.
 set wildignorecase
