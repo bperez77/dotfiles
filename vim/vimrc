@@ -261,7 +261,7 @@ command! -bar SquashConsecutiveBlankLines call SquashConsecutiveBlankLines()
 augroup BufferLocalVariables
     autocmd!
 
-    autocmd BufNewFile,BufRead * let b:enable_whitespace_cleanup = g:enable_whitespace_cleanup
+    autocmd BufNewFile,BufReadPre * let b:enable_whitespace_cleanup = g:enable_whitespace_cleanup
 augroup END
 
 " Auto commands that deal with cleaning up extraneous whitespace in files. By default, all of the whitespace specified

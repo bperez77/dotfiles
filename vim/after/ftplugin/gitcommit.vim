@@ -14,6 +14,10 @@
 " useful for Git commit files, since it will nest you inside the .git directory.
 setlocal noautochdir
 
+" Disable the cleaning up of whitespace. The whitespace cleanup commands mess up the syntax highlighting for the diff in
+" the commit, and Git will automatically strip whitespace
+let b:enable_whitespace_cleanup = 0
+
 " Enable spell checking (US English) for Git commit files.
 setlocal spell spelllang=en_us
 
