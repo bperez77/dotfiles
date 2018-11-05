@@ -17,9 +17,6 @@
 " General Variables
 "-----------------------------------------------------------------------------------------------------------------------
 
-" The default text width to use for files. This is used if the file type doesn't define a text width.
-let g:default_text_width    = 120
-
 " The directory where this Vimrc file is located. The expression handles symbolic links and gives an absolute path.
 let g:vim_directory         = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
@@ -131,12 +128,23 @@ set wildmode=full
 set wildmenu
 
 "-----------------------------------------------------------------------------------------------------------------------
-" General Settings
+" Vim Settings
 "-----------------------------------------------------------------------------------------------------------------------
 
 " Set the default Shell file type to be Bash. Vim treats all shell files under a generic Shell file type. Thus, when a
 " shell file with an unknown type is encountered, a default must be used.
-let g:is_bash           = 1
+let g:is_bash                   = 1
+
+"-----------------------------------------------------------------------------------------------------------------------
+" Custom Settings
+"-----------------------------------------------------------------------------------------------------------------------
+
+" The default text width to use for files. This is used if the file type doesn't define a text width.
+let g:default_text_width        = 120
+
+" By default, perform whitespace cleanup (stripping trailing whitespace, deleting consecutive blank lines, etc.) on all
+" files. This is inherited by the buffer-local variable, which can be overridden by specific file types.
+let g:enable_whitespace_cleanup = 1
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Color Settings
@@ -164,17 +172,52 @@ highlight OverLength    ctermbg=red ctermfg=white guibg=#592929
 " Functions
 "-----------------------------------------------------------------------------------------------------------------------
 
-" Function to set the default text width if it is not already specified.
-function! SetDefaultTextWidth()
-    if &textwidth == 0 || &filetype == ""
-        let &textwidth = g:default_text_width
+" Function to set the over length marker to be 1 past the text width.
+function! HighlightOverLength()
+    if &textwidth != 0
+        execute 'match OverLength /\%' . (&textwidth + 1) . 'v.\+/'
     endif
 endfunction
 
-" Function to set the over length marker to be 1 past the text width.
-function! SetOverLength()
-    if &textwidth != 0
-        execute 'match OverLength /\%' . (&textwidth + 1) . 'v.\+/'
+" Performs a search and replace with the given search and replace string. This function ensures the cursor position is
+" preserved (when possible) and disables highlighting for the search.
+function! SearchAndReplace(regex)
+    " Mark the cursor position before the search and replace.
+    normal! mz
+
+    " Perform the search and replace, and disable any highlighting.
+    silent! execute a:regex
+    nohlsearch
+
+    " Return to the previous cursor position. It is possible for this to fail, depending on the search pattern.
+    silent! normal! `z
+endfunction
+
+" Function to set the default text width if it is not already specified.
+function! SetDefaultTextWidth()
+    if (&textwidth == 0) || (&filetype == "")
+        let &l:textwidth = g:default_text_width
+    endif
+endfunction
+
+" Squashes any set of 2 or more consecutive blank lines into a single blank line.
+function! SquashConsecutiveBlankLines()
+    if b:enable_whitespace_cleanup
+        call SearchAndReplace('%s/\(\s*\n\s*\n\)\(\s*\n\)\+/\1/e')
+    endif
+endfunction
+
+" Strips any blank lines from the end of file, deleting them.
+function! StripTrailingLines()
+    if b:enable_whitespace_cleanup
+        call SearchAndReplace('%s/\($\n\s*\)\+\%$//e')
+    endif
+endfunction
+
+" Strips the trailing whitespace the end of any lines.
+function! StripTrailingWhitespace()
+    if b:enable_whitespace_cleanup
+        call SearchAndReplace('%s/\s\+$//e')
     endif
 endfunction
 
@@ -205,30 +248,35 @@ command! -bar -nargs=* OnWrite autocmd BufWritePost * !<args>
 command! -bar -nargs=* OnWriteSilent autocmd BufWritePost * Sh <args>
 command! -bar OnWriteClear autocmd! BufWritePost
 
-" Commands that remove trailing blank lines, collapse consecutive blank lines, and strip trailing whitespace.
-command! -bar StripWhitespace execute 'normal! mz' | silent! %s/\s\+$//e | noh | normal! `z
-command! -bar DeleteTrailingLines execute 'normal! mz' | silent! %s/\($\n\s*\)\+\%$//e | noh | silent! normal! `z
-command! -bar SquashBlankLines execute 'normal! mz' | silent! %s/\(\s*\n\s*\n\)\(\s*\n\)\+/\1/e | noh |
-        \ silent! normal! `z
+" Alias the functions for whitespace cleanup as commands, so they can be more easily invoked.
+command! -bar StripTrailingWhitespace call StripTrailingWhitespace()
+command! -bar StripTrailingLines call StripTrailingLines()
+command! -bar SquashConsecutiveBlankLines call SquashConsecutiveBlankLines()
 
 "-----------------------------------------------------------------------------------------------------------------------
 " General Auto Commands
 "-----------------------------------------------------------------------------------------------------------------------
 
-" Auto commands that deal with striping whitespace when saving files. Three types of whitespaces are stripped by default
-" when saving a file. Any set of 2 consecutive lines or more that are empty are squashed into a single line, empty lines
-" at the end of the file are deleted, and any trailing whitespace at the end of a line is stripped.
+" Set any buffer local variables to the values from their global variable counterparts.
+augroup BufferLocalVariables
+    autocmd!
+
+    autocmd BufNewFile,BufRead * let b:enable_whitespace_cleanup = g:enable_whitespace_cleanup
+augroup END
+
+" Auto commands that deal with cleaning up extraneous whitespace in files. By default, all of the whitespace specified
+" is cleaned up, but this can be disabled on a per-buffer basis by setting b:enable_whitespace_cleanup to 0.
 augroup WhitespaceCleanup
     autocmd!
 
-    autocmd BufWritePre * SquashBlankLines
-    autocmd BufWritePre * DeleteTrailingLines
-    autocmd BufWritePre * StripWhitespace
+    autocmd BufWritePre * StripTrailingLines
+    autocmd BufWritePre * StripTrailingWhitespace
+    autocmd BufWritePre * SquashConsecutiveBlankLines
 augroup END
 
 " Auto commands that deal with automatically saving views and loading them from file for each buffer. Views store
 " editor context information about the file such as the cursor position and any folds. Note that the '?*' pattern is
-" used to prevent empty file names from being matched, since this views cause an error for empty windows and help pages.
+" used to prevent empty file names from being matched, since views cause an error for empty windows and help pages.
 augroup SaveViews
     autocmd!
 
@@ -236,11 +284,11 @@ augroup SaveViews
     autocmd BufWinEnter ?* silent loadview
 augroup END
 
-" Auto commands that deal with line length restrictions.
+" Auto commands that deal with Vim's text width property. By default, if a the filetype plugin does not specify a text
+" width, it is set to g:default_text_width.
 augroup TextWidth
     autocmd!
 
-    " By default, the text width is 120 if not specified.
     autocmd BufRead,BufNewFile * call SetDefaultTextWidth()
 augroup END
 
@@ -309,8 +357,8 @@ noremap <F3> :setlocal spell! spelllang=en_us<CR>
 inoremap <F3> :setlocal spell! spelllang=en_us<CR>
 
 " Quick shortcuts to disable and enable highlighting over length lines.
-noremap <F4> :call SetOverLength()<CR>
-inoremap <F4> :call SetOverLength()<CR>
+noremap <F4> :call HighlightOverLength()<CR>
+inoremap <F4> :call HighlightOverLength()<CR>
 noremap <F5> :match none<CR>
 inoremap <F5> :match none<CR>
 
