@@ -31,7 +31,7 @@ let g:vim_directory         = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 execute 'source ' . g:vim_directory . '/plugins.vim'
 
 "-----------------------------------------------------------------------------------------------------------------------
-" General Settings
+" Vim Options
 "-----------------------------------------------------------------------------------------------------------------------
 
 " Ensure that modern Vim mode is used, and Vim makes no attempt to be Vi backwards compatible.
@@ -69,10 +69,6 @@ set hlsearch
 " Make the Vim search behave like searching does in a web browser does. When a search command is typed, matches against
 " the current search string are highlighted and updated as more of the command is typed.
 set incsearch
-
-" Set the default Shell file type to be Bash. Vim treats all shell files under a generic Shell file type. Thus, when a
-" shell file with an unknown type is encountered, a default must be used.
-let g:is_bash           = 1
 
 " Show the line number for each line on the left-hand side of the Vim window.
 set number
@@ -135,6 +131,14 @@ set wildmode=full
 set wildmenu
 
 "-----------------------------------------------------------------------------------------------------------------------
+" General Settings
+"-----------------------------------------------------------------------------------------------------------------------
+
+" Set the default Shell file type to be Bash. Vim treats all shell files under a generic Shell file type. Thus, when a
+" shell file with an unknown type is encountered, a default must be used.
+let g:is_bash           = 1
+
+"-----------------------------------------------------------------------------------------------------------------------
 " Color Settings
 "-----------------------------------------------------------------------------------------------------------------------
 
@@ -153,8 +157,29 @@ highlight DiffText      ctermfg=White ctermbg=DarkBlue guifg=White guibg=DarkBlu
 " When the color column is enabled, color it blue.
 highlight ColorColumn   ctermbg=DarkBlue ctermfg=white guibg=#592929
 
+" When the over length highlight group is enabled, color it in red. This highlights any characters over the text width.
+highlight OverLength    ctermbg=red ctermfg=white guibg=#592929
+
 "-----------------------------------------------------------------------------------------------------------------------
-" Aliases, Commands, and Functions
+" Functions
+"-----------------------------------------------------------------------------------------------------------------------
+
+" Function to set the default text width if it is not already specified.
+function! SetDefaultTextWidth()
+    if &textwidth == 0 || &filetype == ""
+        let &textwidth = g:default_text_width
+    endif
+endfunction
+
+" Function to set the over length marker to be 1 past the text width.
+function! SetOverLength()
+    if &textwidth != 0
+        execute 'match OverLength /\%' . (&textwidth + 1) . 'v.\+/'
+    endif
+endfunction
+
+"-----------------------------------------------------------------------------------------------------------------------
+" Aliases and Commands
 "-----------------------------------------------------------------------------------------------------------------------
 
 " Allow for capital letters for common commands.
@@ -186,20 +211,6 @@ command! -bar DeleteTrailingLines execute 'normal! mz' | silent! %s/\($\n\s*\)\+
 command! -bar SquashBlankLines execute 'normal! mz' | silent! %s/\(\s*\n\s*\n\)\(\s*\n\)\+/\1/e | noh |
         \ silent! normal! `z
 
-" Function to set the default text width if it is not already specified.
-function! SetDefaultTextWidth()
-    if &textwidth == 0 || &filetype == ""
-        let &textwidth = g:default_text_width
-    endif
-endfunction
-
-" Function to set the over length marker to be 1 past the text width.
-function! SetOverLength()
-    if &textwidth != 0
-        execute 'match OverLength /\%' . (&textwidth + 1) . 'v.\+/'
-    endif
-endfunction
-
 "-----------------------------------------------------------------------------------------------------------------------
 " General Auto Commands
 "-----------------------------------------------------------------------------------------------------------------------
@@ -207,7 +218,7 @@ endfunction
 " Auto commands that deal with striping whitespace when saving files. Three types of whitespaces are stripped by default
 " when saving a file. Any set of 2 consecutive lines or more that are empty are squashed into a single line, empty lines
 " at the end of the file are deleted, and any trailing whitespace at the end of a line is stripped.
-augroup StripWhitespace
+augroup WhitespaceCleanup
     autocmd!
 
     autocmd BufWritePre * SquashBlankLines
@@ -226,15 +237,12 @@ augroup SaveViews
 augroup END
 
 " Auto commands that deal with line length restrictions.
-augroup LineLength
+augroup TextWidth
     autocmd!
 
     " By default, the text width is 120 if not specified.
     autocmd BufRead,BufNewFile * call SetDefaultTextWidth()
 augroup END
-
-" Highlight any characters past the line length limit in red.
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Syntax Auto Commands
