@@ -17,8 +17,11 @@
 " General Variables
 "-----------------------------------------------------------------------------------------------------------------------
 
+" The default text width to use for files. This is used if the file type doesn't define a text width.
+let g:default_text_width    = 120
+
 " The directory where this Vimrc file is located. The expression handles symbolic links and gives an absolute path.
-let g:vim_directory     = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+let g:vim_directory         = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Plugins
@@ -184,9 +187,9 @@ command! -bar SquashBlankLines execute 'normal! mz' | silent! %s/\(\s*\n\s*\n\)\
         \ silent! normal! `z
 
 " Function to set the default text width if it is not already specified.
-function! SetDefaultTW()
+function! SetDefaultTextWidth()
     if &textwidth == 0 || &filetype == ""
-        set textwidth=120
+        let &textwidth = g:default_text_width
     endif
 endfunction
 
@@ -227,10 +230,7 @@ augroup LineLength
     autocmd!
 
     " By default, the text width is 120 if not specified.
-    autocmd BufRead,BufNewFile * call SetDefaultTW()
-
-    " For C-like file types, the line length restriction is 80 characters.
-    autocmd FileType c,cpp,python,rust,cuda,make,asm setlocal textwidth=80
+    autocmd BufRead,BufNewFile * call SetDefaultTextWidth()
 augroup END
 
 " Highlight any characters past the line length limit in red.
