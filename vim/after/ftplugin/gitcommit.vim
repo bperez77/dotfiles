@@ -16,3 +16,7 @@ setlocal noautochdir
 
 " Enable spell checking (US English) for Git commit files.
 setlocal spell spelllang=en_us
+
+" Disable the saving of views for Git commit files by saving nothing to the view files. Since Git commit files are
+" temporary, it's not very useful to save things such as the cursor position.
+setlocal viewoptions=""
