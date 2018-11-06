@@ -182,15 +182,15 @@ endfunction
 " Performs a search and replace with the given search and replace string. This function ensures the cursor position is
 " preserved (when possible) and disables highlighting for the search.
 function! SearchAndReplace(regex)
-    " Mark the cursor position before the search and replace.
-    normal! mz
+    " Save the cursor position (and view) from before the search and replace operation.
+    let l:old_view = winsaveview()
 
     " Perform the search and replace, and disable any highlighting.
     silent! execute a:regex
     nohlsearch
 
-    " Return to the previous cursor position. It is possible for this to fail, depending on the search pattern.
-    silent! normal! `z
+    " Return the cursor to its previous position (and restore the view) from before the operation, if possible.
+    call winrestview(l:old_view)
 endfunction
 
 " Function to set the default text width if it is not already specified.
