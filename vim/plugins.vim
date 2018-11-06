@@ -64,6 +64,10 @@ call plug#begin(g:vim_plugin_directory)
     Plug 'junegunn/fzf', {'do': './install --all --no-update-rc'}
     Plug 'junegunn/fzf.vim'
 
+    " Adds Git status indicators into the sign column, which is next to the line numbers. This shows the status of each
+    " line in the file, whether it is added, modified, or removed.
+    Plug 'airblade/vim-gitgutter'
+
     " Adds support for the ISPC (Intel SPMD Program Compiler) language to Vim.
     Plug 'jez/vim-ispc'
 
