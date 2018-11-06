@@ -46,6 +46,9 @@ call plug#begin(g:vim_plugin_directory)
     " line number, git branch, what Vim mode you're currently in, etc.
     Plug 'vim-airline/vim-airline'
 
+    " Adds commands for easily commenting out blocks of text to Vim.
+    Plug 'tpope/vim-commentary'
+
     " Adds support for C0 files to Vim, used for the 15-122 class. This is a locally installed plugin.
     Plug g:vim_manual_plugin_directory . '/c0.vim'
 
