@@ -86,6 +86,9 @@ call plug#begin(g:vim_plugin_directory)
     " variant of the Man command that renders the Man pages more nicely.
     Plug 'jez/vim-superman', {'do': 'mkdir -p ${USER_LOCAL_DIRECTORY} && cp -ar bin ${USER_LOCAL_DIRECTORY}/'}
 
+    " Adds commands for easily surrounding text with delimiters (e.g. quotes, parenthesis, etc.) to Vim.
+    Plug 'tpope/vim-surround'
+
     " Adds a table mode to Vim that allows for the creation and formatting of nice tables in Vim, particularity for
     " Markdown tables.
     Plug 'dhruvasagar/vim-table-mode'
