@@ -17,8 +17,14 @@
 " General Variables
 "-----------------------------------------------------------------------------------------------------------------------
 
+" The user's name. This is used when generating header comments for files.
+let g:user_name     = 'Brandon Perez'
+
+" The user's email. This is used when generating header comments for file.
+let g:user_email    = 'bmperez@alumni.cmu.edu'
+
 " The directory where this Vimrc file is located. The expression handles symbolic links and gives an absolute path.
-let g:vim_directory         = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+let g:vim_directory = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Plugins
@@ -426,7 +432,7 @@ iabbrev <expr> _shhd_bold "" .
 iabbrev <expr> _dxhd "" .
     \"/**<CR>" .
     \"@file " . fnamemodify(bufname("%"), ":t") . "<CR>" .
-    \"@author Brandon Perez <bmperez@alumni.cmu.edu><CR>" .
+    \"@author " . g:user_name . " <" . g:user_email . "><CR>" .
     \"@date " . strftime("%A, %B %d, %Y at %r %Z") . "<CR>" .
     \"<CR>" .
     \"FIXME: Insert a short description here<CR>" .
@@ -454,7 +460,7 @@ iabbrev <expr> _sxhd "" .
     \fnamemodify(bufname("%"), ":t") . "<CR>" .
     \".. module:: " . fnamemodify(bufname("%"), ":t:r") . "<CR>" .
     \"<CR>" .
-    \".. moduleauthor:: Brandon Perez <bmperez@alumni.cmu.edu><CR>" .
+    \".. moduleauthor:: " . g:user_name . " <" . g:user_email . "><CR>" .
     \".. date:: " . strftime("%A, %B %d, %Y at %r %Z") . "<CR>" .
     \"<CR>" .
     \"FIXME: Insert Brief Description Here<CR>" .
