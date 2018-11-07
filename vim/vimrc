@@ -32,7 +32,7 @@ execute 'source ' . g:vim_directory . '/plugins.vim'
 "-----------------------------------------------------------------------------------------------------------------------
 
 " Ensure that modern Vim mode is used, and Vim makes no attempt to be Vi backwards compatible.
-set nocompatible
+setglobal nocompatible
 
 " Enable syntax highlighting, file type detection, file type specific indentation, and plugins.
 syntax on
@@ -40,92 +40,92 @@ filetype indent plugin on
 
 " Change the current working directory to be the parent directory of the current file being edited. This is enabled to
 " make it easier to switch to other files in the same directory as the file being edited.
-set autochdir
+setglobal autochdir
 
 " Allow backspacing over the end of a line, automatic indentation, and the start of insert.
-set backspace=eol,indent,start
+setglobal backspace=eol,indent,start
 
 " Prevent Vim from making any annoying bell sounds.
-set belloff=all
+setglobal belloff=all
 
 " Change the directory where Vim's backup files are stored. These are created by Vim when it opens a file. This changes
 " it from the default of the current working directory, which helps keep the working directory clean. Note that the
 " trailing '//' the file names are unique, by including the full path in the name.
-let &backupdir          = g:vim_directory . '/editor_files/backup_files//'
+let &g:backupdir        = g:vim_directory . '/editor_files/backup_files//'
 
 " Change the directory where Vim's swap files are stored. These are created by Vim when it opens a file.
-let &directory          = g:vim_directory . '/editor_files/swap_files//'
+let &g:directory        = g:vim_directory . '/editor_files/swap_files//'
 
 " When pressing the tab key, insert spaces instead of a tab character, the number of which is given by soft tab stop.
-set expandtab
+setlocal expandtab
 
 " When performing a search, highlight all matching instances of the search term in the file. This highlight remains
 " persistent until the next search or when it is explicitly disabled.
-set hlsearch
+setglobal hlsearch
 
 " Make the Vim search behave like searching does in a web browser does. When a search command is typed, matches against
 " the current search string are highlighted and updated as more of the command is typed.
-set incsearch
+setglobal incsearch
 
 " Show the line number for each line on the left-hand side of the Vim window.
-set number
+setlocal number
 
 " Show information about the current cursor position in the bottom right of the Vim window. This includes the line
 " number and character/column position of the cursor and the relative position in the overall file.
-set ruler
+setglobal ruler
 
 " Set the default shell to Bash.
-set shell=bash
+setglobal shell=bash
 
 " The number of spaces that are used for each step of manual or automatic indentation.
-set shiftwidth=4
+setlocal shiftwidth=4
 
 " Show the (normal-mode) command being typed in the last line of the screen.
-set showcmd
+setglobal showcmd
 
 " Highlight matching delimiters when the cursor is over one them (e.g braces, parenthesis, etc.).
-set showmatch
+setglobal showmatch
 
 " The number of spaces that are used when pressing the tab key. This also affects the behavior when pressing the
 " backspace key, so it deletes the equivalent number of spaces when pressed.
-set softtabstop=4
+setlocal softtabstop=4
 
 " When performing a horizontal or vertical split, open the window below or to the right of the current window.
-set splitbelow
-set splitright
+setglobal splitbelow
+setglobal splitright
 
 " When using Ctags to search for identifiers, search for the tags file from the file's current directory, then all of
 " its parent directories.
-set tags=./tags;
+setglobal tags=./tags;
 
 " Update the title of the screen (terminal window) based on the file is being edited, setting it to its name.
-set title
+setglobal title
 
 " Change the directory where Vim's undo files are stored. These are created when Vim needs to track the undo history.
-let &undodir            = g:vim_directory . '/editor_files/undo_files//'
+let &g:undodir          = g:vim_directory . '/editor_files/undo_files//'
 
 " Enable the saving of the undo history to file in the undo directory. This allows the undo history to persist across
 " session (the undo history is restored when the file is reopened.
-set undofile
+setlocal undofile
 
 " Change the directory where Vim's view files are stored. This is the same directory as other Vim-generated files.
-let &viewdir            = g:vim_directory . '/editor_files/view_files//'
+let &g:viewdir          = g:vim_directory . '/editor_files/view_files//'
 
 " The list of file patterns to ignore when completing file or directory names. This adds the list of ignore patterns
 " defined by the Bashrc to Vim's standard list of ignores. Note that this also affects globbing functions.
 let s:wildignore_list   = substitute($TEXT_IGNORE_LIST, ' ', ',', 'g')
-let &wildignore         .= s:wildignore_list
+let &g:wildignore       .= s:wildignore_list
 
 " When completing file or directory names, the case of the name is ignored when selected a match.
-set wildignorecase
+setglobal wildignorecase
 
 " When performing tab completion, complete the next full match and also start a wild menu if it is enabled. This updates
 " the completion text to the next full match.
-set wildmode=full
+setglobal wildmode=full
 
 " When performing tab completion, list all available tab completions at the bottom of the screen. The available
 " completions can be scrolled throw by pressed tab repeatedly.
-set wildmenu
+setglobal wildmenu
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Vim Settings
