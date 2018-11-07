@@ -131,6 +131,10 @@ setglobal wildmode=full
 " completions can be scrolled throw by pressed tab repeatedly.
 setglobal wildmenu
 
+" The number of milliseconds after nothing is typed to save the swap file to disk. This is used by the Git gutter plugin
+" to control how often the status of lines are updated. This is reduced to 100 ms.
+setglobal updatetime=100
+
 "-----------------------------------------------------------------------------------------------------------------------
 " Vim Settings
 "-----------------------------------------------------------------------------------------------------------------------
