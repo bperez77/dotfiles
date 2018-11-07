@@ -43,7 +43,7 @@ filetype indent plugin on
 setglobal autochdir
 
 " Allow backspacing over the end of a line, automatic indentation, and the start of insert.
-setglobal backspace=eol,indent,start
+setglobal backspace="eol,indent,start"
 
 " Prevent Vim from making any annoying bell sounds.
 setglobal belloff=all
@@ -179,6 +179,13 @@ function! HighlightOverLength()
     endif
 endfunction
 
+" Function to set the default text width if it is not already specified.
+function! SetDefaultTextWidth()
+    if (&textwidth == 0) || (&filetype == "")
+        let &l:textwidth = g:default_text_width
+    endif
+endfunction
+
 " Performs a search and replace with the given search and replace string. This function ensures the cursor position is
 " preserved (when possible) and disables highlighting for the search.
 function! SearchAndReplace(regex)
@@ -191,13 +198,6 @@ function! SearchAndReplace(regex)
 
     " Return the cursor to its previous position (and restore the view) from before the operation, if possible.
     call winrestview(l:old_view)
-endfunction
-
-" Function to set the default text width if it is not already specified.
-function! SetDefaultTextWidth()
-    if (&textwidth == 0) || (&filetype == "")
-        let &l:textwidth = g:default_text_width
-    endif
 endfunction
 
 " Squashes any set of 2 or more consecutive blank lines into a single blank line.
@@ -231,7 +231,8 @@ command! Wq wq
 command! W w
 command! Q q
 
-" Override the default Vexplore command behavior to split right instead of left.
+" Override the default Netrw explore command command behavior to split right and below instead of left and above.
+command! Sex Sexplore
 command! Vex Vexplore!
 
 " A command that allows a shell command to be executed silently. Normally, VIM puts itself in the background, then
