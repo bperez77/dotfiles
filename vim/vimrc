@@ -59,6 +59,13 @@ let &g:directory        = g:vim_directory . '/editor_files/swap_files//'
 " When pressing the tab key, insert spaces instead of a tab character, the number of which is given by soft tab stop.
 set expandtab
 
+" When opening a file, open all potential folds in a file, rather than having them be closed initially by default.
+set nofoldenable
+
+" Enable text folding in Vim and use syntax as the method to create the folds, based on the language. This can be
+" overridden locally for particular languages.
+set foldmethod=syntax
+
 " When performing a search, highlight all matching instances of the search term in the file. This highlight remains
 " persistent until the next search or when it is explicitly disabled.
 setglobal hlsearch
