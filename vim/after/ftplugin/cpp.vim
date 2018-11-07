@@ -11,7 +11,7 @@
 "-----------------------------------------------------------------------------------------------------------------------
 
 " Change the comment string to be C++-style comments instead of C-style comments.
-setlocal commentstring="// %s"
+setlocal commentstring=//\ %s
 
 " Override the default text width for C++ files to 120 characters.
 setlocal textwidth=120

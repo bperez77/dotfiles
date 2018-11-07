@@ -43,7 +43,7 @@ filetype indent plugin on
 setglobal autochdir
 
 " Allow backspacing over the end of a line, automatic indentation, and the start of insert.
-setglobal backspace="eol,indent,start"
+setglobal backspace=eol,indent,start
 
 " Prevent Vim from making any annoying bell sounds.
 setglobal belloff=all
@@ -113,7 +113,7 @@ let &g:viewdir          = g:vim_directory . '/editor_files/view_files//'
 
 " Set the items to track when saving a view. This saves the cursor positions and any folds in the file. Notably,
 " 'options' are not saved as this can cause several issues.
-set viewoptions="cursor,folds"
+setglobal viewoptions=cursor,folds
 
 " The list of file patterns to ignore when completing file or directory names. This adds the list of ignore patterns
 " defined by the Bashrc to Vim's standard list of ignores. Note that this also affects globbing functions.
