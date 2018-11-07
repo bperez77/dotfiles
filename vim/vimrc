@@ -111,6 +111,10 @@ setlocal undofile
 " Change the directory where Vim's view files are stored. This is the same directory as other Vim-generated files.
 let &g:viewdir          = g:vim_directory . '/editor_files/view_files//'
 
+" Set the items to track when saving a view. This saves the cursor positions and any folds in the file. Notably,
+" 'options' are not saved as this can cause several issues.
+set viewoptions="cursor,folds"
+
 " The list of file patterns to ignore when completing file or directory names. This adds the list of ignore patterns
 " defined by the Bashrc to Vim's standard list of ignores. Note that this also affects globbing functions.
 let s:wildignore_list   = substitute($TEXT_IGNORE_LIST, ' ', ',', 'g')
