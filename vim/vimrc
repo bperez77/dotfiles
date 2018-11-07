@@ -57,7 +57,7 @@ let &g:backupdir        = g:vim_directory . '/editor_files/backup_files//'
 let &g:directory        = g:vim_directory . '/editor_files/swap_files//'
 
 " When pressing the tab key, insert spaces instead of a tab character, the number of which is given by soft tab stop.
-setlocal expandtab
+set expandtab
 
 " When performing a search, highlight all matching instances of the search term in the file. This highlight remains
 " persistent until the next search or when it is explicitly disabled.
@@ -68,7 +68,7 @@ setglobal hlsearch
 setglobal incsearch
 
 " Show the line number for each line on the left-hand side of the Vim window.
-setlocal number
+set number
 
 " Show information about the current cursor position in the bottom right of the Vim window. This includes the line
 " number and character/column position of the cursor and the relative position in the overall file.
@@ -78,7 +78,7 @@ setglobal ruler
 setglobal shell=bash
 
 " The number of spaces that are used for each step of manual or automatic indentation.
-setlocal shiftwidth=4
+set shiftwidth=4
 
 " Show the (normal-mode) command being typed in the last line of the screen.
 setglobal showcmd
@@ -88,7 +88,7 @@ setglobal showmatch
 
 " The number of spaces that are used when pressing the tab key. This also affects the behavior when pressing the
 " backspace key, so it deletes the equivalent number of spaces when pressed.
-setlocal softtabstop=4
+set softtabstop=4
 
 " When performing a horizontal or vertical split, open the window below or to the right of the current window.
 setglobal splitbelow
@@ -106,7 +106,7 @@ let &g:undodir          = g:vim_directory . '/editor_files/undo_files//'
 
 " Enable the saving of the undo history to file in the undo directory. This allows the undo history to persist across
 " session (the undo history is restored when the file is reopened.
-setlocal undofile
+set undofile
 
 " Change the directory where Vim's view files are stored. This is the same directory as other Vim-generated files.
 let &g:viewdir          = g:vim_directory . '/editor_files/view_files//'
