@@ -194,14 +194,14 @@ highlight OverLength    ctermbg=red ctermfg=white guibg=#592929
 "-----------------------------------------------------------------------------------------------------------------------
 
 " Function to set the over length marker to be 1 past the text width.
-function! HighlightOverLength()
+function! HighlightOverLength() abort
     if &textwidth != 0
         execute 'match OverLength /\%' . (&textwidth + 1) . 'v.\+/'
     endif
 endfunction
 
 " Function to set the default text width if it is not already specified.
-function! SetDefaultTextWidth()
+function! SetDefaultTextWidth() abort
     if (&textwidth == 0) || (&filetype == "")
         let &l:textwidth = g:default_text_width
     endif
@@ -209,7 +209,7 @@ endfunction
 
 " Performs a search and replace with the given search and replace string. This function ensures the cursor position is
 " preserved (when possible) and disables highlighting for the search.
-function! SearchAndReplace(regex)
+function! SearchAndReplace(regex) abort
     " Save the cursor position (and view) from before the search and replace operation.
     let l:old_view = winsaveview()
 
@@ -222,21 +222,21 @@ function! SearchAndReplace(regex)
 endfunction
 
 " Squashes any set of 2 or more consecutive blank lines into a single blank line.
-function! SquashConsecutiveBlankLines()
+function! SquashConsecutiveBlankLines() abort
     if b:enable_whitespace_cleanup
         call SearchAndReplace('%s/\(\s*\n\s*\n\)\(\s*\n\)\+/\1/e')
     endif
 endfunction
 
 " Strips any blank lines from the end of file, deleting them.
-function! StripTrailingLines()
+function! StripTrailingLines() abort
     if b:enable_whitespace_cleanup
         call SearchAndReplace('%s/\($\n\s*\)\+\%$//e')
     endif
 endfunction
 
 " Strips the trailing whitespace the end of any lines.
-function! StripTrailingWhitespace()
+function! StripTrailingWhitespace() abort
     if b:enable_whitespace_cleanup
         call SearchAndReplace('%s/\s\+$//e')
     endif
@@ -403,7 +403,7 @@ iabbrev <expr> _hdts strftime("%A, %B %d, %Y at %r %Z")
 iabbrev <expr> _ds strftime("%b %d, %Y")
 
 " Shortcut to insert a header guard.
-function! Header_Gaurd()
+function! HeaderGaurd() abort
     let basename = toupper(fnamemodify(bufname("%"), ":t:r"))
     let extension = toupper(fnamemodify(bufname("%"), ":e"))
     let gaurd = basename . "_" . extension . "_"
@@ -412,7 +412,7 @@ function! Header_Gaurd()
            \"" .
            \"#endif /* " . gaurd . " */"
 endfunction
-iabbrev <expr> _hdgd Header_Gaurd()
+iabbrev <expr> _hdgd <SID>HeaderGaurd()
 
 " Shortcut to insert a generic comment header for various languages.
 iabbrev <expr> _hd "" .
