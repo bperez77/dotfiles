@@ -276,29 +276,41 @@ command! -bar StripTrailingLines call StripTrailingLines()
 command! -bar SquashConsecutiveBlankLines call SquashConsecutiveBlankLines()
 
 "-----------------------------------------------------------------------------------------------------------------------
-" General Auto Commands
+" Auto Commands
 "-----------------------------------------------------------------------------------------------------------------------
 
-" Set any buffer local variables to the values from their global variable counterparts.
+" Set any buffer local variables to the values from their global variable counterparts. This sets it up so that
+" buffer-local variables will inherit the value from the global variable.
 augroup BufferLocalVariables
     autocmd!
 
     autocmd BufNewFile,BufReadPre * let b:enable_whitespace_cleanup = g:enable_whitespace_cleanup
 augroup END
 
-" Auto commands that deal with cleaning up extraneous whitespace in files. By default, all of the whitespace specified
-" is cleaned up, but this can be disabled on a per-buffer basis by setting b:enable_whitespace_cleanup to 0.
-augroup WhitespaceCleanup
+" Set reasonable defaults for the format options used by Vim for formatting text and comments in files. These set up
+" options such as automatically wrapping text and comments that exceed the text width, among other things.
+augroup FormatOptions
     autocmd!
 
-    autocmd BufWritePre * StripTrailingLines
-    autocmd BufWritePre * StripTrailingWhitespace
-    autocmd BufWritePre * SquashConsecutiveBlankLines
+    " Enable the wrapping of all text and comments when they exceed the text width.
+    autocmd FileType * setlocal formatoptions+=c
+    autocmd FileType * setlocal formatoptions-=l
+    autocmd FileType * setlocal formatoptions+=t
+
+    " Allow comment formatting with the 'gq' (formatting) shortcut, and remove comment leaders when joining lines.
+    autocmd FileType * setlocal formatoptions+=q
+    autocmd FileType * setlocal formatoptions+=j
+
+    " Recognize numbered lists when formatting comments. This appropriately indents line continuations.
+    autocmd FileType * setlocal formatoptions+=n
+
+    " Disable the insertion of the comment leader when beginning a new line from normal mode with 'o' or 'O'.
+    autocmd FileType * setlocal formatoptions-=o
 augroup END
 
-" Auto commands that deal with automatically saving views and loading them from file for each buffer. Views store
-" editor context information about the file such as the cursor position and any folds. Note that the '?*' pattern is
-" used to prevent empty file names from being matched, since views cause an error for empty windows and help pages.
+" Automatically save views and load them from file for each buffer. Views store editor context information about
+" the file such as the cursor position and any folds. Note that the '?*' pattern is used to prevent empty file names
+" from being matched, since views cause an error for empty windows and help pages.
 augroup SaveViews
     autocmd!
 
@@ -306,27 +318,22 @@ augroup SaveViews
     autocmd BufWinEnter ?* silent loadview
 augroup END
 
-" Auto commands that deal with Vim's text width property. By default, if a the filetype plugin does not specify a text
-" width, it is set to g:default_text_width.
+" Set Vim's text width property to a reasonable value. By default, if a file type plugin does not specify a text width,
+" it is set to g:default_text_width.
 augroup TextWidth
     autocmd!
 
     autocmd BufRead,BufNewFile * call SetDefaultTextWidth()
 augroup END
 
-"-----------------------------------------------------------------------------------------------------------------------
-" Syntax Auto Commands
-"-----------------------------------------------------------------------------------------------------------------------
-
-" Auto commands that deal with changing settings for comments.
-augroup LanguageComments
+" Clean up all extraneous whitespace in files. By default, all of the whitespace specified is cleaned up, but this can
+" be disabled on a per-buffer basis by setting b:enable_whitespace_cleanup to 0.
+augroup WhitespaceCleanup
     autocmd!
 
-    " Enable C style comments for C-like languages.
-    autocmd FileType rust,cuda,c0,verilog_systemverilog setlocal formatoptions+=croql
-
-    " Disable automatic extension of '//' style comments.
-    autocmd FileType c,cpp,rust,cuda,c0,verilog_systemverilog setlocal comments-=:// comments+=f://
+    autocmd BufWritePre * StripTrailingLines
+    autocmd BufWritePre * StripTrailingWhitespace
+    autocmd BufWritePre * SquashConsecutiveBlankLines
 augroup END
 
 "-----------------------------------------------------------------------------------------------------------------------
