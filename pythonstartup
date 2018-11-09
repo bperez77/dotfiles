@@ -122,7 +122,7 @@ del _get_color, _setup_prompt
 try:
     from see import see
 except ImportError:
-    print('Unable to import "see" module. Run `python -m pip install` see to install it.')
+    print('Unable to import "see" module. Run `python -m pip install see` to install it.')
 
 # Import the various container types and iteration tools so they can be used from the interpreter.
 from collections import *

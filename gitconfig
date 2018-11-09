@@ -163,7 +163,7 @@
 [submodule]
 
     # Recurse into submodules by default when performing any Git commands that deal with submodules. This means that
-    # submodules will automatically updated when pulling, fetching, checking out, etc..
+    # submodules will automatically updated when pulling, fetching, checking out, etc.
     reurse = true
 
     # The number of submodules that are fetched/cloned in parallel. A value of 0 gives a reasonable number of threads.
