@@ -237,7 +237,7 @@ alias make-android='make ARCH=arm CROSS_COMPILE=arm-linux-androideabi-'
 alias ctags='ctags --recurse --extras=+q --fields=+i'
 
 # Changes directory to the top-level/root of the current Git repository, if the current working directory is under one.
-alias git-root='cd $(git rev-parse --show-cdup)'
+alias git-root='cd ./$(git rev-parse --show-cdup)'
 
 # Setup the LaTeX compilation commands to be compatible with the Minted and Pygments syntax highlighters by default.
 alias pdflatex='pdflatex -shell-escape'
