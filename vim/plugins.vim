@@ -120,9 +120,14 @@ let g:airline_detect_spelllang      = 0
 " Easy Align Plugin Settings
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Use 'ga' as the key stroke shortcut for the easy align command. This creates shortcuts for normal and visual mode.
-nmap ga <Plug>(EasyAlign)
-vmap ga <Plug>(EasyAlign)
+" Change the default behavior used for aligning delimiters of different lengths from right-aligning to left-aligning.
+" This is important when aligning operators that may have different lengths (e.g. '=' and '+=').
+let g:easy_align_delimiter_align    = 'ld'
+
+" Add additional delimiters that can be used by Easy Align for alignment. This adds support for backslashes.
+let g:easy_align_delimiters         = {
+        \ '\': {'pattern': '\\', 'right_margin': 0},
+\ }
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Large File Plugin Settings
