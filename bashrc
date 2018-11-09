@@ -294,6 +294,9 @@ alias diff='diff --color=auto --report-identical-files'
 alias vi='vim'
 alias emacs='emacs24 --no-window-system'
 
+# Open an empty Vim buffer for creating a Git commit message. This sets the file type appropriately.
+alias vim-commit="vim -c 'setlocal filetype=gitcommit'"
+
 # Setup the Ripgrep command to follow symbolic links and include most files in its search by default.
 alias rg="rg --follow --hidden --no-ignore ${RIPGREP_IGNORE}"
 alias ripgrep='rg'
