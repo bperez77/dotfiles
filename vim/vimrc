@@ -213,38 +213,47 @@ function! SetDefaultTextWidth() abort
     endif
 endfunction
 
-" Performs a search and replace with the given search and replace string. This function ensures the cursor position is
-" preserved (when possible) and disables highlighting for the search.
-function! SearchAndReplace(regex) abort
+" Performs a search and replace over the given range of lines (inclusive). To perform the search over the entire file,
+" specify both range arguments as empty strings. The function minimizes the state modified, so the cursor position is
+" preserved (if possible), no entries are added to the jump list or search history, and no highlighting occurs.
+function! SearchAndReplace(regex, start_line, end_line) abort
     " Save the cursor position (and view) from before the search and replace operation.
-    let l:old_view = winsaveview()
+    let l:current_view = winsaveview()
 
-    " Perform the search and replace, and disable any highlighting.
-    silent! execute a:regex
+    " Form the full search and replace command with the range based on the arguments.
+    if (a:start_line != '') || (a:end_line != '')
+        let l:ranged_regex = a:start_line . ',' . a:end_line . 's' . a:regex
+    else
+        let l:ranged_regex = '%s' . a:regex
+    endif
+
+    " Perform the search and replace over the specified range and preserve the editor state.
+    keepjumps keeppatterns execute l:ranged_regex
     nohlsearch
-
-    " Return the cursor to its previous position (and restore the view) from before the operation, if possible.
-    call winrestview(l:old_view)
+    call winrestview(l:current_view)
 endfunction
 
 " Squashes any set of 2 or more consecutive blank lines into a single blank line.
-function! SquashConsecutiveBlankLines() abort
+function! SquashConsecutiveBlankLines(start_line, end_line) abort
     if b:enable_whitespace_cleanup
-        call SearchAndReplace('%s/\(\s*\n\s*\n\)\(\s*\n\)\+/\1/e')
+        let l:regex = ':\v' . '(\s*\n\s*\n)(\s*\n)+' . ':\1' . ':e'
+        call SearchAndReplace(l:regex, a:start_line, a:end_line)
     endif
 endfunction
 
 " Strips any blank lines from the end of file, deleting them.
 function! StripTrailingLines() abort
     if b:enable_whitespace_cleanup
-        call SearchAndReplace('%s/\($\n\s*\)\+\%$//e')
+        let l:regex = ':\v' . '($\n\s*)+%$' . ':' . ':e'
+        call SearchAndReplace(l:regex, '', '')
     endif
 endfunction
 
-" Strips the trailing whitespace the end of any lines.
-function! StripTrailingWhitespace() abort
+" Strips the trailing whitespace the end of each line in the given range of lines (inclusive)
+function! StripTrailingWhitespace(start_line, end_line) abort
     if b:enable_whitespace_cleanup
-        call SearchAndReplace('%s/\s\+$//e')
+        let l:regex = ':\v' . '\s+$' . ':'. ':e'
+        call SearchAndReplace(l:regex, a:start_line, a:end_line)
     endif
 endfunction
 
@@ -277,9 +286,9 @@ command! -bar -nargs=* OnWriteSilent autocmd BufWritePost * Sh <args>
 command! -bar OnWriteClear autocmd! BufWritePost
 
 " Alias the functions for whitespace cleanup as commands, so they can be more easily invoked.
-command! -bar StripTrailingWhitespace call StripTrailingWhitespace()
 command! -bar StripTrailingLines call StripTrailingLines()
-command! -bar SquashConsecutiveBlankLines call SquashConsecutiveBlankLines()
+command! -bar -range=% StripTrailingWhitespace call StripTrailingWhitespace(<line1>, <line2>)
+command! -bar -range=% SquashConsecutiveBlankLines call SquashConsecutiveBlankLines(<line1>, <line2>)
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Auto Commands
