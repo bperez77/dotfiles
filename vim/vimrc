@@ -41,8 +41,10 @@ execute 'source ' . g:vim_directory . '/plugins.vim'
 setglobal nocompatible
 
 " Enable syntax highlighting, file type detection, file type specific indentation, and plugins.
+filetype on
+filetype indent on
+filetype plugin on
 syntax on
-filetype indent plugin on
 
 " Change the current working directory to be the parent directory of the current file being edited. This is enabled to
 " make it easier to switch to other files in the same directory as the file being edited.
