@@ -48,6 +48,10 @@ filetype indent plugin on
 " make it easier to switch to other files in the same directory as the file being edited.
 setglobal autochdir
 
+" When starting a new line, use the indentation from the previous line to determine where the next line will start. Note
+" that this is a fallback setting, any language-specific indentation settings will take priority over it.
+set autoindent
+
 " Allow backspacing over the end of a line, automatic indentation, and the start of insert.
 setglobal backspace=eol,indent,start
 
