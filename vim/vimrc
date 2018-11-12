@@ -228,7 +228,7 @@ function! SearchAndReplace(regex, start_line, end_line) abort
     endif
 
     " Perform the search and replace over the specified range and preserve the editor state.
-    keepjumps keeppatterns execute l:ranged_regex
+    execute 'keepjumps keeppatterns ' . l:ranged_regex
     nohlsearch
     call winrestview(l:current_view)
 endfunction
