@@ -307,6 +307,26 @@ alias emacs='emacs24 --no-window-system'
 # Open an empty Vim buffer for creating a Git commit message. This sets the file type appropriately.
 alias vim-commit="vim -c 'setlocal filetype=gitcommit'"
 
+# Setup the FD command to follow symbolic links and include most files in its search by default.
+alias fd="fd --follow --hidden --no-ignore ${FD_IGNORE}"
+
+# Perform a FD file search only on file not ignored by Git. This search is performed from the root of repository.
+# In order to specify other paths, the `--search-path` flag must be used.
+function fd-git
+{
+    # Determine if the current working directory is under a Git repository, and get the relative path to the root.
+    local git_root=$(git rev-parse --show-cdup)
+    if [[ $? -ne 0 ]]; then
+        exit_code=${?}
+        printf "Error: Current working directory is not under a Git repository.\n" 1>&2
+        return ${exit_code}
+    fi
+
+    # If the git root result is empty (from being at the root of the repository), then make sure '.' is specified.
+    local args=("${@}")
+    command fd --follow --hidden ${FD_IGNORE} --search-path ${git_root:-.} "${args[@]}"
+}
+
 # Setup the Ripgrep command to follow symbolic links and include most files in its search by default.
 RIPGREP_IGNORE="$(echo ${FIND_IGNORE_LIST[@]} | sed -e "s/[^ ]\\+/--iglob '!&'/g")"
 alias rg="rg --follow --hidden --no-ignore ${RIPGREP_IGNORE}"
