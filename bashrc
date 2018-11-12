@@ -160,9 +160,9 @@ FIND_IGNORE_LIST='.git .hg .svn'
 export TEXT_IGNORE_LIST="${COPY_IGNORE_LIST} ${FIND_IGNORE_LIST}"
 
 # Setup the default commands used for the various FZF shortcuts and commands to use FD and respect an ignore list.
-FD_IGNORE="$(echo ${FIND_IGNORE_LIST[@]} | sed -e "s/[^ ]\\+/--exclude '&'/g")"
-export FZF_ALT_C_COMMAND="fd --color never --follow --hidden --no-ignore --type directory ${FD_IGNORE}"
-export FZF_CTRL_T_COMMAND="fd --color never --follow --hidden --no-ignore --type file ${FD_IGNORE}"
+FD_IGNORE="$(echo ${FIND_IGNORE_LIST[@]} | sed -e "s/[^ ]\\+/--exclude &/g")"
+export FZF_ALT_C_COMMAND="command fd --color never --follow --hidden --no-ignore --type directory ${FD_IGNORE}"
+export FZF_CTRL_T_COMMAND="command fd --color never --follow --hidden --no-ignore --type file ${FD_IGNORE}"
 export FZF_DEFAULT_COMMAND="${FZF_CTRL_T_COMMAND}"
 
 # Enable multi-select mode by default for the standard FZF command and the CTRL-T shortcut.
@@ -328,12 +328,11 @@ function fd-git
 }
 
 # Setup the Ripgrep command to follow symbolic links and include most files in its search by default.
-RIPGREP_IGNORE="$(echo ${FIND_IGNORE_LIST[@]} | sed -e "s/[^ ]\\+/--iglob '!&'/g")"
+RIPGREP_IGNORE="$(echo ${FIND_IGNORE_LIST[@]} | sed -e "s/[^ ]\\+/--iglob !&/g")"
 alias rg="rg --follow --hidden --no-ignore ${RIPGREP_IGNORE}"
 alias ripgrep='rg'
 
-# Perform a Ripgrep search only on files not ignored by Git. This search is performed from the root of the Git
-# repository. This command assumes that no other paths are specified.
+# Perform a Ripgrep search only on files not ignored by Git. This search is performed from the root of the repository.
 function rg-git
 {
     # Check that the pattern was specified by the user, and use the Ripgrep command to generate the usage.
@@ -352,7 +351,7 @@ function rg-git
     fi
 
     local args=("${@}")
-    command rg --follow "${args[@]}" ${git_root}
+    command rg --follow --hidden ${RIPGREP_IGNORE} "${args[@]}" ${git_root}
 }
 alias ripgrep-git='rg-git'
 
