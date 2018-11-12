@@ -165,6 +165,14 @@ export FZF_ALT_C_COMMAND="fd --color never --follow --hidden --no-ignore --type 
 export FZF_CTRL_T_COMMAND="fd --color never --follow --hidden --no-ignore --type file ${FD_IGNORE}"
 export FZF_DEFAULT_COMMAND="${FZF_CTRL_T_COMMAND}"
 
+# Enable multi-select mode by default for the standard FZF command and the CTRL-T shortcut.
+export FZF_CTRL_T_OPTS="--multi"
+export FZF_DEFAULT_OPTS="${FZF_CTRL_T_OPTS}"
+
+# Set FZF's reverse history search (CTRL-R) shortcut to preview commands, as some of them may be too long to fit on the
+# terminal screen. Also, all for this preview to be toggled with '?'.
+export FZF_CTRL_R_OPTS='--preview "echo {}" --preview-window "down:3:wrap"'
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Path Variables
 #-----------------------------------------------------------------------------------------------------------------------
