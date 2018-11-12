@@ -436,7 +436,7 @@ function! HeaderGaurd() abort
     let basename = toupper(fnamemodify(bufname("%"), ":t:r"))
     let extension = toupper(fnamemodify(bufname("%"), ":e"))
     let gaurd = basename . "_" . extension . "_"
-    return  "#ifndef " . gaurd . "" .
+    return "#ifndef " . gaurd . "" .
            \"#define " . gaurd . "" .
            \"" .
            \"#endif /* " . gaurd . " */"
