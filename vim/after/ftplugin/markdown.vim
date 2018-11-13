@@ -15,3 +15,7 @@ setlocal spell spelllang=en_us
 
 " Enable the Vim Table Mode plugin, which allows for easy alignment of tables.
 silent TableModeEnable
+
+" Disable soft text wrapping for Markdown files. Since Markdown's tables can't be split over multiple lines, it's
+" cleaner to let the lines overflow the screen and horizontally scroll to read them.
+set nowrap
