@@ -308,7 +308,7 @@ alias emacs='emacs24 --no-window-system'
 alias vim-commit="vim -c 'setlocal filetype=gitcommit'"
 
 # Setup the FD command to follow symbolic links and include most files in its search by default.
-alias fd="fd --follow --hidden --no-ignore ${FD_IGNORE}"
+alias fd="fd --follow --hidden --no-ignore --show-errors ${FD_IGNORE}"
 
 # Perform a FD file search only on file not ignored by Git. This search is performed from the root of repository.
 # In order to specify other paths, the `--search-path` flag must be used.
