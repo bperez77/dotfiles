@@ -141,6 +141,15 @@ export PS2="${MAGENTA_BACKGROUND}$(printf " %.s" {1..8})${NORMAL}"
 complete -o default -o nospace -F _man vman
 
 #-----------------------------------------------------------------------------------------------------------------------
+# Readline Settings
+#-----------------------------------------------------------------------------------------------------------------------
+
+# When pasting text, insert the text as a single string instead of treating each character as if had come from the
+# keyboard. This prevents pasted characters from being interpreted as editing commands. For example, if
+# pasted text has an embedded newline, this will prevent the line from automatically being entered in the terminal.
+bind 'set enable-bracketed-paste on'
+
+#-----------------------------------------------------------------------------------------------------------------------
 # General Environment Variables
 #-----------------------------------------------------------------------------------------------------------------------
 
