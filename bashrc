@@ -724,7 +724,8 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 || ${SHELL_IS_GIT_BASH} -eq 0 ]]; then
     alias cmd='run-windows-cmd'
     alias cmd-start='start-windows-cmd'
     alias start='run-windows-cmd start'
-    alias powershell='run-windows-cmd start powershell.exe -NoExit'
+    alias powershell='run-windows-cmd powershell.exe'
+    alias powershell-start='start-windows-cmd powershell.exe -NoExit'
 
     # Alias for the Mklink command. Note that symbolic links created with Mklink are usual able both by the WSL and
     # Windows. However, links created with ln appear as junctions to Windows, and thus aren't usable.
