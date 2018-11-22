@@ -138,9 +138,9 @@
 
 [push]
 
-    # If no refspec is given, then push the local branch to the upstream branch on the remote that it is set to track.
-    # Additionally, this enforces that the name of the local and remote branches must match.
-    default = simple
+    # If no refspec is given for the push comand, then push the local branch to the upstream branch with the same name.
+    # If this branch is not tracked, then create an upstream branch with the same name.
+    default = current
 
     # When pushing to the remote, also push any tags present locally but not on the remote by default.
     followTags = true
