@@ -149,6 +149,14 @@ complete -o default -o nospace -F _man vman
 # pasted text has an embedded newline, this will prevent the line from automatically being entered in the terminal.
 bind 'set enable-bracketed-paste on'
 
+# Setup ALT-e as a shortcut to edit a file. The file is searched for with FZF and then opened up with Vim.
+function fzf-edit
+{
+    file=$(fzf --height '40%') &&
+    printf 'vim %q' "${file}"
+}
+bind '"\ee": "\C-e\C-u$(fzf-edit)\e\C-e\er\C-m'
+
 #-----------------------------------------------------------------------------------------------------------------------
 # General Environment Variables
 #-----------------------------------------------------------------------------------------------------------------------
