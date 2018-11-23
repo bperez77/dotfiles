@@ -5,7 +5,8 @@
 " Author:           Brandon Perez <bmperez@alumni.cmu.edu>
 " Creation Date:    Sunday, October 28, 2018 at 10:53:12 AM PDT
 "
-" This file contains additional file associations for the Rust file type.
+" Description:
+"   This file contains additional file associations for the Rust file type.
 "
 "-----------------------------------------------------------------------------------------------------------------------
 

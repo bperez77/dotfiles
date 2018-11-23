@@ -5,11 +5,12 @@
 " Author:           Brandon Perez <bmperez@alumni.cmu.edu>
 " Creation Date:    Tuesday, September 03, 2013 at 4:54:31 PM EDT
 "
-" This file is executed when a new Vim session starts (typically when opening a file), and it sets up the settings,
-" shortcuts, plugins, and abbreviations for the Vim session.
+" Description:
+"   This file is executed when a new Vim session starts (typically when opening a file), and it sets up the settings,
+"   shortcuts, plugins, and abbreviations for the Vim session.
 "
-" This file contains the general settings for Vim. For plugin settings, see plugins.vim. For language/file type specific
-" settings, see the after directory.
+"   This file contains the general settings for Vim. For plugin settings, see plugins.vim. For language/file type
+"   specific settings, see the after directory.
 "
 "-----------------------------------------------------------------------------------------------------------------------
 

@@ -5,8 +5,9 @@
 # Author:           Brandon Perez <bmperez@alumni.cmu.edu>
 # Creation Date:    Wednesday, June 26, 2013 at 2:24:58 PM EDT
 #
-# This file is read and parsed whenever SSH is run, and it configures the settings for SSH and any short-hand aliases
-# for host names.
+# Description:
+#   This file is read and parsed whenever SSH is run, and it configures the settings for SSH and any short-hand aliases
+#   for host names.
 #
 #-----------------------------------------------------------------------------------------------------------------------
 

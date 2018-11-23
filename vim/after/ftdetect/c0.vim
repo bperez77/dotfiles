@@ -5,7 +5,8 @@
 " Author:           Brandon Perez <bmperez@alumni.cmu.edu>
 " Creation Date:    Sunday, October 28, 2018 at 11:27:34 AM PDT
 "
-" This file contains additional file associations for the C0 file type.
+" Description:
+"   This file contains additional file associations for the C0 file type.
 "
 "-----------------------------------------------------------------------------------------------------------------------
 

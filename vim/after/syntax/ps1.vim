@@ -5,8 +5,9 @@
 " Author:           Brandon Perez <bmperez@alumni.cmu.edu>
 " Creation Date:    Wednesday, November 07, 2018 at 07:59:19 PM PST
 "
-" This file contains syntax settings for the PowerShell file type. This file is sourced after the other file type plugin
-" files, so it adds to and/or overwrites the existing settings.
+" Description:
+"   This file contains syntax settings for the PowerShell file type. This file is sourced after the other file type
+"   plugin files, so it adds to and/or overwrites the existing settings.
 "
 "-----------------------------------------------------------------------------------------------------------------------
 

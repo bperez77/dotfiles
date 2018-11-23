@@ -5,7 +5,8 @@
 " Author:           Brandon Perez <bmperez@alumni.cmu.edu>
 " Creation Date:    Sunday, October 28, 2018 at 02:24:50 PM PDT
 "
-" This file contains additional file associations for the Python file type.
+" Description:
+"   This file contains additional file associations for the Python file type.
 "
 "-----------------------------------------------------------------------------------------------------------------------
 

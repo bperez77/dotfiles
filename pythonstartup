@@ -5,8 +5,9 @@
 # Author:           Brandon Perez <bmperez@alumni.cmu.edu>
 # Creation Date:    Tuesday, February 16, 2016 at 11:19:26 AM EDT
 #
-# This file is executed whenever an interactive Python session starts up, and it sets up persistent command history, tab
-# completion, and default imported modules for the session.
+# Description:
+#   This file is executed whenever an interactive Python session starts up, and it sets up persistent command history,
+#   tab completion, and default imported modules for the session.
 #
 #-----------------------------------------------------------------------------------------------------------------------
 

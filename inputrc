@@ -5,10 +5,11 @@
 # Author:           Brandon Perez <bmperez@alumni.cmu.edu>
 # Creation date:    Monday, July 04, 2016 at 10:56:49 PM PDT
 #
-# This file is executed whenever the Readline library is started up, and sets the settings and keyboard shortcuts for
-# the user's input that is interpreted by the Readline library. This file sets up the global settings for Readline for
-# all programs; specific options for programs will be setup by their configuration files. These settings are mostly
-# relevant when using a shell program such as Bash, as it control keybindings and various behavior.
+# Description:
+#   This file is executed whenever the Readline library is started up, and sets the settings and keyboard shortcuts for
+#   the user's input that is interpreted by the Readline library. This file sets up the global settings for Readline for
+#   all programs; specific options for programs will be setup by their configuration files. These settings are mostly
+#   relevant when using a shell program such as Bash, as it control keybindings and various behavior.
 #
 #-----------------------------------------------------------------------------------------------------------------------
 

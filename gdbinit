@@ -5,8 +5,9 @@
 # Author:           Brandon Perez <bmperez@alumni.cmu.edu>
 # Creation Date:    Monday, October 12, 2015 at 01:26:12 PM EDT
 #
-# This file is read whenever a GDB sessions starts up, and it initializes and sets the global settings for GDB. Namely,
-# this file sets up GDB command history that is persistent across sessions.
+# Description:
+#   This file is read whenever a GDB sessions starts up, and it initializes and sets the global settings for GDB.
+#   Namely, this file sets up GDB command history that is persistent across sessions.
 #
 #-----------------------------------------------------------------------------------------------------------------------
 
