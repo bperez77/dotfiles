@@ -722,8 +722,8 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 || ${SHELL_IS_GIT_BASH} -eq 0 ]]; then
     export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
 
     # Setup aliases for common Windows commands. The cmd-start alias runs the command in a new window.
-    alias cmd='run-windows-cmd'
-    alias cmd-start='start-windows-cmd'
+    alias cmd='run-windows-cmd cmd.exe'
+    alias cmd-start='start-windows-cmd cmd.exe'
     alias start='run-windows-cmd start'
     alias powershell='run-windows-cmd powershell.exe'
     alias powershell-start='start-windows-cmd powershell.exe -NoExit'
