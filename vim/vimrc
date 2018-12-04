@@ -114,6 +114,9 @@ set softtabstop=4
 setglobal splitbelow
 setglobal splitright
 
+" The number of spaces used for tab characters. This is used when tabs are used for indentation (e.g. Makefiles).
+set tabstop=4
+
 " When using Ctags to search for identifiers, search for the tags file from the file's current directory, then all of
 " its parent directories.
 setglobal tags=./tags;
