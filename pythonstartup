@@ -129,6 +129,17 @@ except ImportError:
 from collections import *
 from itertools import *
 
+# Import the OS and system modules so they can be quickly used from the interpreter. Also, import the path submodule.
+import os
+from os import path
+import sys
+
+# Import the NumPy module so it's available in the interpreter, if it's available.
+try:
+    import numpy as np
+except ImportError:
+    pass
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Defined Functions
 #-----------------------------------------------------------------------------------------------------------------------
