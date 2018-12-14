@@ -10,7 +10,10 @@
 "
 "-----------------------------------------------------------------------------------------------------------------------
 
-" Associate MSBuild project and configuration files with the XML file types, since they are XML-style files.
-autocmd BufRead,BufNewFile *.*proj      setlocal filetype=xml
-autocmd BufRead,BufNewFile *.props      setlocal filetype=xml
-autocmd BufRead,BufNewFile *.targets    setlocal filetype=xml
+" Associate MSBuild project and configuration files with the XML file type, since they are XML-style files.
+autocmd BufRead,BufNewFile *.*proj          setlocal filetype=xml
+autocmd BufRead,BufNewFile *.props          setlocal filetype=xml
+autocmd BufRead,BufNewFile *.targets        setlocal filetype=xml
+
+" Associate Core XT configuration files with XML file type.
+autocmd BufRead,BufNewFile corext.config    setlocal filetype=xml
