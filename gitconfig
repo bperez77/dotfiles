@@ -253,5 +253,3 @@
 
     # Include any local, machine-specific settings if there's a Git config file for it.
     path = .gitconfig_local
-[winUpdater]
-	recentlySeenVersion = 2.19.1.windows.1
