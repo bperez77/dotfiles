@@ -226,6 +226,21 @@
     # commit hash, author, and the first line of each commit, along with the change summary.
     sslog = log --stat --pretty=short
 
+    # Summarize the changes (as a diff) between the current branch/commit and the branch/commit specified by the user.
+    # The diff will be taken against the current HEAD.
+    summarize = "!                                                                  \
+        summarize() {                                                               \
+            if [ $# -lt 1 ]; then                                                   \
+                echo 'Error: Improper number of command line arguments specified';  \
+                echo 'Usage: git summarize <commit> [diff_options]';                \
+            fi &&                                                                   \
+                                                                                    \
+            target_commit=\"${1}\" &&                                               \
+            source_commit=\"$(git rev-parse --verify HEAD)\" &&                     \
+            git diff \"${source_commit}...${target_commit}\";                       \
+        } &&                                                                        \
+        summarize"
+
     # Show the Git history is a visualized graph/tree format that displays the underlying structure of the dependencies
     # between commits. This is useful for showing merges, such as branches that have been merged into the current one.
     tree = log --graph --decorate --pretty=oneline --abbrev-commit
