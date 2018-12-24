@@ -12,6 +12,35 @@
 #-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
+# Default Modules
+#-----------------------------------------------------------------------------------------------------------------------
+
+# Import the Automatic Imports module so it's available in the interpreter, if it is installed. This module lazily
+# imports all available Python modules. The modules are available, but the actual importing doesn't happen until the
+# module is used in the interpreter. This lazy importing is also recursive. This should come before any other imports.
+try:
+    from autoimp import *
+
+    # Add additional aliases for module names other than NumPy which is already available.
+    tf = tensorflow
+except ImportError:
+    print('Unable to import "autoimp" module. Run `python -m pip install autoimp` to install it.')
+
+# Import the See module so it's available in interpreter, if it is installed. See provides an improved version of the
+# Dir function, for listing the members of objects.
+try:
+    from see import see
+except ImportError:
+    print('Unable to import "see" module. Run `python -m pip install see` to install it.')
+
+# Import the various container types and iteration tools without their module names.
+from collections import *
+from itertools import *
+
+# Import the Path module without the leading OS module.
+from os import path
+
+#-----------------------------------------------------------------------------------------------------------------------
 # Readline Settings
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -114,31 +143,6 @@ def _setup_prompt():
 # Remove the setup prompt function so it doesn't pollute the interactive session's namespace.
 _setup_prompt()
 del _get_color, _setup_prompt
-
-#-----------------------------------------------------------------------------------------------------------------------
-# Default Modules
-#-----------------------------------------------------------------------------------------------------------------------
-
-# Provides an improved version of the Dir function, for listing the members of an object.
-try:
-    from see import see
-except ImportError:
-    print('Unable to import "see" module. Run `python -m pip install see` to install it.')
-
-# Import the various container types and iteration tools so they can be used from the interpreter.
-from collections import *
-from itertools import *
-
-# Import the OS and system modules so they can be quickly used from the interpreter. Also, import the path submodule.
-import os
-from os import path
-import sys
-
-# Import the NumPy module so it's available in the interpreter, if it's available.
-try:
-    import numpy as np
-except ImportError:
-    pass
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Defined Functions
