@@ -596,7 +596,7 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 ]]; then
     export DISPLAY='localhost:0'
 
     # The location where the C drive is mounted in the WSL.
-    export C_DRIVE='/mnt/c/'
+    export C_DRIVE='/mnt/c'
 
     # The location of the Window User's home directory in the WSL (assumes that the usernames match).
     export WINDOWS_HOME="${C_DRIVE}/Users/${USER}"
@@ -662,7 +662,7 @@ SHELL_IS_GIT_BASH=$(uname -s | grep --quiet '^MINGW'; echo $?)
 if [[ ${SHELL_IS_GIT_BASH} -eq 0 ]]; then
 
     # The location where the C drive is mounted in Git Bash.
-    export C_DRIVE='/c/'
+    export C_DRIVE='/c'
 
     # The location of the Window User's home directory in Git Bash.
     export WINDOWS_HOME="${HOME}"
