@@ -430,10 +430,11 @@ vmap ga <Plug>(EasyAlign)
 " Insert Mode Text Expansions (Macros)
 "-----------------------------------------------------------------------------------------------------------------------
 
-" Shortcuts to insert dates, timestamps, and human-readable timestamps.
-iabbrev <expr> _dts strftime("%c")
-iabbrev <expr> _hdts strftime("%A, %B %d, %Y at %r %Z")
-iabbrev <expr> _ds strftime("%b %d, %Y")
+" Shortcuts to insert various date and time stamps, both in human-readable and short format (prefixed with s).
+iabbrev <expr> _dts_    strftime("%A, %B %d, %Y at %r %Z")
+iabbrev <expr> _mdts_   strftime("%c")
+iabbrev <expr> _ds_     strftime("%A, B %d, %Y")
+iabbrev <expr> _mds_    strftime("%a %b %d %y")
 
 " Shortcut to insert a header guard.
 function! HeaderGaurd() abort
