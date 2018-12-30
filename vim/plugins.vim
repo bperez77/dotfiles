@@ -106,9 +106,9 @@ call plug#begin(g:vim_plugin_directory)
 
 call plug#end()
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"-----------------------------------------------------------------------------------------------------------------------
 " Airline Plugin Settings
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"-----------------------------------------------------------------------------------------------------------------------
 
 " Use the fancier Powerline fonts for the tag line being displayed, instead of the default Unicode fonts. This is the
 " font used when examples are given on line. Note, this requires the Powerline patched fonts to be installed.
@@ -117,9 +117,9 @@ let g:airline_powerline_fonts       = 1
 " Don't display the language being used for spell checking when spell mode is displayed in the tag line.
 let g:airline_detect_spelllang      = 0
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"-----------------------------------------------------------------------------------------------------------------------
 " Easy Align Plugin Settings
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"-----------------------------------------------------------------------------------------------------------------------
 
 " Change the default behavior used for aligning delimiters of different lengths from right-aligning to left-aligning.
 " This is important when aligning operators that may have different lengths (e.g. '=' and '+=').
@@ -130,9 +130,9 @@ let g:easy_align_delimiters         = {
         \ '\': {'pattern': '\\', 'right_margin': 0},
 \ }
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"-----------------------------------------------------------------------------------------------------------------------
 " Large File Plugin Settings
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"-----------------------------------------------------------------------------------------------------------------------
 
 " The minimum size a file must be in MB to activate the Large File plugin. Files above this size will have various
 " settings that will slow down editing disabled.
