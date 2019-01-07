@@ -383,6 +383,9 @@ alias dd='dd status=progress'
 # Setup the Dmesg command so that the kernel log messages have human-readable timestamps by default.
 alias dmesg='dmesg --ctime --color=always'
 
+# Setup the secure copy command to preserve file metadata and recursively copy data.
+alias scp='scp -p -r'
+
 # Setup the remote sync command to preserve file metadata, show incremental progress, and exclude files by default.
 RSYNC_EXCLUDE="$(echo ${COPY_IGNORE_LIST[@]} | sed -e 's/[^ ]\+/--exclude "&"/g')"
 alias rsync="rsync --recursive --archive --hard-links --acls --xattrs --checksum --human-readable --human-readable \
