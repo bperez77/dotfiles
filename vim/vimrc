@@ -83,6 +83,9 @@ set foldmethod=syntax
 " persistent until the next search or when it is explicitly disabled.
 setglobal hlsearch
 
+" Treats all search patterns as case-insensitive. This works with the smart case option to enable it for searches.
+set ignorecase
+
 " Make the Vim search behave like searching does in a web browser does. When a search command is typed, matches against
 " the current search string are highlighted and updated as more of the command is typed.
 setglobal incsearch
@@ -105,6 +108,11 @@ setglobal showcmd
 
 " Highlight matching delimiters when the cursor is over one them (e.g braces, parenthesis, etc.).
 setglobal showmatch
+
+" Enables smart case for searches. If the search pattern is all lowercase letters, then it is treated as
+" case-insensitive. Otherwise, it is treated as case-sensitive. Requires the ignore case option. Case sensitivity can be
+" forced by specifying \C in the pattern.
+set smartcase
 
 " The number of spaces that are used when pressing the tab key. This also affects the behavior when pressing the
 " backspace key, so it deletes the equivalent number of spaces when pressed.
