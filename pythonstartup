@@ -22,7 +22,8 @@ try:
     from autoimp import *
 
     # Add additional aliases for module names other than NumPy which is already available.
-    tf = tensorflow
+    if 'tensorflow' in globals():
+        tf = tensorflow
 except ImportError:
     print('Unable to import "autoimp" module. Run `python -m pip install autoimp` to install it.')
 
