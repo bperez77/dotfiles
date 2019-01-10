@@ -219,6 +219,10 @@
     # after the remote's commits, and no merge commit will be generated. Keep any local merge commits during the rebase.
     pullr = pull --rebase=preserve
 
+    # Push the changes to all available remotes configured in the repository. Without arguments, this will push the
+    # current branch to all remotes. Otherwise, the normal push arguments control the behavior.
+    pushall = !git remote | xargs -L 1 git push
+
     # Show the Git history with a summary of changes to each file. This is the number of lines added and/or removed.
     slog = log --stat
 
