@@ -303,7 +303,10 @@ alias matlab-shell='command matlab -nodisplay'
 # Allow aliases to be used with the Sudo command. This is done by adding a space at the end of the alias.
 alias sudo='sudo '
 
-# Setup the ls and various grep commands to use color highlighting by default.
+# Setup the ls command to use color higlighting and sort files numerically in a natural way by default.
+alias ls='ls --color=auto -v'
+
+# Setup the various grep commands to use color highlighting by default.
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
