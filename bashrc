@@ -191,6 +191,10 @@ export FZF_DEFAULT_OPTS="${FZF_CTRL_T_OPTS}"
 # terminal screen. Also, all for this preview to be toggled with '?'.
 export FZF_CTRL_R_OPTS='--preview "echo {}" --preview-window "down:3:wrap"'
 
+# The directory where Stow (manager for manually installed programs) looks for packages by default. This is nested
+# inside of the local directory to make installation easy.
+export STOW_DIR="${USER_LOCAL_DIRECTORY}/stow"
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Path Variables
 #-----------------------------------------------------------------------------------------------------------------------

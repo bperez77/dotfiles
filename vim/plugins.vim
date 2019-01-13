@@ -82,7 +82,7 @@ call plug#begin(g:vim_plugin_directory)
 
     " Allows Vim to be used as a pager, adding a less mode to Vim. Additionally, the plugin includes Vim variants of
     " the Cat (Vimcat) and Less (Vimpager) command line tools that include syntax highlighting for the viewed files.
-    Plug 'rkitover/vimpager', {'do': 'make PREFIX=${USER_LOCAL_DIRECTORY} install'}
+    Plug 'rkitover/vimpager', {'do': 'make PREFIX=${STOW_DIR}/vimpager install && stow vimpager'}
 
     " Adds support for the PowerShell language to Vim.
     Plug 'PProvost/vim-ps1'
@@ -92,7 +92,8 @@ call plug#begin(g:vim_plugin_directory)
 
     " Allows man pages to be viewed with Vim. This is already possible natively with Vim; this plugin sets up a Vim
     " variant of the Man command that renders the Man pages more nicely.
-    Plug 'jez/vim-superman', {'do': 'mkdir -p ${USER_LOCAL_DIRECTORY} && cp -ar bin ${USER_LOCAL_DIRECTORY}/'}
+    Plug 'jez/vim-superman', {'do': 'mkdir -p ${STOW_DIR}/vim-superman && cp -ar bin ${STOW_DIR}/vim-superman &&'
+            \ . ' stow vim-superman'}
 
     " Adds commands for easily surrounding text with delimiters (e.g. quotes, parenthesis, etc.) to Vim.
     Plug 'tpope/vim-surround'
