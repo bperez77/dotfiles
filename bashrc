@@ -180,7 +180,7 @@ export TEXT_IGNORE_LIST="${COPY_IGNORE_LIST} ${FIND_IGNORE_LIST}"
 # Setup the default commands used for the various FZF shortcuts and commands to use FD and respect an ignore list.
 FD_IGNORE="$(echo ${FIND_IGNORE_LIST[@]} | sed -e "s/[^ ]\\+/--exclude &/g")"
 export FZF_ALT_C_COMMAND="command fd --color never --follow --hidden --no-ignore --type directory ${FD_IGNORE}"
-export FZF_CTRL_T_COMMAND="command fd --color never --follow --hidden --no-ignore --type file ${FD_IGNORE}"
+export FZF_CTRL_T_COMMAND="command fd --color never --follow --hidden --no-ignore ${FD_IGNORE}"
 export FZF_DEFAULT_COMMAND="${FZF_CTRL_T_COMMAND}"
 
 # Enable multi-select mode by default for the standard FZF command and the CTRL-T shortcut.
