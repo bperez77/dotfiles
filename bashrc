@@ -438,9 +438,8 @@ function format-text-files
     done
 }
 
-# Runs an arbitrary command and sends a desktop notification (Ubuntu only) when the command finishes. The message also
-# reports the exit status of the command that was run.
-function notify-complete
+# Runs an arbitrary command and generates a popup window when the command finshes with the command's exit status.
+function notify
 {
     # Check that the proper number of command line arguments was specified.
     local nargs=$#
@@ -451,11 +450,31 @@ function notify-complete
     fi
 
     # Get the name of the command (without the path) and the full command.
-    local cmd_name=$(basename ${1})
-    local cmd="${@}"
+    local cmd_name="$(basename ${1})"
+    local cmd=("${@}")
+
+    # Run the command to completion, and then open a popup window to indicate it has finished.
+    "${cmd[@]}"
+    zenity --info --text "The command '${cmd_name}' has finished with exit status '${?}'."
+}
+
+# Variant of the notify function that uses a desktop (toast) notification instead of a popup window.
+function notify-desktop
+{
+    # Check that the proper number of command line arguments was specified.
+    local nargs=$#
+    if [[ ${nargs} -eq 0 ]]; then
+        echo 'Error: No command specified.'
+        echo 'Usage: notify <cmd> [cmd_arg1 cmd_arg2 ...]'
+        return 1
+    fi
+
+    # Get the name of the command (without the path) and the full command.
+    local cmd_name="$(basename ${1})"
+    local cmd=("${@}")
 
     # Run the command to completion, and then send a desktop notification when it finishes.
-    ${cmd}
+    "${cmd[@]}"
     notify-send "The command '${cmd_name}' has finished with exit status '${?}'."
 }
 
