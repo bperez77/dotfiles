@@ -449,12 +449,14 @@ function notify
         return 1
     fi
 
-    # Get the name of the command (without the path) and the full command.
+    # Get the command, its name without the path, and all of the arguments from the command.
+    local cmd="${1}"
     local cmd_name="$(basename ${1})"
-    local cmd=("${@}")
+    local args=("${@:2}")
 
-    # Run the command to completion, and then open a popup window to indicate it has finished.
-    "${cmd[@]}"
+    # Use eval to expand the command if it an alias, and quote the arguments array appropriately to preserve any
+    # embedded quotes. Run the command to completion, and then open popup window to indicate it has finished.
+    eval "${cmd}" '"${args[@]}"'
     zenity --info --text "The command '${cmd_name}' has finished with exit status '${?}'."
 }
 
@@ -470,11 +472,13 @@ function notify-desktop
     fi
 
     # Get the name of the command (without the path) and the full command.
+    local cmd="${1}"
     local cmd_name="$(basename ${1})"
-    local cmd=("${@}")
+    local args=("${@:2}")
 
-    # Run the command to completion, and then send a desktop notification when it finishes.
-    "${cmd[@]}"
+    # Use eval to expand the command if it an alias, and quote the arguments array appropriately to preserve any
+    # embedded quotes. Run the command to completion, and then send a desktop notification when it finishes.
+    eval "${cmd}" '"${args[@]}"'
     notify-send "The command '${cmd_name}' has finished with exit status '${?}'."
 }
 
