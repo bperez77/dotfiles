@@ -78,10 +78,6 @@ export HISTTIMEFORMAT='%D:%T'
 # global history file. This ensures that new command windows will immediately have the history from other ones.
 export PROMPT_COMMAND="history -a; ${PROMPT_COMMAND}"
 
-# When executing a pipeline of commands, the exit code of the pipeline is from rightmost command to exit with a non-zero
-# exit status, or 0 if all commands are successful. Normally, the exit code simply comes from the last command.
-set -o pipefail
-
 # If a command name matches a directory, then automatically cd into that directory. This saves needing to prefix
 # directory names with cd; they can be typed directly into the shell to change the directory.
 shopt -s autocd
