@@ -153,7 +153,8 @@ bind 'set enable-bracketed-paste on'
 # Setup ALT-e as a shortcut to edit a file. The file is searched for with FZF and then opened up with Vim.
 function fzf-edit
 {
-    file=$(fzf --height '40%') &&
+    file="$(command fd --color never --follow --hidden --no-ignore --type file | command fzf ${FZF_DEFAULT_OPTS} \
+            --height '40%' --reverse)" &&
     printf 'vim %q' "${file}"
 }
 bind '"\ee": "\C-e\C-u$(fzf-edit)\e\C-e\er\C-m'
