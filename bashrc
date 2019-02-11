@@ -645,8 +645,9 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 ]]; then
         # leave it as is. This is useful for Windows command switches (e.g. /D).
         for elem in "${cmd[@]:1}"
         do
-            # Do not apply real path any URL strings to, as this will convert double slashes into a single slash.
-            if [[ ! "${elem}" =~ ^(file?|ftp|http|https|ssh)://.* ]]; then
+            # Do not apply WSL path to strings with invalid characters or with URL strings, as double slashes will be
+            # converted to single slashes.
+            if [[ ! "${elem}" =~ ^(file?|ftp|http|https|ssh)://.* && ! "${elem}" =~ .*:.* ]]; then
                 new_cmd+=" '$(wslpath -m -- "$(realpath --quiet --canonicalize-missing --relative-base="$(pwd)" -- \
                         "${elem}")" 2> /dev/null || echo "${elem}")'"
             else
