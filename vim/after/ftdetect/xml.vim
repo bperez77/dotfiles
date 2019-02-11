@@ -15,7 +15,7 @@ autocmd BufRead,BufNewFile *.*proj                      setlocal filetype=xml
 autocmd BufRead,BufNewFile *.props                      setlocal filetype=xml
 autocmd BufRead,BufNewFile *.targets                    setlocal filetype=xml
 
-" Associate NuGet and Core XT configuration files with XML file type.
+" Associate NuGet and CoreXT configuration files with XML file type.
 autocmd BufRead,BufNewFile corext.config                setlocal filetype=xml
 autocmd BufRead,BufNewFile NuGet.config,nuget.config    setlocal filetype=xml
 autocmd BufRead,BufNewFile nuget.config                 setlocal filetype=xml
