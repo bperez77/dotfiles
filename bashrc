@@ -201,8 +201,8 @@ export PATH="${PATH}:${USER_LOCAL_DIRECTORY}/bin"
 export MANPATH="${MANPATH}:${USER_LOCAL_DIRECTORY}/share/man"
 export LD_LIBRARY_PATH="${MANPATH}:${USER_LOCAL_DIRECTORY}/lib"
 
-# Add the bin directory to the executable path, where any miscellaneous user-created executables may be.
-export PATH="${PATH}:${HOME}/bin/"
+# Add the bin scripts directory to the executable path, where any miscellaneous user-created executables may be.
+export PATH="${PATH}:${HOME}/bin/scripts"
 
 # Add the path to Git's diff-highlight program, used for getting word-level highlighting in diffs.
 export PATH="${PATH}:/usr/share/doc/git/contrib/diff-highlight/"
