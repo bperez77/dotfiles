@@ -245,10 +245,10 @@ function! SearchAndReplace(regex, start_line, end_line) abort
     call winrestview(l:current_view)
 endfunction
 
-" Squashes any set of 2 or more consecutive blank lines into a single blank line.
+" Squashes any set of 3 or more consecutive blank lines into 2 blank lines.
 function! SquashConsecutiveBlankLines(start_line, end_line) abort
     if b:enable_whitespace_cleanup
-        let l:regex = ':\v' . '(\s*\n\s*\n)(\s*\n)+' . ':\1' . ':e'
+        let l:regex = ':\v' . '(\s*\n\s*\n\s*\n)(\s*\n)+' . ':\1' . ':e'
         call SearchAndReplace(l:regex, a:start_line, a:end_line)
     endif
 endfunction
