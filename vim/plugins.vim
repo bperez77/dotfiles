@@ -69,6 +69,11 @@ call plug#begin(g:vim_plugin_directory)
     " line in the file, whether it is added, modified, or removed.
     Plug 'airblade/vim-gitgutter'
 
+    " Adds a manager for Ctags files. This plugin automtically generates tags files for projects (typically defined by
+    " repository boundaries) and incrementally updates the tags file as new changes are saved. This all also happens in
+    " the background to be transparent to the user.
+    Plug 'ludovicchabant/vim-gutentags'
+
     " Adds support for the ISPC (Intel SPMD Program Compiler) language to Vim.
     Plug 'jez/vim-ispc'
 
@@ -130,6 +135,19 @@ let g:easy_align_delimiter_align    = 'ld'
 let g:easy_align_delimiters         = {
         \ '\': {'pattern': '\\', 'right_margin': 0},
 \ }
+
+"-----------------------------------------------------------------------------------------------------------------------
+" Gutentags Plugin Settings
+"-----------------------------------------------------------------------------------------------------------------------
+
+" Define the directory where created tags files are placed. Tags are placed here rather than at the root of projects.
+let g:gutentags_cache_dir                   = g:vim_directory . '/editor_files/tags_files'
+
+" The list of extra arguments to pass to the Ctags program when invoking it.
+let g:gutentags_ctags_extra_args            = ['--recurse', '--extras=+q', '--fields=+i']
+
+" Generate tags file even if there is no buffer open, as long as the current working directory is inside a project.
+let g:gutentags_generate_on_empty_buffer    = 1
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Large File Plugin Settings
