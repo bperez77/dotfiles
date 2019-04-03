@@ -261,10 +261,6 @@ alias make-arm='make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-'
 alias make-aarch64='make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-'
 alias make-android='make ARCH=arm CROSS_COMPILE=arm-linux-androideabi-'
 
-# Setup the tag generation command to recursively traverse all subdirectories, use class/hierarchy qualified tags to
-# resolve naming conflicts, and include class inheritance information for fields.
-alias ctags='ctags --recurse --extras=+q --fields=+i'
-
 # Changes directory to the top-level/root of the current Git repository, if the current working directory is under one.
 alias git-root='cd ./$(git rev-parse --show-cdup)'
 

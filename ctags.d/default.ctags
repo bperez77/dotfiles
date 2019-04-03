@@ -1,0 +1,27 @@
+#-----------------------------------------------------------------------------------------------------------------------
+#
+# Ctags Configuration File
+#
+# Author:           Brandon Perez <bmperez@alumni.cmu.edu>
+# Creation Date:    Tuesday, April 3, 2019 at 12:37:22 AM PDT
+#
+# Description:
+#
+#   This file is read by the Ctags program before it begins execution, and it specified default options to be appended
+#   to the Ctags program arguments. These control various settings for Ctags, such as which tag entries and fields to
+#   include, which languages to target, etc.
+#
+#-----------------------------------------------------------------------------------------------------------------------
+
+# Always recurse into all subdirectories when generating tags.
+--recurse
+
+# Include all extra language-independent tag entries in the generated tags. In particular, this includes class/hierarchy
+# qualified tag entries to resolve naming conflicts, a tag entry for the base file name containing the tag, and
+# references tags that are used to find references to tags. Exclude any extras that are intended for debugging.
+--extras=*
+--extras=-subword
+
+# Include all language-independent extension fields in the generated tag entries. In particular, this includes
+# the inheritance information which is used to extra class inheritance information.
+--fields=*

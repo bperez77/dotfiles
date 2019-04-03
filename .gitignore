@@ -23,6 +23,7 @@
 
 # Allow for the various configuration files.
 !/bashrc
+!/ctags.d/*
 !/gdbinit
 !/gitconfig
 !/inputrc
