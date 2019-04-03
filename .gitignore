@@ -29,7 +29,7 @@
 !/kilerc
 !/minttyrc
 !/pythonstartup
-!/ssh_config
+!/ssh/*
 
 # Allow for the Vimrc file and the various configuration files under the Vim directory.
 !*.vim
