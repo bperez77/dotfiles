@@ -25,3 +25,13 @@
 # Include all language-independent extension fields in the generated tag entries. In particular, this includes
 # the inheritance information which is used to extra class inheritance information.
 --fields=*
+
+# Limit the generation of tags for a specific subset of the supported languages. This is done to reduce the size of the
+# tags file and make searching through the tags more manageable.
+--languages=C
+--languages=+C#
+--languages=+C++
+--languages=+Python
+--languages=+Rust
+--languages=+SystemVerilog
+--languages=+Verilog
