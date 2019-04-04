@@ -43,3 +43,31 @@
 --languages=+Rust
 --languages=+SystemVerilog
 --languages=+Verilog
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Language-Specific Options
+#-----------------------------------------------------------------------------------------------------------------------
+
+# Add all extra C specific extension fields in the tag entries, namely properties.
+--fields-C=*
+
+# Add tag entries for local variables and function parameters to tags generated for C.
+--kinds-C=+l
+--kinds-C=+z
+
+# Add all extra C++ specific extension fields in the tag entries, such as template parameters, properties, etc.
+--fields-C++=*
+
+# Add tag entries for local variables and function parameters to tags generated for C++.
+--kinds-C=+l
+--kinds-C=+z
+
+# Add tag entries for local variables to generated tags for C#.
+--kinds-C#=+l
+
+# Add all extra Python specific extension fields in the tag entries, namely function decorators.
+--fields-Python=*
+
+# Add tag entries for local variables and function parameters to tags generated for C++.
+--kinds-Python=+l
+--kinds-Python=+z
