@@ -20,7 +20,7 @@
 # qualified tag entries to resolve naming conflicts, a tag entry for the base file name containing the tag, and
 # references tags that are used to find references to tags. Exclude any extras that are intended for debugging.
 --extras=*
---extras=-s
+--extras=-{subword}
 
 # Include all language-independent extension fields in the generated tag entries. In particular, this includes
 # the inheritance information which is used to extra class inheritance information.
