@@ -69,10 +69,13 @@ call plug#begin(g:vim_plugin_directory)
     " line in the file, whether it is added, modified, or removed.
     Plug 'airblade/vim-gitgutter'
 
-    " Adds a manager for Ctags files. This plugin automtically generates tags files for projects (typically defined by
+    " Adds a manager for Ctags files. This plugin automatically generates tags files for projects (typically defined by
     " repository boundaries) and incrementally updates the tags file as new changes are saved. This all also happens in
     " the background to be transparent to the user.
     Plug 'ludovicchabant/vim-gutentags'
+
+    " Adds support for viewing and editing binary files to Vim. This plugin adds simple Hex editor features to Vim.
+    Plug 'fidian/hexmode'
 
     " Adds support for the ISPC (Intel SPMD Program Compiler) language to Vim.
     Plug 'jez/vim-ispc'
