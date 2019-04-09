@@ -140,6 +140,30 @@ let g:easy_align_delimiters         = {
 \ }
 
 "-----------------------------------------------------------------------------------------------------------------------
+" Hexmode Settings
+"-----------------------------------------------------------------------------------------------------------------------
+
+" Open the file with the Hexmode plugin if it is a binary file. Note that any file that matches an existing filetype is
+" not considered binary.
+function TriggerHexMode() abort
+    if &filetype != ''
+        return
+    endif
+
+    " Use the File utility to determine if the file is not a plaintext file. Explicitly disable the large file plugin
+    " since binary files are typically large and the syntax highlighting is desirable.
+    if system('file -ib ' . shellescape(expand('%:p'))) !~# '^text/plain'
+        Hexmode
+    endif
+endfunction
+
+" Setup automatic detection of if a file is binary one based on its contents and enable the Hexmode plugin if so.
+augroup BinaryFileDetection
+    autocmd!
+    autocmd BufNewFile,BufRead * call TriggerHexMode()
+augroup END
+
+"-----------------------------------------------------------------------------------------------------------------------
 " Gutentags Plugin Settings
 "-----------------------------------------------------------------------------------------------------------------------
 
