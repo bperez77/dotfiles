@@ -269,6 +269,26 @@ function! StripTrailingWhitespace(start_line, end_line) abort
     endif
 endfunction
 
+" Performs an FZF file search from the project root directory if one exists, or from the current working directory if a
+" root does not exist. The search is either performed over all files, or only files tracked in Git.
+function! FzfFileSearch(git_files_only) abort
+    " If only Git files are being searched then no path is required.
+    if a:git_files_only
+        GFiles
+        return
+    endif
+
+    " Get the directory from which to perform the search from, falling back to the current working directory.
+    let l:buffer_directory = expand('%:p:h', 1)
+    try
+        let l:search_directory = gutentags#get_project_root(l:buffer_directory)
+    catch /^gutentags\:/
+        let l:search_directory = l:buffer_directory
+    endtry
+
+    execute 'Files ' . l:search_directory
+endfunction
+
 "-----------------------------------------------------------------------------------------------------------------------
 " Aliases and Commands
 "-----------------------------------------------------------------------------------------------------------------------
@@ -433,6 +453,12 @@ noremap <silent> <C-w>b :Gblame<CR>
 " Use 'ga' as the key stroke shortcut for the easy align command. This creates shortcuts for normal and visual mode.
 nmap ga <Plug>(EasyAlign)
 vmap ga <Plug>(EasyAlign)
+
+
+" Setup CTRL-P for all modes as a shortcut to search all the files in the current project (or from the current working
+" directory if there is no project). Set CTRL-G CTRL-P to do the same, but only with files tracked under Git.
+map <C-P>       :call FzfFileSearch(0)<CR>
+map <C-G><C-P>  :call FzfFileSearch(1)<CR>
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Insert Mode Text Expansions (Macros)
