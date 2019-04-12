@@ -149,9 +149,19 @@ bind 'set enable-bracketed-paste on'
 # Setup ALT-e as a shortcut to edit a file. The file is searched for with FZF and then opened up with Vim.
 function fzf-edit
 {
-    file="$(command fd --color never --follow --hidden --no-ignore --type file | command fzf ${FZF_DEFAULT_OPTS} \
-            --height '40%' --reverse)" &&
-    printf 'vim %q' "${file}"
+    # Define the command used to select the file(s) to edit. Note that the null character is used to delimit the outputs
+    # so that all files with special characters can be handled properly.
+    local fzf_cmd='command fd --color never --follow --hidden --no-ignore --type file --print0 ${FD_TEXT_IGNORE} |
+        fzf ${FZF_DEFAULT_OPTS} --height "40%" --reverse --read0 --print0'
+
+    local files=()
+    IFS= mapfile -d $'\0' files < <(eval ${fzf_cmd})
+
+    # Only attempt to open files if some have been selected by the user.
+    if [[ ${#files[@]} -ne 0 ]]; then
+        printf 'vim ' &&
+        printf '%q ' "${files[@]}"
+    fi
 }
 bind '"\ee": "\C-e\C-u$(fzf-edit)\e\C-e\er\C-m'
 
@@ -176,6 +186,7 @@ export TEXT_IGNORE_LIST="${COPY_IGNORE_LIST} ${FIND_IGNORE_LIST}"
 
 # Setup the default commands used for the various FZF shortcuts and commands to use FD and respect an ignore list.
 FD_IGNORE="$(echo ${FIND_IGNORE_LIST[@]} | sed -e "s/[^ ]\\+/--exclude &/g")"
+FD_TEXT_IGNORE="$(echo ${TEXT_IGNORE_LIST} | sed -e "s/[^ ]\\+/--exclude &/g")"
 export FZF_ALT_C_COMMAND="command fd --color never --follow --hidden --no-ignore --type directory ${FD_IGNORE}"
 export FZF_CTRL_T_COMMAND="command fd --color never --follow --hidden --no-ignore ${FD_IGNORE}"
 export FZF_DEFAULT_COMMAND="${FZF_CTRL_T_COMMAND}"
@@ -185,7 +196,7 @@ export FZF_CTRL_T_OPTS="--multi"
 export FZF_DEFAULT_OPTS="${FZF_CTRL_T_OPTS}"
 
 # Set FZF's reverse history search (CTRL-R) shortcut to preview commands, as some of them may be too long to fit on the
-# terminal screen. Also, all for this preview to be toggled with '?'.
+# terminal screen. Also, allow for this preview to be toggled with '?'.
 export FZF_CTRL_R_OPTS='--preview "echo {}" --preview-window "down:3:wrap"'
 
 # The directory where Stow (manager for manually installed programs) looks for packages by default. This is nested
