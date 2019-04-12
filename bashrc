@@ -166,7 +166,7 @@ export USER_LOCAL_DIRECTORY="${HOME}/.local"
 export PYTHONSTARTUP="${HOME}/.pythonstartup"
 
 # A good heuristic for the number of threads to use when compiling code in parallel (especially with Makefiles).
-export THRS=$((2 * $(getconf _NPROCESSORS_ONLN)))
+export THREADS=$((2 * $(getconf _NPROCESSORS_ONLN)))
 
 # Lists of glob patterns to use for ignoring files and directories for copy commands, file finding commands, and text
 # editing commands, respectively. The text editing list is exported to Vim for its wild ignore option.
