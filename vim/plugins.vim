@@ -150,9 +150,10 @@ function TriggerHexMode() abort
         return
     endif
 
-    " Use the File utility to determine if the file is not a plaintext file. Explicitly disable the large file plugin
-    " since binary files are typically large and the syntax highlighting is desirable.
-    if system('file -ib ' . shellescape(expand('%:p'))) !~# '^text/plain'
+    " Use the File utility to determine if the file is not a plaintext file.
+    let l:text_file_regex = '\v^(' . 'text/plain' . '|inode/symlink' . '|inode/x-empty' . ')'
+    silent let l:file_type = system('file -ib ' . shellescape(expand('%:p')) . ' 2> /dev/null')
+    if (l:file_type !~# l:text_file_regex) && (l:file_type != '')
         Hexmode
     endif
 endfunction
@@ -160,7 +161,7 @@ endfunction
 " Setup automatic detection of if a file is binary one based on its contents and enable the Hexmode plugin if so.
 augroup BinaryFileDetection
     autocmd!
-    autocmd BufNewFile,BufRead * call TriggerHexMode()
+    autocmd BufRead * call TriggerHexMode()
 augroup END
 
 "-----------------------------------------------------------------------------------------------------------------------
