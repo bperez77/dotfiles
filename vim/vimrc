@@ -211,10 +211,23 @@ highlight OverLength    ctermbg=red ctermfg=white guibg=#592929
 " Functions
 "-----------------------------------------------------------------------------------------------------------------------
 
-" Function to set the over length marker to be 1 past the text width.
-function! HighlightOverLength() abort
-    if &textwidth != 0
-        execute 'match OverLength /\%' . (&textwidth + 1) . 'v.\+/'
+" Toggles if portions of any lines that exceed the current text width are highlighted in red. If the current buffer does
+" not have a text width defined, then no highlighting is performed.
+function! ToggleOverLength() abort
+    " If the match ID variable isn't defined yet, define it.
+    if !exists('w:overlength_match_id')
+        let w:overlength_match_id = -1
+    endif
+
+    " The pattern used to match portions of a line that exceed the text width.
+    let l:match_pattern = '\v' . '%' . (&textwidth + 1) . 'v.+'
+
+    " Toggle the over length highlighting based on if the match ID is set.
+    if (w:overlength_match_id == -1) && (&textwidth != 0)
+        let w:overlength_match_id = matchadd('OverLength', l:match_pattern)
+    elseif w:overlength_match_id != -1
+        call matchdelete(w:overlength_match_id)
+        let w:overlength_match_id = -1
     endif
 endfunction
 
@@ -430,19 +443,20 @@ endfunction
 vnoremap <silent> <expr> p <sid>Repl()
 vnoremap <silent> <expr> P <sid>Repl()
 
-" Shortcuts to toggle paste mode and spellcheck.
-set pastetoggle=<F2>
-noremap <F3> :setlocal spell! spelllang=en_us<CR>
-inoremap <F3> :setlocal spell! spelllang=en_us<CR>
+" Set the F12 key as the shortcut for toggling paste mode.
+set pastetoggle=<F12>
 
-" Quick shortcuts to disable and enable highlighting over length lines.
-noremap <F4> :call HighlightOverLength()<CR>
-inoremap <F4> :call HighlightOverLength()<CR>
-noremap <F5> :match none<CR>
-inoremap <F5> :match none<CR>
+" Set the F2 key as the shortcut for toggling spell checking.
+nnoremap <silent> <F2>  :setlocal spell! spelllang=en_us<CR>
+inoremap <silent> <F2>  <C-o>:setlocal spell! spelllang=en_us<CR>
 
-" Quick shortcut to disable highlighting over length lines.
-noremap <F8> :match none<CR>
+" Set the F3 key as shortcut for disabling highlighting of a search term until the next search.
+nnoremap <silent> <F3>  :nohlsearch<CR>
+inoremap <silent> <F3>  <C-o>:nohlsearch<CR>
+
+" Set the F4 key as the shortcut for toggling if portions of a line over the buffer's text width are highlighted in red.
+nnoremap <silent> <F4>  :call ToggleOverLength()<CR>
+inoremap <silent> <F4> <C-o>:call ToggleOverLength()<CR>
 
 " Window navigation shortcuts with Alt and the arrow keys.
 map <silent> <A-Up> :wincmd k<CR>
