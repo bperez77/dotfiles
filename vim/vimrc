@@ -322,6 +322,9 @@ command! -bar StripTrailingLines call StripTrailingLines()
 command! -bar -range=% StripTrailingWhitespace call StripTrailingWhitespace(<line1>, <line2>)
 command! -bar -range=% SquashConsecutiveBlankLines call SquashConsecutiveBlankLines(<line1>, <line2>)
 
+" Format the currently open buffer using Python's JSON tool. This formats JSON files into a reasonable form.
+command! FormatJSON %!python -m json.tool
+
 "-----------------------------------------------------------------------------------------------------------------------
 " Auto Commands
 "-----------------------------------------------------------------------------------------------------------------------
