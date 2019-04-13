@@ -48,7 +48,7 @@ from os import path
 def _setup_readline():
     """Sets up tab completion and persistent command history for the interactive session."""
 
-    # The Readline library is only supported on Linux and Mac system.
+    # The Readline library is only supported on Linux and Mac systems.
     import platform
     if platform.system().lower() != 'linux':
         return
@@ -79,6 +79,45 @@ def _setup_readline():
     # When the interpreter exits, write the new history to the history file to enable persistent command history. Note
     # that this also includes the history that was read from the file, so this is effectively an append operation.
     atexit.register(readline.write_history_file, history_path)
+
+    # Setup an alternate reverse history serach shortcut with ALT-r that utilizes the FZF program.
+    readline.parse_and_bind('"\\er": "\\C-e\\C-u_fzf_history_search()\\n"')
+
+def _fzf_history_search():
+    """A function that replaces the standard CTRL-R history search with a variant that uses the FZF program (a fuzzy
+    finder). This is done to emulate what history search for bash looks like."""
+
+    # The Readline library (and thus history seraching) is only supported on Linux and Mac systems.
+    import platform
+    if platform.system().lower() != 'linux':
+        return
+
+    # General Imports
+    import os
+    import shlex
+    import subprocess
+
+    # Readline Imports
+    import readline
+
+    # Read the entire history into a string.
+    history_generator = (readline.get_history_item(i+1) for i in range(readline.get_current_history_length()))
+    history_entries = '\n'.join(history_generator)
+
+    # Source the FZF CTRL-R and default options and combine them with standard options to form the FZF options.
+    fzf_ctrl_r_opts = os.getenv('FZF_CTRL_R_OPTS', default='')
+    fzf_default_opts = os.getenv('FZF_DEFAULT_OPTS', default='')
+    fzf_options = '--height 40% {} --tac --sync --tiebreak=index --bind=ctrl-r:toggle-sort {} --no-multi'.format(
+            fzf_default_opts, fzf_ctrl_r_opts)
+
+
+    # Run FZF to perform a fuzzy search over the history entries, passing the options in the environment variable.
+    fzf_env = os.environ.copy()
+    fzf_env['FZF_DEFAULT_OPTS'] = fzf_options
+    process = subprocess.run(['fzf'], input=history_entries, stdout=subprocess.PIPE, env=fzf_env, encoding='utf-8')
+
+    # A single line is expected to be returned by the FZF program.
+    print(process.stdout.strip('\n'))
 
 # Remove setup Readline function so it doesn't pollute the interactive session's namespace.
 _setup_readline()
