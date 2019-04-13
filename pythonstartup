@@ -45,6 +45,9 @@ from os import path
 # Readline Settings
 #-----------------------------------------------------------------------------------------------------------------------
 
+# The history entry that was selected by the reverse history search, to be displayed on the subsequent line.
+_SELECTED_HISTORY_ENTRY = ''
+
 def _setup_readline():
     """Sets up tab completion and persistent command history for the interactive session."""
 
@@ -80,17 +83,19 @@ def _setup_readline():
     # that this also includes the history that was read from the file, so this is effectively an append operation.
     atexit.register(readline.write_history_file, history_path)
 
-    # Setup an alternate reverse history serach shortcut with ALT-r that utilizes the FZF program.
-    readline.parse_and_bind('"\\er": "\\C-e\\C-u_fzf_history_search()\\n"')
+    # Replace the standard reverse history search with a version that uses the FZF program. This works by invoking a
+    # Python function to do the search, then using another function for the pre-input hook to place the selected entry
+    # on the next prompt line.
+    readline.parse_and_bind(r'"\C-r": "\C-e\C-u_fzf_history_search()\C-m"')
+    readline.set_pre_input_hook(_readline_pre_input_hook)
 
 def _fzf_history_search():
-    """A function that replaces the standard CTRL-R history search with a variant that uses the FZF program (a fuzzy
-    finder). This is done to emulate what history search for bash looks like."""
+    """Perform a search over the Python command history using the FZF program (a fuzzy finder).
 
-    # The Readline library (and thus history seraching) is only supported on Linux and Mac systems.
-    import platform
-    if platform.system().lower() != 'linux':
-        return
+    This function is triggered when Ctrl-R is typed by the user. After the search is complete, this function updates a
+    global variable that is utilized by the pre-input hook function to place the selected history on the next prompt
+    line. This is required because there is no way to edit the current line buffer natively using Python.
+    """
 
     # General Imports
     import os
@@ -99,6 +104,9 @@ def _fzf_history_search():
 
     # Readline Imports
     import readline
+
+    # Declare the global variables accessed by this function.
+    global _SELECTED_HISTORY_ENTRY
 
     # Read the entire history into a string.
     history_generator = (readline.get_history_item(i+1) for i in range(readline.get_current_history_length()))
@@ -117,7 +125,27 @@ def _fzf_history_search():
     process = subprocess.run(['fzf'], input=history_entries, stdout=subprocess.PIPE, env=fzf_env, encoding='utf-8')
 
     # A single line is expected to be returned by the FZF program.
-    print(process.stdout.strip('\n'))
+    _SELECTED_HISTORY_ENTRY = process.stdout.strip('\n')
+
+def _readline_pre_input_hook():
+    """The pre-input hook for readline, which is called after the prompt is printed, but before user input is entered.
+
+    This function simply inserts the selected history entry from the reverse history search, if one was performed on the
+    previous line into the readline buffer. This is equivalent to if the user typed it themselves.
+    """
+
+    # Readline Imports
+    import readline
+
+    # Declare the global variables accessed by this function.
+    global _SELECTED_HISTORY_ENTRY
+
+    # Insert the selected history entry into the current line. If a search wasn't performed, the string is empty.
+    readline.insert_text(_SELECTED_HISTORY_ENTRY)
+    readline.redisplay()
+
+    # Unconditionally reset the selected history entry to an empty string
+    _SELECTED_HISTORY_ENTRY = ''
 
 # Remove setup Readline function so it doesn't pollute the interactive session's namespace.
 _setup_readline()
