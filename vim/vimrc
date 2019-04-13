@@ -454,11 +454,15 @@ noremap <silent> <C-w>b :Gblame<CR>
 nmap ga <Plug>(EasyAlign)
 vmap ga <Plug>(EasyAlign)
 
-
 " Setup CTRL-P for all modes as a shortcut to search all the files in the current project (or from the current working
 " directory if there is no project). Set CTRL-G CTRL-P to do the same, but only with files tracked under Git.
 map <C-P>       :call FzfFileSearch(0)<CR>
 map <C-G><C-P>  :call FzfFileSearch(1)<CR>
+
+" Change the default behavior of the forward word search (*) and backward word search (#) to not jump to the next word
+" immediately, but rather stay on the current word. Make sure the jump list is not modified.
+nnoremap * :keepjumps normal! #*<CR>
+nnoremap # :keepjumps normal! *#<CR>
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Insert Mode Text Expansions (Macros)
