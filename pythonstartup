@@ -115,7 +115,7 @@ def _fzf_history_search():
     # Source the FZF CTRL-R and default options and combine them with standard options to form the FZF options.
     fzf_ctrl_r_opts = os.getenv('FZF_CTRL_R_OPTS', default='')
     fzf_default_opts = os.getenv('FZF_DEFAULT_OPTS', default='')
-    fzf_options = '--height 40% {} --tac --sync --tiebreak=index --bind=ctrl-r:toggle-sort {} --no-multi'.format(
+    fzf_options = '--height 40% {} --tac --sync --tiebreak=index --bind=ctrl-r:toggle-sort {} --multi'.format(
             fzf_default_opts, fzf_ctrl_r_opts)
 
 
