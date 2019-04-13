@@ -163,7 +163,7 @@ function fzf-edit
         printf '%q ' "${files[@]}"
     fi
 }
-bind '"\ee": "\C-e\C-u$(fzf-edit)\e\C-e\er\C-m'
+bind '"\ee": "\C-e\C-u$(fzf-edit)\e\C-e\er\C-m"'
 
 #-----------------------------------------------------------------------------------------------------------------------
 # General Environment Variables
