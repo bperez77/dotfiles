@@ -79,6 +79,9 @@ set nofoldenable
 " overridden locally for particular languages.
 set foldmethod=syntax
 
+" Set the number of commands and previous search patterns remembered by Vim in the history to the maximum value.
+set history=10000
+
 " When performing a search, highlight all matching instances of the search term in the file. This highlight remains
 " persistent until the next search or when it is explicitly disabled.
 setglobal hlsearch
