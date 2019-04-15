@@ -93,6 +93,13 @@ set ignorecase
 " the current search string are highlighted and updated as more of the command is typed.
 set incsearch
 
+" Enable the displaying of indicator characters for various types of whitespace characters and in certain situations.
+" Specifically, use '«' and '»' to indicate that a line continues further to left or right, respectively, when line
+" wrapping  is disabled. Use '·' to display trailing whitespace characters and use '▸' to indicate where a tab character
+" starts and use '·' to indicate the whitespace that it fills. Use '␣' to mark non-breakable space characters.
+set list
+let &listchars          = 'extends:»,nbsp:␣,trail:·,precedes:«,tab:▸·'
+
 " Show the line number for each line on the left-hand side of the Vim window.
 set number
 
