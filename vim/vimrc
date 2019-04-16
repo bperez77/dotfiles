@@ -113,6 +113,10 @@ set shell=bash
 " The number of spaces that are used for each step of manual or automatic indentation.
 set shiftwidth=4
 
+" Set the string that precedes the start of lines that have been wrapped (i.e. logical lines, not physical ones). This
+" adds a marker and indents the lines by 8 characters to make it clear that they are wrapped.
+let &showbreak          = '↳       '
+
 " Show the (normal-mode) command being typed in the last line of the screen.
 set showcmd
 
