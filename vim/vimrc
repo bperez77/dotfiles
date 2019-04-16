@@ -86,6 +86,7 @@ set history=10000
 " persistent until the next search or when it is explicitly disabled.
 set hlsearch
 
+
 " Treats all search patterns as case-insensitive. This works with the smart case option to enable it for searches.
 set ignorecase
 
@@ -220,6 +221,11 @@ highlight ColorColumn   ctermbg=DarkBlue ctermfg=white guibg=#592929
 
 " When the over length highlight group is enabled, color it in red. This highlights any characters over the text width.
 highlight OverLength    ctermbg=red ctermfg=white guibg=#592929
+
+" Change the highlighting of the characters from the `listchars` option so that it is gray. This is done to make the
+" color muted, and make sure the color doesn't conflict with existing color schemes.
+highlight NonText       ctermfg=Gray guibg=Gray70
+highlight SpecialKey    ctermfg=Gray guibg=Gray70
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Functions
