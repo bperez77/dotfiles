@@ -127,8 +127,8 @@ def _fzf_history_search():
     fzf_env['FZF_DEFAULT_OPTS'] = fzf_options
     process = subprocess.run(['fzf'], input=history_entries, stdout=subprocess.PIPE, env=fzf_env, encoding='utf-8')
 
-    # A single line is expected to be returned by the FZF program.
-    _SELECTED_HISTORY_ENTRY = process.stdout.strip('\n')
+    # Remove the final newline from the input returned by the program, so the cursor is on the final line.
+    _SELECTED_HISTORY_ENTRY = process.stdout.rstrip('\n')
 
 def _readline_pre_input_hook():
     """The pre-input hook for readline, which is called after the prompt is printed, but before user input is entered.
