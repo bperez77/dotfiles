@@ -119,9 +119,8 @@ def _fzf_history_search():
     # Source the FZF CTRL-R and default options and combine them with standard options to form the FZF options.
     fzf_ctrl_r_opts = os.getenv('FZF_CTRL_R_OPTS', default='')
     fzf_default_opts = os.getenv('FZF_DEFAULT_OPTS', default='')
-    fzf_options = '--height 40% {} --tac --sync --tiebreak=index --bind=ctrl-r:toggle-sort {} --multi'.format(
-            fzf_default_opts, fzf_ctrl_r_opts)
-
+    fzf_options = (f'--height 40% {fzf_default_opts} --tac --sync --tiebreak=index --bind=ctrl-r:toggle-sort'
+            f' {fzf_ctrl_r_opts} --multi')
 
     # Run FZF to perform a fuzzy search over the history entries, passing the options in the environment variable.
     fzf_env = os.environ.copy()
@@ -188,9 +187,9 @@ def _get_color(color):
     # Return the string code for the given color. Note that the \001 and \002 delimiters tell Readline not
     # to count the characters towards the line length. This is necessary to wrap long lines properly.
     if color in color_dict:
-        return '\001{}\002'.format(color_dict[color])
+        return f'\001{color_dict[color]}\002'
     else:
-        raise KeyError('"{}" is not a valid color or modifier.'.format(color))
+        raise KeyError(f'"{color}" is not a valid color or modifier.')
 
 def _setup_prompt():
     """Modifies the PS1 and PS2 prompts used for the interactive session."""
@@ -198,19 +197,23 @@ def _setup_prompt():
     # General Imports
     import sys
 
-    # Create a dictionary for colors to use in the format strings
-    colors = ('green', 'magenta_background', 'normal', 'yellow')
-    color_dict = {color_name: _get_color(color_name) for color_name in colors}
+    # Generate the color strings to use in the format strings.
+    green = _get_color('green')
+    magenta_background = _get_color('magenta_background')
+    normal = _get_color('normal')
+    yellow = _get_color('yellow')
 
     # Override the default prompt used in the interactive session, printed at the beginning of each line, and set it up
     # to display the version of Python being used.
-    sys.ps1 = '{green}[{yellow}Python-{version.major}.{version.minor}.{version.micro}{green}]>>> {normal}'.format(
-            version=sys.version_info, **color_dict)
+    version = sys.version_info
+    sys.ps1 = f'{green}[{yellow}Python-{version.major}.{version.minor}.{version.micro}{green}]>>> {normal}'
 
     # Override the default prompt used for line continuations, so that multi-line commands can be copied properly. Align
     # the lines with the PS1 prompt length, so function definitions look nice.
-    ps1_len = len('[Python-{version.major}.{version.minor}.{version.micro}]>>> '.format(version=sys.version_info))
-    sys.ps2 = '{magenta_background}{space:<{ps2_len}}{normal} '.format(ps2_len=ps1_len - 1, space=' ', **color_dict)
+    ps1_len = len(f'[Python-{version.major}.{version.minor}.{version.micro}]>>> ')
+    ps2_len = ps1_len - 1
+    space = ' '
+    sys.ps2 = f'{magenta_background}{space:<{ps2_len}}{normal} '
 
 # Remove the setup prompt function so it doesn't pollute the interactive session's namespace.
 _setup_prompt()
