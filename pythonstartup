@@ -108,6 +108,10 @@ def _fzf_history_search():
     # Declare the global variables accessed by this function.
     global _SELECTED_HISTORY_ENTRY
 
+    # Remove this function call from the Python command history so that it doesn't pollute the history.
+    history_index = readline.get_current_history_length() - 1
+    readline.remove_history_item(history_index)
+
     # Read the entire history into a string.
     history_generator = (readline.get_history_item(i+1) for i in range(readline.get_current_history_length()))
     history_entries = '\n'.join(history_generator)
