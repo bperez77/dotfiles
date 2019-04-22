@@ -398,6 +398,13 @@ augroup FormatOptions
     autocmd FileType * setlocal formatoptions-=o
 augroup END
 
+" Whenever the terminal is resized or scaled, automatically resize and scale all the windows so they adjust with it.
+augroup ResizeWindows
+    autocmd!
+
+    autocmd VimResized * wincmd =
+augroup END
+
 " Automatically save views and load them from file for each buffer. Views store editor context information about
 " the file such as the cursor position and any folds. Note that the '?*' pattern is used to prevent empty file names
 " from being matched, since views cause an error for empty windows and help pages.
