@@ -66,6 +66,9 @@ set belloff=all
 " trailing '//' the file names are unique, by including the full path in the name.
 let &backupdir          = g:vim_directory . '/editor_files/backup_files//'
 
+" Set the characters that will cause a line break when wrapping long lines.
+let &breakat            = ' 	*+,./?"'
+
 " Change the directory where Vim's swap files are stored. These are created by Vim when it opens a file.
 let &directory          = g:vim_directory . '/editor_files/swap_files//'
 
@@ -93,6 +96,10 @@ set ignorecase
 " Make the Vim search behave like searching does in a web browser does. When a search command is typed, matches against
 " the current search string are highlighted and updated as more of the command is typed.
 set incsearch
+
+" When wrapping long lines, do not wrap the line at the last character that fits on the screen (which can break the line
+" in the middle of a word), but instead break the line only at the characters defined by the 'breakat' option.
+set linebreak
 
 " Enable the displaying of indicator characters for various types of whitespace characters and in certain situations.
 " Specifically, use '«' and '»' to indicate that a line continues further to left or right, respectively, when line
