@@ -485,12 +485,12 @@ nnoremap <silent> <F2>  :setlocal spell! spelllang=en_us<CR>
 inoremap <silent> <F2>  <C-o>:setlocal spell! spelllang=en_us<CR>
 
 " Set the F3 key as shortcut for disabling highlighting of a search term until the next search.
-nnoremap <silent> <F3>  :nohlsearch<CR>
-inoremap <silent> <F3>  <C-o>:nohlsearch<CR>
+nnoremap <F3>  :nohlsearch<CR>
+inoremap <F3>  <C-o>:nohlsearch<CR>
 
 " Set the F4 key as the shortcut for toggling if portions of a line over the buffer's text width are highlighted in red.
-nnoremap <silent> <F4>  :call ToggleOverLength()<CR>
-inoremap <silent> <F4> <C-o>:call ToggleOverLength()<CR>
+nnoremap <F4>  :call ToggleOverLength()<CR>
+inoremap <F4> <C-o>:call ToggleOverLength()<CR>
 
 " Window navigation shortcuts with Alt and the arrow keys.
 map <silent> <A-Up> :wincmd k<CR>
