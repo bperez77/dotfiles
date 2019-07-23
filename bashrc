@@ -644,13 +644,8 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 ]]; then
     {
         # Resolve any symbolic links in the program path, and convert the path from a Unix-style to Windows-style.
         local cmd=("${@}")
-        local full_conversion_cmd='wslpath -w -- "$(realpath --quiet --canonicalize-missing --relative-base="$(pwd)" -- \
-                "${cmd[0]}")"'
-        if ! (${conversion_cmd} &> /dev/null); then
-            local new_cmd="('$(full_conversion_cmd)'"
-        else
-            local new_cmd="('${cmd[0]}'"
-        fi
+        local new_cmd="('$(wslpath -w -- "$(realpath --quiet --canonicalize-missing --relative-base="$(pwd)" -- \
+                "${cmd[0]}")" 2> /dev/null || echo "${cmd[0]}")'"
 
         # Resolve any symbolic links in each element of the command, and replace any drive paths with the Windows drive
         # letter (do not convert the path from Unix-style to Windows-style). If the path is not representable, then
@@ -659,10 +654,9 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 ]]; then
         do
             # Do not apply WSL path to strings with invalid characters or with URL strings, as double slashes will be
             # converted to single slashes.
-            local conversion_cmd='wslpath -m -- $(realpath --quiet --canonicalize-missing --relative-base="$(pwd)" -- "${elem}")"
-                    2> /dev/null || echo "${elem}"'
-            if [[ ! "${elem}" =~ ^(file?|ftp|http|https|ssh)://.* && ! "${elem}" =~ .*:.* ]] && ! (${conversion_cmd} &> /dev/null); then
-                new_cmd+=" '$(${conversion_cmd})'"
+            if [[ ! "${elem}" =~ ^(file?|ftp|http|https|ssh)://.* && ! "${elem}" =~ .*:.* ]]; then
+                new_cmd+=" '$(wslpath -m -- "$(realpath --quiet --canonicalize-missing --relative-base="$(pwd)" -- \
+                        "${elem}")" 2> /dev/null || echo "${elem}")'"
             else
                 new_cmd+=" '${elem}'"
             fi
