@@ -22,7 +22,6 @@
 !/README.md
 
 # Allow for the various configuration files.
-!/bashrc
 !/ctags.d/*
 !/gdbinit
 !/gitconfig
@@ -31,6 +30,10 @@
 !/minttyrc
 !/pythonstartup
 !/ssh/*
+
+# Allow for the Bashrc file and the various configuration files nder hte Bash director.
+!/bashrc
+!*.bash
 
 # Allow for the Vimrc file and the various configuration files under the Vim directory.
 !*.vim

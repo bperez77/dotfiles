@@ -42,74 +42,14 @@ if [[ -f "${HOME}/.fzf.bash" ]]; then
 fi
 
 #-----------------------------------------------------------------------------------------------------------------------
-# History and Shell Options
+# User Settings
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Make the size of in-memory history of the current session unlimited.
-export HISTSIZE=-1
 
-# Make the size of the shared history stored in the history file unlimited.
-export HISTFILESIZE=-1
+# Source the various user settings files.
+source "${HOME}/.bash/history.bash"
+source "${HOME}/.bash/shell_options.bash"
 
-# When adding new entries to the history, erase any duplicate values. Also, ignore any new entries that are a duplicate.
-export HISTCONTROL="erasedups:ignoredups"
-
-# Create the list of commands to ignore when they are used without any arguments (including options without arguments).
-IGNORED_NOARG_COMMANDS=(make ls ll dir cd 'git log' 'git clean' 'git status' 'git pull' 'git diff')
-for cmd in "${IGNORED_NOARG_COMMANDS[@]}"
-do
-    IGNORED_COMMANDS+=":*([ \t])${cmd}*([0-9-_.])*([ \t])"
-done
-
-# Create a list of commands to ignore even when they are used with arguments. These are ones not worth repeating.
-IGNORED_ARG_COMMANDS=(bg fg exit history man vman kill 'cd -')
-for cmd in "${IGNORED_ARG_COMMANDS[@]}"
-do
-    IGNORED_COMMANDS+=":*([ \t])${cmd}*"
-done
-
-# Set the list of commands to ignore for new history entries, focusing on the items described above.
-export HISTIGNORE="${HISTIGNORE}:${IGNORED_COMMANDS}:*([ \t])"
-
-# Set the format of the timestamps used in the history file.
-export HISTTIMEFORMAT='%D:%T'
-
-# Add to the command that is run before a new prompt is printed to the terminal to append the current history to the
-# global history file. This ensures that new command windows will immediately have the history from other ones.
-export PROMPT_COMMAND="history -a; ${PROMPT_COMMAND}"
-
-# If a command name matches a directory, then automatically cd into that directory. This saves needing to prefix
-# directory names with cd; they can be typed directly into the shell to change the directory.
-shopt -s autocd
-
-# If the argument to cd does not match a directory name, then it is treated as a variable if its name matches one. This
-# saves needing to type the $ before the variable name when changing the directory to a variable's value.
-shopt -s cdable_vars
-
-# Fix simple spelling errors when using the change directory command.
-shopt -s cdspell
-
-# Check the window size after each command, and adjust the text as necessary (for window resizes).
-shopt -s checkwinsize
-
-# Append to the history file on exit, rather than overwriting it. This ensures that the history is saved across
-# multiple sessions of the shell.
-shopt -s cmdhist
-
-# Fix simple spelling errors when using tab completion on directories.
-shopt -s dirspell
-
-# Allow for the extended globbing patterns for the command-line, which allow for lists of glob patterns to be used.
-shopt -s extglob
-
-# Allow for the recursive '**' glob pattern, which matches to 0 or more subdirectories (in a file expansion context).
-shopt -s globstar
-
-# Save any multi-line commands to the history file as a single entry, so it can be easily recalled and used again.
-shopt -s histappend
-
-# Enable tab completion of hostnames from the /etc/hosts file, after an '@' character.
-shopt -s hostcomplete
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Bash Command-Line Prompt
