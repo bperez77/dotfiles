@@ -47,28 +47,10 @@ fi
 
 
 # Source the various user settings files.
+source "${HOME}/.bash/command_prompt.bash"
 source "${HOME}/.bash/history.bash"
 source "${HOME}/.bash/shell_options.bash"
 
-
-#-----------------------------------------------------------------------------------------------------------------------
-# Bash Command-Line Prompt
-#-----------------------------------------------------------------------------------------------------------------------
-
-# ANSI color and modifications codes for terminal text. Note that the \[ and \] delimiters tell Bash not to count the
-# characters towards prompt's length. This is necessary for Bash to properly wrap long lines on the terminal.
-CYAN="\\[$(tput setaf 6)\\]"                # Cyan color for text.
-GREEN="\\[$(tput setaf 2)\\]"               # Green color for text.
-MAGENTA_BACKGROUND="\\[$(tput setab 5)\\]"  # Magenta color for the terminal background.
-NORMAL="\\[$(tput sgr0)\\]"                 # Return text to normal.
-YELLOW="\\[$(tput setaf 3)\\]"              # Yellow color for text.
-
-# Set the terminal prompt. The current user is represented by \u, host by \h, and the current working directory by \w.
-export PS1="${GREEN}[\\u@\\h ${YELLOW}\\w${CYAN}\$(__git_ps1)${GREEN}]\\\$ ${NORMAL}"
-
-# Set the prompt used for line continuations in the terminal (for multiline commands) so that multiline commands can be
-# copied properly.
-export PS2="${MAGENTA_BACKGROUND}$(printf " %.s" {1..8})${NORMAL}"
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Tab Completion Settings
