@@ -50,14 +50,8 @@ fi
 source "${HOME}/.bash/command_prompt.bash"
 source "${HOME}/.bash/history.bash"
 source "${HOME}/.bash/shell_options.bash"
+source "${HOME}/.bash/tab_completion.bash"
 
-
-#-----------------------------------------------------------------------------------------------------------------------
-# Tab Completion Settings
-#-----------------------------------------------------------------------------------------------------------------------
-
-# Setup the Vim Man command from the Vim SuperMan plugin to have the same completion behavior as Man.
-complete -o default -o nospace -F _man vman
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Readline Settings
