@@ -58,9 +58,8 @@
 
 [commit]
 
-    # In the generated commit message, show the diff of the changes that are going to be committed and the diff of
-    # changes that are not going to be committed (i.e. unstaged changes).
-    verbose = 2
+    # In the generated commit message, show the diff of the changes that are going to be committed.
+    verbose = 1
 
 [diff]
 
