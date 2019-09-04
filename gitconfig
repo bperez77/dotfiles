@@ -216,7 +216,7 @@
 
     # Pull changes from the remote and rebase the local branch on top of them. Any local, unpushed changes will appear
     # after the remote's commits, and no merge commit will be generated. Keep any local merge commits during the rebase.
-    pullr = pull --rebase=preserve
+    pullr = pull --rebase=merges
 
     # Push all changes to all available remotes configured in the repository, including branches and tags.
     push-all = !git remote | xargs -L 1 -I {} bash -c 'git push --all {} && git push --tags {}'
