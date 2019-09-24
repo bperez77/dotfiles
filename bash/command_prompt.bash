@@ -17,6 +17,9 @@
 #   pasted and so that line continuations are intended slightly. By default, the secondary command prompt includes a
 #   character that mangles the command when trying to copy it; colored spaces are used instead.
 #
+#   The process that starts Bash can also define an environment variable that gets prepended to the standard PS1,
+#   `PS1_PREFIX`. This is useful for distinguishing between various context-based environments within the shell.
+#
 #-----------------------------------------------------------------------------------------------------------------------
 
 
@@ -31,6 +34,7 @@ CYAN="\\[$(tput setaf 6)\\]"                # Cyan color for text.
 GREEN="\\[$(tput setaf 2)\\]"               # Green color for text.
 MAGENTA_BACKGROUND="\\[$(tput setab 5)\\]"  # Magenta color for the terminal background.
 NORMAL="\\[$(tput sgr0)\\]"                 # Return text to normal.
+RED="\\[$(tput setaf 1)\\]"                 # Red color for text.
 YELLOW="\\[$(tput setaf 3)\\]"              # Yellow color for text.
 
 
@@ -40,8 +44,8 @@ YELLOW="\\[$(tput setaf 3)\\]"              # Yellow color for text.
 
 
 # Set the terminal prompt. The current user is represented by \u, host by \h, and the current working directory by \w.
-# `__git_ps1` is a function that display Git repository information.
-export PS1="${GREEN}[\\u@\\h ${YELLOW}\\w${CYAN}\$(__git_ps1)${GREEN}]\\\$ ${NORMAL}"
+# `__git_ps1` is a function that display Git repository information. If a prefix is defined by the user, then add it.
+export PS1="${RED}${PS1_PREFIX}${GREEN}[\\u@\\h ${YELLOW}\\w${CYAN}\$(__git_ps1)${GREEN}]\\\$ ${NORMAL}"
 
 
 #-----------------------------------------------------------------------------------------------------------------------
