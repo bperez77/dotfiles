@@ -49,6 +49,7 @@ fi
 # Source the various user settings files.
 source "${HOME}/.bash/command_prompt.bash"
 source "${HOME}/.bash/history.bash"
+source "${HOME}/.bash/readline.bash"
 source "${HOME}/.bash/shell_options.bash"
 source "${HOME}/.bash/tab_completion.bash"
 
