@@ -88,6 +88,18 @@ function main
     do
         local target_path="${CONFIGURATION_PATHS[${source_path}]}"
 
+        # The Ln command cannot overwite directories, so we'll move it to a backup it if it is one (and not a symlink).
+        if [[ ! -L "${source_path}" && -d "${source_path}" ]]; then
+            local i=1
+            while [[ -e "${source_path}.~${i}~" ]]
+            do
+                i=$((${i} + 1))
+            done
+
+            echo "Removing and backing up the directory \"${source_path}\" to \"${source_path}.~${i}~..."
+            mv "${source_path}" "${source_path}.~${i}~"
+        fi
+
         # Get the directory where the link will be created (source) and the relative path from there to the target.
         local source_dir="$(dirname "${source_path}")"
         local target_relative_path="$(realpath --canonicalize-missing --no-symlinks --relative-to="${source_dir}" \
