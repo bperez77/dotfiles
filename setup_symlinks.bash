@@ -42,8 +42,14 @@ set -u
 #-----------------------------------------------------------------------------------------------------------------------
 
 
-# The directory where this script is located. Note: This only works when the script is run, not sourced.
-SCRIPT_DIRECTORY="$(dirname "${0}")"
+# The directory where this script is located. In order to respect a current working directory that is inside a
+# symbolically linked directory, utilize the current working directory if the script path is relative. Otherwise, the
+# absolute path is sufficient. Note: This only works when the script is run, not sourced.
+if [[ "${0}" == /* ]]; then
+    SCRIPT_DIRECTORY="$(realpath --no-symlinks "$(dirname "${0}")")"
+else
+    SCRIPT_DIRECTORY="$(realpath --no-symlinks "$(dirname "$(pwd)/${0}")")"
+fi
 
 # Configuration files in this repository to create symbolic links for, typically in the home directory.
 declare -A CONFIGURATION_PATHS=(
