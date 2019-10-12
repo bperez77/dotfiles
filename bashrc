@@ -97,41 +97,41 @@ export STOW_DIR="${USER_LOCAL_DIRECTORY}/stow"
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Add the user-local installed executables and programs to the executable, manual, and library paths.
-export PATH="${PATH}:${USER_LOCAL_DIRECTORY}/bin"
-export MANPATH="${MANPATH}:${USER_LOCAL_DIRECTORY}/share/man"
-export LD_LIBRARY_PATH="${MANPATH}:${USER_LOCAL_DIRECTORY}/lib"
+export PATH="${USER_LOCAL_DIRECTORY}/bin:${PATH}"
+export MANPATH="${USER_LOCAL_DIRECTORY}/share/man:${MANPATH}"
+export LD_LIBRARY_PATH="${USER_LOCAL_DIRECTORY}/lib:${LD_LIBRARY_PATH}"
 
 # Add the bin scripts directory to the executable path, where any miscellaneous user-created executables may be.
-export PATH="${PATH}:${HOME}/bin/scripts"
+export PATH="${HOME}/bin/scripts:${PATH}"
 
 # Add the path to Git's diff-highlight program, used for getting word-level highlighting in diffs.
-export PATH="${PATH}:/usr/share/doc/git/contrib/diff-highlight/"
+export PATH="/usr/share/doc/git/contrib/diff-highlight/:${PATH}"
 
 # Add the paths for the installed Arduino studio, MATLAB, Altera Quartus, and Eagle programs to the executable path.
-export PATH="${PATH}:/usr/bin/Arduino/arduino"
-export PATH="${PATH}:/usr/local/MATLAB/R2015a/bin/"
-export PATH="${PATH}:/opt/Altera/15.1/quartus/bin/"
-export PATH="${PATH}:/opt/eagle-7.5.0/bin/"
+export PATH="/usr/bin/Arduino/arduino:${PATH}"
+export PATH="/usr/local/MATLAB/R2015a/bin/:${PATH}"
+export PATH="/opt/Altera/15.1/quartus/bin/:${PATH}"
+export PATH="/opt/eagle-7.5.0/bin/:${PATH}"
 
 # Add the various Xilinx tools (Vivado, HLS, SDK, cross-compiler) to the executable path.
 XILINX_ROOT='/opt/Xilinx/'
 XILINX_VERSION='2017.2'
-export PATH="${PATH}:${XILINX_ROOT}/Vivado/${XILINX_VERSION}/bin/"
-export PATH="${PATH}:${XILINX_ROOT}/SDK/${XILINX_VERSION}/gnu/arm/lin/bin/"
-export PATH="${PATH}:${XILINX_ROOT}/SDK/${XILINX_VERSION}/bin/"
-export PATH="${PATH}:${XILINX_ROOT}/Vivado_HLS/${XILINX_VERSION}/bin/"
+export PATH="${XILINX_ROOT}/Vivado/${XILINX_VERSION}/bin/:${PATH}"
+export PATH="${XILINX_ROOT}/SDK/${XILINX_VERSION}/gnu/arm/lin/bin/:${PATH}"
+export PATH="${XILINX_ROOT}/SDK/${XILINX_VERSION}/bin/:${PATH}"
+export PATH="${XILINX_ROOT}/Vivado_HLS/${XILINX_VERSION}/bin/:${PATH}"
 
 # Add the Rust toolchain and any Rust programs installed with Cargo to the executable path.
-export PATH="${PATH}:${HOME}/.cargo/bin"
+export PATH="${HOME}/.cargo/bin:${PATH}"
 
 # Add the user-local Go programs and libraries to Go path, and add the installed binaries to the executable path.
 GO_USER_DIRECTORY="${HOME}/.go"
-export GOPATH="${GOPATH}:${GO_USER_DIRECTORY}"
-export PATH="${PATH}:${GO_USER_DIRECTORY}/bin"
+export GOPATH="${GO_USER_DIRECTORY}:${GOPATH}"
+export PATH="${GO_USER_DIRECTORY}/bin:${PATH}"
 
 # Add the programs for the manually installed C0 and SML/NJ languages to the executable path.
-export PATH="${PATH}:/usr/share/smlnj/bin/"
-export PATH="${PATH}:/usr/share/cc0/bin/"
+export PATH="/usr/share/smlnj/bin/:${PATH}"
+export PATH="/usr/share/cc0/bin/:${PATH}"
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Programming and Development Tool Aliases
@@ -645,8 +645,8 @@ fi
 if [[ ${SHELL_IS_WSL_BASH} -eq 0 || ${SHELL_IS_GIT_BASH} -eq 0 ]]; then
 
     # Add in paths to common Windows binaries.
-    export PATH="${PATH}:${C_DRIVE}/Windows/System32/"
-    export PATH="${PATH}:${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0"
+    export PATH="${C_DRIVE}/Windows/System32/:${PATH}"
+    export PATH="${C_DRIVE}/Windows/System32/WindowsPowerShell/v1.0:${PATH}"
 
     # Setup aliases for common Windows commands. The cmd-start alias runs the command in a new window.
     alias cmd='run-windows-cmd cmd.exe'
