@@ -97,9 +97,9 @@ export STOW_DIR="${USER_LOCAL_DIRECTORY}/stow"
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Add the user-local installed executables and programs to the executable, manual, and library paths.
-export PATH="${USER_LOCAL_DIRECTORY}/bin:${PATH}"
-export MANPATH="${USER_LOCAL_DIRECTORY}/share/man:${MANPATH}"
-export LD_LIBRARY_PATH="${USER_LOCAL_DIRECTORY}/lib:${LD_LIBRARY_PATH}"
+export PATH="${USER_LOCAL_DIRECTORY}/bin${PATH:+:${PATH}}"
+export MANPATH="${USER_LOCAL_DIRECTORY}/share/man${MANPATH:+:${MANPATH}}"
+export LD_LIBRARY_PATH="${USER_LOCAL_DIRECTORY}/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
 
 # Add the bin scripts directory to the executable path, where any miscellaneous user-created executables may be.
 export PATH="${HOME}/bin/scripts:${PATH}"
@@ -126,7 +126,7 @@ export PATH="${HOME}/.cargo/bin:${PATH}"
 
 # Add the user-local Go programs and libraries to Go path, and add the installed binaries to the executable path.
 GO_USER_DIRECTORY="${HOME}/.go"
-export GOPATH="${GO_USER_DIRECTORY}:${GOPATH}"
+export GOPATH="${GO_USER_DIRECTORY}${GOPATH:+:${GOPATH}}"
 export PATH="${GO_USER_DIRECTORY}/bin:${PATH}"
 
 # Add the programs for the manually installed C0 and SML/NJ languages to the executable path.
