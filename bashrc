@@ -531,31 +531,52 @@ if [[ ${SHELL_IS_WSL_BASH} -eq 0 ]]; then
     # The location of the Window User's home directory in the WSL (assumes that the usernames match).
     export WINDOWS_HOME="${C_DRIVE}/Users/${USER}"
 
+    # Convert an argument in a WSL command (including the program path) to the appropriate representation to run it in a
+    # Windows command. Any symbolic links are resolved in the path, and drive paths are replaced with the Windows drive
+    # letter. If the argument is not a path, then it is returned as-is. Forward slashes are converted to backslashes if
+    # specified by the second argument.
+    function convert-wsl-argument
+    {
+        local arg="${1}"
+        local convert_slashes="${2:-false}"
+
+        # Do not convert arguments with URL strings =, as double slashes will be converted to single slashes. Also, do
+        # not convert arguments that contain a colon character in them, as will not be WSL paths.
+        if [[ "${arg}" =~ ^(file?|ftp|http|https|ssh)://.* || "${arg}" =~ .*:.* ]]; then
+            echo "${arg}"
+            return
+        fi
+
+        # Based on if slashes should be converted, determine the appropriate substitution.
+        if [[ "${convert_slashes}" == 'true' ]]; then
+            local sed_regexes='-e s|^/mnt/\([a-zA-Z]\)/*|\1:\\|g -e s|/|\\|g'
+        else
+            local sed_regexes='-e s|^/mnt/\([a-zA-Z]\)/*|\1:/|g'
+        fi
+
+        local no_symlink_arg="$(realpath --quiet --canonicalize-missing --relative-base="$(pwd)" -- "${arg}")"
+        local windows_arg="$(echo "${no_symlink_arg}" | sed ${sed_regexes})"
+
+        # Return the argument by printing it to stdout.
+        echo "${windows_arg}"
+    }
+
     # Converts a command for a native Windows program launched from the WSL to one that is suitable to be run. The new
     # command is returned as statement that evaluates to an array (e.g. eval "var=$(convert-wsl-cmd <cmd ...>)").
     function convert-wsl-cmd
     {
+        # Convert the program path to a Windows path, and additional convert forward slashes to back slashes.
         # Resolve any symbolic links in the program path, and convert the path from a Unix-style to Windows-style.
         local cmd=("${@}")
-        local new_cmd="('$(wslpath -w -- "$(realpath --quiet --canonicalize-missing --relative-base="$(pwd)" -- \
-                "${cmd[0]}")" 2> /dev/null || echo "${cmd[0]}")'"
+        local new_cmd="('$(convert-wsl-argument "${cmd[0]}" "true")'"
 
-        # Resolve any symbolic links in each element of the command, and replace any drive paths with the Windows drive
-        # letter (do not convert the path from Unix-style to Windows-style). If the path is not representable, then
-        # leave it as is. This is useful for Windows command switches (e.g. /D).
-        for elem in "${cmd[@]:1}"
+        # Convert each argument of the command to a Windows path (if applicable), but preserve forward slashes.
+        for arg in "${cmd[@]:1}"
         do
-            # Do not apply WSL path to strings with invalid characters or with URL strings, as double slashes will be
-            # converted to single slashes.
-            if [[ ! "${elem}" =~ ^(file?|ftp|http|https|ssh)://.* && ! "${elem}" =~ .*:.* ]]; then
-                new_cmd+=" '$(wslpath -m -- "$(realpath --quiet --canonicalize-missing --relative-base="$(pwd)" -- \
-                        "${elem}")" 2> /dev/null || echo "${elem}")'"
-            else
-                new_cmd+=" '${elem}'"
-            fi
+            new_cmd+=" '$(convert-wsl-argument "${arg}")'"
         done
 
-        # Return the converted command by printing the statement that evaluates to the equivalent array.
+        # Return the converted command by printing the statement that evaluates to the equivalent array to stdout.
         new_cmd+=")"
         echo ${new_cmd}
     }
