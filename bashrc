@@ -101,6 +101,10 @@ export PATH="${USER_LOCAL_DIRECTORY}/bin${PATH:+:${PATH}}"
 export MANPATH="${USER_LOCAL_DIRECTORY}/share/man${MANPATH:+:${MANPATH}}"
 export LD_LIBRARY_PATH="${USER_LOCAL_DIRECTORY}/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
 
+# The man path must be prefixed by a colon in order for the standard paths to be included (this includes man paths from
+# the system configuration files).
+export MANPATH=":${MANPATH}"
+
 # Add the bin scripts directory to the executable path, where any miscellaneous user-created executables may be.
 export PATH="${HOME}/bin/scripts:${PATH}"
 
