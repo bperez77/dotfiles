@@ -217,15 +217,20 @@
     # not respect the follow argument for Git log. Git log was used over Git short log because it doesn't respect the
     # follow option.
     ls-authors = "!                                                                                             \
-        ls_authors() {                                                                                          \
-            if [ $# -gt 0 ]; then                                                                               \
-                path_args=\"--follow -- ${GIT_PREFIX:-.}/${1}\";                                                \
+        ls_authors()                                                                                            \
+        {                                                                                                       \
+            if [ ${#} -gt 0 ] ; then                                                                            \
+                path_args=\"--follow -- ${GIT_PREFIX:-.}/${1}\" ;                                               \
             else                                                                                                \
-                path_args=\"\";                                                                                 \
+                path_args=\"\" ;                                                                                \
             fi &&                                                                                               \
-            git log --format='%aN <%aE>' ${path_args} | sort | uniq --count | sort --numeric-sort --reverse;    \
+                                                                                                                \
+            git log --format='%aN <%aE>' ${path_args} | sort | uniq --count | sort --numeric-sort --reverse ;   \
+            return ${?} ;                                                                                       \
         } &&                                                                                                    \
-        ls_authors"
+                                                                                                                \
+        ls_authors \"${@}\";                                                                                    \
+        exit ${?}"
 
     # Lists all branches in the repository by the last time a commit was pushed to the branch. A terse summary of each
     # commit is displayed and formatted. Assumes that the remote name is the default of 'origin'.
@@ -254,16 +259,19 @@
     # The diff will be taken against the current HEAD.
     summarize = "!                                                                  \
         summarize() {                                                               \
-            if [ $# -lt 1 ]; then                                                   \
-                echo 'Error: Improper number of command line arguments specified';  \
-                echo 'Usage: git summarize <commit> [diff_options]';                \
+            if [ ${#} -lt 1 ]; then                                                 \
+                echo 'Error: Improper number of command line arguments specified' ; \
+                echo 'Usage: git summarize <commit> [diff_options]' ;               \
+                return 1 ;                                                          \
             fi &&                                                                   \
                                                                                     \
             target_commit=\"${1}\" &&                                               \
             source_commit=\"$(git rev-parse --verify HEAD)\" &&                     \
-            git diff \"${source_commit}...${target_commit}\";                       \
+            git diff \"${source_commit}...${target_commit}\" ;                      \
         } &&                                                                        \
-        summarize"
+                                                                                    \
+        summarize \"${@}\";                                                         \
+        exit ${?}"
 
     # Show the Git history is a visualized graph/tree format that displays the underlying structure of the dependencies
     # between commits. This is useful for showing merges, such as branches that have been merged into the current one.
