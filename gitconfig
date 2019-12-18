@@ -277,7 +277,8 @@
     # between commits. This is useful for showing merges, such as branches that have been merged into the current one.
     tree = log --graph --decorate --pretty=oneline --abbrev-commit
 
-    gc-all = !git -c gc.reflogExpire=0 -c gc.reflogExpireUnreachable=0 -c gc.rerereresolved=0 -c gc.rerereunresolved=0 -c gc.pruneExpire=now gc
+    gc-all = !git -c gc.reflogExpire=0 -c gc.reflogExpireUnreachable=0 -c gc.rerereresolved=0 -c gc.rerereunresolved=0 \
+            -c gc.pruneExpire=now gc
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Local Machine-Specific Settings
