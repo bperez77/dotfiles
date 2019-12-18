@@ -187,6 +187,28 @@
     # Update the committer and author timestamps of the most recent commit to the current time.
     commit-update-now = !GIT_COMMITTER_DATE="\"`date`\"" git commit --amend --no-edit --date "\"`date`\""
 
+    # Deletes the specified branches, both the local and remote copy. Assumes that the remote is "origin".
+    delete-branches = "!                                                            \
+        delete_branches()                                                           \
+        {                                                                           \
+            if [ ${#} -lt 1 ]; then                                                 \
+                echo 'Error: Improper number of command line arguments specified' ; \
+                echo 'Usage: git delete-branches <branch> [branch ...]' ;           \
+                return 1 ;                                                          \
+            fi &&                                                                   \
+                                                                                    \
+            for branch in \"${@}\" ;                                                \
+            do                                                                      \
+                git branch -D \"${branch}\" ;                                       \
+                git push origin \":${branch}\" ;                                    \
+            done ;                                                                  \
+            return ${?} ;                                                           \
+        } &&                                                                        \
+                                                                                    \
+        delete_branches \"${@}\";                                                   \
+        exit ${?}"
+
+
     # List all of the currently configured Git aliases available to the user.
     ls-aliases = config --get-regexp '^alias\\.'
 
