@@ -187,50 +187,53 @@
     # Update the committer and author timestamps of the most recent commit to the current time.
     commit-update-now = !GIT_COMMITTER_DATE="\"`date`\"" git commit --amend --no-edit --date "\"`date`\""
 
-    # Deletes the specified branches, both the local and remote copy. Assumes that the remote is "origin".
-    delete-branches = "!                                                            \
-        delete_branches()                                                           \
-        {                                                                           \
-            if [ ${#} -lt 1 ]; then                                                 \
-                echo 'Error: Improper number of command line arguments specified' ; \
-                echo 'Usage: git delete-branches <branch> [branch ...]' ;           \
-                return 1 ;                                                          \
-            fi &&                                                                   \
-                                                                                    \
-            for branch in \"${@}\" ;                                                \
-            do                                                                      \
-                git branch -D \"${branch}\" ;                                       \
-                git push origin \":${branch}\" ;                                    \
-            done ;                                                                  \
-            return ${?} ;                                                           \
-        } &&                                                                        \
-                                                                                    \
-        delete_branches \"${@}\";                                                   \
-        exit ${?}"
+    # Deletes the specified branches, both the local and remote copy. Assumes that the remote is "origin". Note that the
+    # arguments to the alias will be implicitly appended to this command string.
+    delete-branches = "!bash -c '                                                           \
+            function delete-branches                                                        \
+            {                                                                               \
+                if [[ ${#} -lt 1 ]]; then                                                   \
+                    echo \"Error: Too few command line arguments specified\" ;              \
+                    echo \"Usage: git delete-branches <branch> [branch ...]\" ;             \
+                    return 1 ;                                                              \
+                fi &&                                                                       \
+                                                                                            \
+                for branch in \"${@}\" ;                                                    \
+                do                                                                          \
+                    git branch -D \"${branch}\" ;                                           \
+                    git push origin \":${branch}\" ;                                        \
+                done ;                                                                      \
+            } &&                                                                            \
+                                                                                            \
+            delete-branches \"${0}\" \"${@}\"                                               \
+        '"
 
 
     # List all of the currently configured Git aliases available to the user.
     ls-aliases = config --get-regexp '^alias\\.'
 
-    # List all of the authors who have committed to the given file, sorted by the number of commits. If no argument is
-    # specified, then authors across the entire repository are listed. Note that directories can be used, but they will
-    # not respect the follow argument for Git log. Git log was used over Git short log because it doesn't respect the
-    # follow option.
-    ls-authors = "!                                                                                             \
-        ls_authors()                                                                                            \
-        {                                                                                                       \
-            if [ ${#} -gt 0 ] ; then                                                                            \
-                path_args=\"--follow -- ${GIT_PREFIX:-.}/${1}\" ;                                               \
-            else                                                                                                \
-                path_args=\"\" ;                                                                                \
-            fi &&                                                                                               \
-                                                                                                                \
-            git log --format='%aN <%aE>' ${path_args} | sort | uniq --count | sort --numeric-sort --reverse ;   \
-            return ${?} ;                                                                                       \
-        } &&                                                                                                    \
-                                                                                                                \
-        ls_authors \"${@}\";                                                                                    \
-        exit ${?}"
+    # List all of the authors who have committed to the given path in the repository, sorted by the number of commits.
+    # If no argument is specified, then authors across the entire repository are listed. Note that directories can be
+    # used, but they will not respect the follow argument for Git log. Git log was used over Git short log because it
+    # doesn't respect the follow option.
+    ls-authors = "!bash -c '                                                                                        \
+            function ls-authors                                                                                     \
+            {                                                                                                       \
+                if [[ ${#} -gt 1 ]] ; then                                                                          \
+                    echo \"Error: Too many command line arguments specified.\" ;                                    \
+                    echo \"Usage: git ls-authors [path]\" ;                                                         \
+                    return 1 ;                                                                                      \
+                elif [[ ${#} -eq 1 ]] ; then                                                                        \
+                    path_args=\"--follow -- ${GIT_PREFIX:-.}/${1}\" ;                                               \
+                else                                                                                                \
+                    path_args=\"\" ;                                                                                \
+                fi &&                                                                                               \
+                                                                                                                    \
+                git log --format=\"%aN <%aE>\" ${path_args} | sort | uniq --count | sort --numeric-sort --reverse ; \
+            } &&                                                                                                    \
+                                                                                                                    \
+            ls-authors \"${0}\" \"${@}\"                                                                            \
+        '"
 
     # Lists all branches in the repository by the last time a commit was pushed to the branch. A terse summary of each
     # commit is displayed and formatted. Assumes that the remote name is the default of 'origin'.
@@ -257,18 +260,22 @@
 
     # Summarize the changes (as a diff) between the current branch/commit and the branch/commit specified by the user.
     # The diff will be taken against the current HEAD.
-    summarize = "!bash -c '                                                             \
-            if [ ${#} -lt 1 ]; then                                                     \
-                echo \"Error: Improper number of command line arguments specified\" ;   \
-                echo \"Usage: git summarize <commit> [diff_options]\" ;                 \
-                exit 1 ;                                                                \
-            fi &&                                                                       \
-                                                                                        \
-            source_commit=\"${0}\" &&                                                   \
-            target_commit=\"$(git rev-parse --verify HEAD)\" &&                         \
-            git diff \"${@:1}\" \"${source_commit}...${target_commit}\" ;               \
-        '                                                                               \
-        \"${@}\""
+    summarize = "!bash -c '                                                                 \
+            function summarize                                                              \
+            {                                                                               \
+                if [[ ${#} -lt 1 ]]; then                                                   \
+                    echo \"Error: Too few command line arguments specified\" ;              \
+                    echo \"Usage: git summarize <commit> [diff_options]\" ;                 \
+                    return 1 ;                                                              \
+                fi &&                                                                       \
+                                                                                            \
+                source_commit=\"${1}\" &&                                                   \
+                target_commit=\"$(git rev-parse --verify HEAD)\" &&                         \
+                git diff \"${@:1}\" \"${source_commit}...${target_commit}\" ;               \
+            } &&                                                                            \
+                                                                                            \
+            summarize \"${0}\" \"${@}\"                                                     \
+        '"
 
     # Show the Git history is a visualized graph/tree format that displays the underlying structure of the dependencies
     # between commits. This is useful for showing merges, such as branches that have been merged into the current one.
