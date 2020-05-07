@@ -90,32 +90,30 @@ function main
     # Setup the symbolic links to the configuration files in this repository. The symbolic links are made relative so
     # absolute paths aren't hardcoded into the symbolic links.
     echo 'Setting up symbolic links for configuration files to the Dotfiles repository...'
-    for source_path in "${!CONFIGURATION_PATHS[@]}"
+    for link_path in "${!CONFIGURATION_PATHS[@]}"
     do
-        local target_path="${CONFIGURATION_PATHS[${source_path}]}"
+        local target_path="${CONFIGURATION_PATHS[${link_path}]}"
 
         # The Ln command cannot overwite directories, so we'll move it to a backup it if it is one (and not a symlink).
-        if [[ ! -L "${source_path}" && -d "${source_path}" ]]; then
+        if [[ ! -L "${link_path}" && -d "${link_path}" ]]; then
             local i=1
-            while [[ -e "${source_path}.~${i}~" ]]
+            while [[ -e "${link_path}.~${i}~" ]]
             do
                 i=$((${i} + 1))
             done
 
-            echo "Removing and backing up the directory \"${source_path}\" to \"${source_path}.~${i}~..."
-            mv "${source_path}" "${source_path}.~${i}~"
+            echo "Removing and backing up the directory \"${link_path}\" to \"${link_path}.~${i}~..."
+            mv "${link_path}" "${link_path}.~${i}~"
         fi
 
         # Get the directory where the link will be created (source) and the relative path from there to the target.
-        local source_dir="$(dirname "${source_path}")"
-        local target_relative_path="$(realpath --canonicalize-missing --no-symlinks --relative-to="${source_dir}" \
+        local link_dir="$(dirname "${link_path}")"
+        local target_relative_path="$(realpath --canonicalize-missing --no-symlinks --relative-to="${link_dir}" \
             "${target_path}")"
 
         # Change the directory to the source path's directory, so the created symbolic link can be relative. Overwrite
         # the file if it already exists, but create a backup in case the file shouldn't have been overwritten.
-        pushd "${source_dir}" > /dev/null
-        ln --verbose --symbolic --no-dereference --force --backup=numbered "${target_relative_path}" "${source_path}"
-        popd > /dev/null
+        ln --verbose --symbolic --no-dereference --force --backup=numbered "${target_relative_path}" "${link_path}"
     done
 }
 
