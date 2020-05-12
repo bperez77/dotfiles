@@ -81,9 +81,9 @@ set skip-completed-text         on
 "\e[1;2D":  shell-backward-word
 "\e[1;2C":  shell-forward-word
 
-# Kill (delete) and yank the previous word with Ctrl-W and the previous shell word with Alt-W.
+# Kill (delete) and yank the previous word with Ctrl-W and the previous space-delimited word with Alt-W.
 "\C-w":     backward-kill-word
-"\ew":      shell-backward-kill-word
+"\ew":      unix-word-rubout
 
 # Scroll through the completion options one by one with the Ctrl-F key combination.
 "\C-f":     menu-complete
