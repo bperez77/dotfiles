@@ -51,11 +51,6 @@ set completion-map-case         on
 # the symbolically linked directory.
 set mark-symlinked-directories  on
 
-# If a word has a partial completion, the common prefix is completed and all matches are listed immediately. This is
-# opposed to the default, where the first tab key press will complete the prefix and ring the bell and the second
-# consecutive tab key press will list all possible completions. This makes it so only one tab key press is required.
-set show-all-if-ambiguous       on
-
 # Similar to the previous option, if a word has no partial completions but multiple possible completion, all the
 # possible completions are listed immediately instead of ringing the bell.
 set show-all-if-unmodified      on
