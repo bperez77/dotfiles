@@ -32,6 +32,7 @@
 # characters towards prompt's length. This is necessary for Bash to properly wrap long lines on the terminal.
 CYAN="\\[$(tput setaf 6)\\]"                # Cyan color for text.
 GREEN="\\[$(tput setaf 2)\\]"               # Green color for text.
+MAGENTA="\\[$(tput setaf 5)\\]"             # Magenta color for text.
 MAGENTA_BACKGROUND="\\[$(tput setab 5)\\]"  # Magenta color for the terminal background.
 NORMAL="\\[$(tput sgr0)\\]"                 # Return text to normal.
 RED="\\[$(tput setaf 1)\\]"                 # Red color for text.
@@ -43,9 +44,28 @@ YELLOW="\\[$(tput setaf 3)\\]"              # Yellow color for text.
 #-----------------------------------------------------------------------------------------------------------------------
 
 
-# Set the terminal prompt. The current user is represented by \u, host by \h, and the current working directory by \w.
-# `__git_ps1` is a function that display Git repository information. If a prefix is defined by the user, then add it.
-export PS1="${RED}${PS1_PREFIX}${GREEN}[\\u@\\h ${YELLOW}\\w${CYAN}\$(__git_ps1)${GREEN}]\\\$ ${NORMAL}"
+# Gets the string for the prompt indicating the editing mode. Since Emacs is the default and standard, nothing is
+# displayed in that case. When using Vi mode, it is displayed as a part of the prompt.
+function get-editing-mode
+{
+    if (shopt -o -p vi > /dev/null); then
+        printf '{vi} '
+    fi
+}
+
+
+# Set the terminal prompt. Note that this string is evaluated before each new terminal line is displayed, so command
+# substitutions are escaped so they are evaluated each time. The prompt consists of an optional prefix that can be
+# specified by the user, the current editing mode (only displayed if Vi editing mode is used), the current user (\u),
+# the host (\h), the current working directory (\w), and Git information such as the current branch or commit and
+# actions such as rebasing or merging if the current working directory is inside of a Git repository. The Git
+# information comes from the `__git_ps1` defined by the Git package to get this information.
+export PS1="${RED}${PS1_PREFIX}"
+PS1+="${MAGENTA}\$(get-editing-mode)"
+PS1+="${GREEN}[\\u@\\h"
+PS1+=" ${YELLOW}\\w"
+PS1+="${CYAN}\$(__git_ps1)"
+PS1+="${GREEN}]\\\$ ${NORMAL}"
 
 
 #-----------------------------------------------------------------------------------------------------------------------
