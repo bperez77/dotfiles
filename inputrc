@@ -85,8 +85,9 @@ set skip-completed-text         on
 "\C-w":     backward-kill-word
 "\ew":      unix-word-rubout
 
-# Scroll through the completion options one by one with the Ctrl-F key combination.
+# Scroll through the completion options one by one with the Ctrl-f and Ctrl-b key combinations.
 "\C-f":     menu-complete
+"\C-b":     menu-complete-backward
 
 # When scrolling through history with the up and down arrow keys, search for the current command that is typed, rather
 # than linearly scrolling through history. Thus, ssh <up arrow> will scroll through all SSH commands.
