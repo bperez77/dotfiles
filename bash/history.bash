@@ -16,26 +16,6 @@
 
 
 #-----------------------------------------------------------------------------------------------------------------------
-# Command Patterns to Ignore
-#-----------------------------------------------------------------------------------------------------------------------
-
-
-# Create the list of commands to ignore when they are used without any arguments (including options without arguments).
-IGNORED_NOARG_COMMANDS=(make ls ll dir cd 'git log' 'git clean' 'git status' 'git pull' 'git diff')
-for cmd in "${IGNORED_NOARG_COMMANDS[@]}"
-do
-    IGNORED_COMMANDS+=":*([ \t])${cmd}*([0-9-_.])*([ \t])"
-done
-
-# Create a list of commands to ignore even when they are used with arguments. These are ones not worth repeating.
-IGNORED_ARG_COMMANDS=(bg fg exit history man vman kill 'cd -')
-for cmd in "${IGNORED_ARG_COMMANDS[@]}"
-do
-    IGNORED_COMMANDS+=":*([ \t])${cmd}*"
-done
-
-
-#-----------------------------------------------------------------------------------------------------------------------
 # Bash History Settings
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -45,8 +25,8 @@ export HISTCONTROL="erasedups:ignoredups"
 # Make the size of the shared history stored in the history file unlimited.
 export HISTFILESIZE=-1
 
-# Set the list of commands to ignore for new history entries, focusing on the items described above.
-export HISTIGNORE="${HISTIGNORE}:${IGNORED_COMMANDS}:*([ \t])"
+# Ignore whitespace only lines in addition to the standard history ignores.
+export HISTIGNORE="${HISTIGNORE}:*([ \t])"
 
 # Make the size of in-memory history of the current session unlimited.
 export HISTSIZE=-1
