@@ -110,6 +110,13 @@
     # The number of worker threads to use when performing a Grep. A value of 0 gives a reasonable number of threads.
     threads = 0
 
+[interactive]
+
+    # Change the default command used to highlight the diffs displayed in interactive commands (e.g. `git add -p`, `git
+    # stash -p`, etc.) to one that supports character-level diff highlighting. This is done through the Git contrib Perl
+    # script `diff-highlight`, same as done for Git's pager.
+    diffFilter = diff-highlight
+
 [filter "lfs"]
 
     # Setup Git large file storage (LFS) as a file filter. Git LFS is used to handle the storage of large files,
