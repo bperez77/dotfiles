@@ -25,6 +25,11 @@
     # Use Vim as the default editor, which is utilized for things such as writing commit messages.
     editor = vim
 
+    # Change the pager used by Git, which is used to navigate diffs and logs, to support character-level diff
+    # highlighting through the Git contrib Perl script `diff-highlight`. The text is passed through the tool to be
+    # highlighted and then passed to Git's default pager for navigation.
+    pager = diff-highlight | less
+
     # Allow for parallel index preloading to speed up operations like Diff. Good for filesystems with poor caching.
     preloadIndex = true
 
