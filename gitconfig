@@ -254,7 +254,7 @@
             refs/remotes/origin
 
     # Same as the `recent-branches` alias, except that the branches are listed in descending order.
-    recent-branches-desc = !git recent-branches --sort=-committerdate
+    recent-branches-desc = recent-branches --sort=-committerdate
 
     # Pull changes from the remote and rebase the local branch on top of them. Any local, unpushed changes will appear
     # after the remote's commits, and no merge commit will be generated. Keep any local merge commits during the rebase.
@@ -293,7 +293,7 @@
     # between commits. This is useful for showing merges, such as branches that have been merged into the current one.
     tree = log --graph --decorate --pretty=oneline --abbrev-commit
 
-    gc-all = !git -c gc.reflogExpire=0 -c gc.reflogExpireUnreachable=0 -c gc.rerereresolved=0 -c gc.rerereunresolved=0 \
+    gc-all = -c gc.reflogExpire=0 -c gc.reflogExpireUnreachable=0 -c gc.rerereresolved=0 -c gc.rerereunresolved=0 \
             -c gc.pruneExpire=now gc
 
 #-----------------------------------------------------------------------------------------------------------------------
