@@ -10,15 +10,18 @@
 #
 #-----------------------------------------------------------------------------------------------------------------------
 
+
 #-----------------------------------------------------------------------------------------------------------------------
 # General and Core Settings
 #-----------------------------------------------------------------------------------------------------------------------
+
 
 [user]
 
     # Set the default name and email address used in commits.
     name = Brandon Perez
     email = bmperez@alumni.cmu.edu
+
 
 [core]
 
@@ -42,6 +45,7 @@
     # characters are used for indentation as errors. Also, set the default tab width to 4.
     whitespace = blank-at-eol,blank-at-eof,space-before-tab,tab-in-indent,tabwidth=4
 
+
 [color]
 
     # Always use colors for commands (e.g. Grep, Diff, etc.), even if the output is not to a terminal. This means colors
@@ -52,19 +56,23 @@
     # important for creating patch files with Diff, as color codes will cause issues if they are put in the patch file.
     diff = true
 
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Command Settings
 #-----------------------------------------------------------------------------------------------------------------------
+
 
 [blame]
 
     # Use relative date format (e.g. 2 days ago) by default when using Blame.
     date = relative
 
+
 [commit]
 
     # In the generated commit message, show the diff of the changes that are going to be committed.
     verbose = 1
+
 
 [diff]
 
@@ -93,6 +101,7 @@
     # Highlight whitespace errors in all lines of the diff (old and new). This highlights any whitespace changes.
     wsErrorHighlight = all
 
+
 [fetch]
 
     # Prune any branches and references that have been deleted from the remote, deleting the local copy of the
@@ -102,6 +111,7 @@
     # In addition to pruning references and branches, also prune tags when fetching by default.
     pruneTags = true
 
+
 [grep]
 
     # Display line numbers by default with the matches when using Grep.
@@ -110,12 +120,14 @@
     # The number of worker threads to use when performing a Grep. A value of 0 gives a reasonable number of threads.
     threads = 0
 
+
 [interactive]
 
     # Change the default command used to highlight the diffs displayed in interactive commands (e.g. `git add -p`, `git
     # stash -p`, etc.) to one that supports character-level diff highlighting. This is done through the Git contrib Perl
     # script `diff-highlight`, same as done for Git's pager.
     diffFilter = diff-highlight
+
 
 [filter "lfs"]
 
@@ -128,6 +140,7 @@
     # Indicates that the filter must always succeed. Any failure means the operation must be aborted.
     required = true
 
+
 [log]
 
     # Use a more human-readable custom date format for Git log messages. This is displayed as "Weekday, Month, Day, Year
@@ -137,16 +150,19 @@
     # Include commit that pertain to the file before it was renamed by default when using git log.
     follow = true
 
+
 [merge]
 
     # Set the default visual/GUI merge tool to be Meld. This is used by the Mergetool command.
     tool = meld
+
 
 [pack]
 
     # The number of threads to use when searching for best delta matches when packing objects. A value of zero gives a
     # reasonable number of threads that is determined by the command.
     threads = 0
+
 
 [push]
 
@@ -157,20 +173,24 @@
     # When pushing to the remote, also push any tags present locally but not on the remote by default.
     followTags = true
 
+
 [rebase]
 
     # When performing an interactive rebase, a warning is printed if any commits are removed in the to do list.
     missingCommitsCheck = warn
+
 
 [status]
 
     # Include the number of entries currently in the stash in the information displayed in the status.
     showStash = true
 
+
 [stash]
 
     # When showing a patch with the Show subcommand, show the entry in patch form by default, instead of as a diffstat.
     showPatch = true
+
 
 [submodule]
 
@@ -181,14 +201,17 @@
     # The number of submodules that are fetched/cloned in parallel. A value of 0 gives a reasonable number of threads.
     fetchJobs = 0
 
+
 [tag]
 
     # By default, sort the tags by the date (committer date) of the commit to which they refer in descending order.
     sort = -committerdate
 
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Git Command Aliases
 #-----------------------------------------------------------------------------------------------------------------------
+
 
 [alias]
 
@@ -196,8 +219,10 @@
     # Git, but are listed as being a file that should be ignored by the Gitignore file.
     check-gitignore = ls-files -i --exclude-standard
 
+
     # Update the committer and author timestamps of the most recent commit to the current time.
     commit-update-now = !GIT_COMMITTER_DATE="\"`date`\"" git commit --amend --no-edit --date "\"`date`\""
+
 
     # Deletes the specified branches, both the local and remote copy. Assumes that the remote is "origin". Note that the
     # arguments to the alias will be implicitly appended to this command string.
@@ -224,6 +249,7 @@
     # List all of the currently configured Git aliases available to the user.
     ls-aliases = config --get-regexp '^alias\\.'
 
+
     # List all of the authors who have committed to the given path in the repository, sorted by the number of commits.
     # If no argument is specified, then authors across the entire repository are listed. Note that directories can be
     # used, but they will not respect the follow argument for Git log. Git log was used over Git short log because it
@@ -247,28 +273,35 @@
             ls-authors \"${0}\" \"${@}\"                                                                            \
         '"
 
+
     # Lists all branches in the repository by the last time a commit was pushed to the branch. A terse summary of each
     # commit is displayed and formatted. Assumes that the remote name is the default of 'origin'.
     recent-branches = for-each-ref --color=always --sort=committerdate \
             --format='  %(color:cyan)%(refname:strip=3)%(color:reset) - %(color:bold)%(color:yellow)%(committerdate:relative)%(color:reset) (%(color:green)%(authorname)%(color:reset)) (%(contents:lines=1))' \
             refs/remotes/origin
 
+
     # Same as the `recent-branches` alias, except that the branches are listed in descending order.
     recent-branches-desc = recent-branches --sort=-committerdate
+
 
     # Pull changes from the remote and rebase the local branch on top of them. Any local, unpushed changes will appear
     # after the remote's commits, and no merge commit will be generated. Keep any local merge commits during the rebase.
     pullr = pull --rebase=merges
 
+
     # Push all changes to all available remotes configured in the repository, including branches and tags.
     push-all = !git remote | xargs -L 1 -I {} bash -c 'git push --all {} && git push --tags {}'
+
 
     # Show the Git history with a summary of changes to each file. This is the number of lines added and/or removed.
     slog = log --stat
 
+
     # Show an abbreviated version of the Git history with the summary of changes to each file. This only shows the
     # commit hash, author, and the first line of each commit, along with the change summary.
     sslog = log --stat --pretty=short
+
 
     # Summarize the changes (as a diff) between the current branch/commit and the branch/commit specified by the user.
     # The diff will be taken against the current HEAD.
@@ -289,16 +322,20 @@
             summarize \"${0}\" \"${@}\"                                                     \
         '"
 
+
     # Show the Git history is a visualized graph/tree format that displays the underlying structure of the dependencies
     # between commits. This is useful for showing merges, such as branches that have been merged into the current one.
     tree = log --graph --decorate --pretty=oneline --abbrev-commit
 
+
     gc-all = -c gc.reflogExpire=0 -c gc.reflogExpireUnreachable=0 -c gc.rerereresolved=0 -c gc.rerereunresolved=0 \
             -c gc.pruneExpire=now gc
+
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Local Machine-Specific Settings
 #-----------------------------------------------------------------------------------------------------------------------
+
 
 [include]
 
