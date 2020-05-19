@@ -6,6 +6,7 @@
 " Creation Date:    Tuesday, September 03, 2013 at 4:54:31 PM EDT
 "
 " Description:
+"
 "   This file is executed when a new Vim session starts (typically when opening a file), and it sets up the settings,
 "   shortcuts, plugins, and abbreviations for the Vim session.
 "
@@ -26,13 +27,6 @@ let g:user_email    = 'bmperez@alumni.cmu.edu'
 
 " The directory where this Vimrc file is located. The expression handles symbolic links and gives an absolute path.
 let g:vim_directory = fnamemodify(resolve(expand('<sfile>:p')), ':h')
-
-"-----------------------------------------------------------------------------------------------------------------------
-" Plugins
-"-----------------------------------------------------------------------------------------------------------------------
-
-" Source the installed and used plugins for Vim. Note that this must come first, because it resets syntax settings.
-execute 'source ' . g:vim_directory . '/plugins.vim'
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Vim Options
@@ -189,25 +183,6 @@ set wildmenu
 set updatetime=100
 
 "-----------------------------------------------------------------------------------------------------------------------
-" Vim Settings
-"-----------------------------------------------------------------------------------------------------------------------
-
-" Set the default Shell file type to be Bash. Vim treats all shell files under a generic Shell file type. Thus, when a
-" shell file with an unknown type is encountered, a default must be used.
-let g:is_bash                   = 1
-
-"-----------------------------------------------------------------------------------------------------------------------
-" Custom Settings
-"-----------------------------------------------------------------------------------------------------------------------
-
-" The default text width to use for files. This is used if the file type doesn't define a text width.
-let g:default_text_width        = 120
-
-" By default, perform whitespace cleanup (stripping trailing whitespace, deleting consecutive blank lines, etc.) on all
-" files. This is inherited by the buffer-local variable, which can be overridden by specific file types.
-let g:enable_whitespace_cleanup = 1
-
-"-----------------------------------------------------------------------------------------------------------------------
 " Color Settings
 "-----------------------------------------------------------------------------------------------------------------------
 
@@ -233,6 +208,32 @@ highlight OverLength    ctermbg=red ctermfg=white guibg=#592929
 " color muted, and make sure the color doesn't conflict with existing color schemes.
 highlight NonText       ctermfg=Gray guibg=Gray70
 highlight SpecialKey    ctermfg=Gray guibg=Gray70
+
+"-----------------------------------------------------------------------------------------------------------------------
+" Plugins
+"-----------------------------------------------------------------------------------------------------------------------
+
+" Source the installed and used plugins for Vim. Note that this must come first, because it resets syntax settings.
+execute 'source ' . g:vim_directory . '/plugins.vim'
+
+"-----------------------------------------------------------------------------------------------------------------------
+" Vim Settings
+"-----------------------------------------------------------------------------------------------------------------------
+
+" Set the default Shell file type to be Bash. Vim treats all shell files under a generic Shell file type. Thus, when a
+" shell file with an unknown type is encountered, a default must be used.
+let g:is_bash                   = 1
+
+"-----------------------------------------------------------------------------------------------------------------------
+" Custom Settings
+"-----------------------------------------------------------------------------------------------------------------------
+
+" The default text width to use for files. This is used if the file type doesn't define a text width.
+let g:default_text_width        = 120
+
+" By default, perform whitespace cleanup (stripping trailing whitespace, deleting consecutive blank lines, etc.) on all
+" files. This is inherited by the buffer-local variable, which can be overridden by specific file types.
+let g:enable_whitespace_cleanup = 1
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Functions

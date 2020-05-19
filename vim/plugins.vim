@@ -147,6 +147,14 @@ let g:easy_align_delimiters         = {
 " files with extensions that are expected to always be binary.
 let g:hexmode_patterns = '*.bin,*.exe,*.dat'
 
+"-----------------------------------------------------------------------------------------------------------------------
+" GitGutter Plugin Settings
+"-----------------------------------------------------------------------------------------------------------------------
+
+highlight clear SignColumn
+highlight GitGutterAdd      ctermfg=DarkGreen   ctermbg=NONE
+highlight GitGutterDelete   ctermfg=DarkRed     ctermbg=NONE
+highlight GitGutterChange   ctermfg=DarkYellow  ctermbg=NONE
 
 "-----------------------------------------------------------------------------------------------------------------------
 " Gutentags Plugin Settings
