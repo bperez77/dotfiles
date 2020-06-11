@@ -34,6 +34,22 @@ try:
 except ImportError:
     print('Unable to import "see" module. Run `python -m pip install see` to install it.')
 
+# Import the Pint module so it's available in the interpreter, setup a default unit registry, and add some common units
+# as globals so they can simply be referred to by name (e.g. `meter` instead of `ureg.meter`).
+try:
+    # Needs to be renamed as it will be overriden by the pint unit.
+    import pint as units_pint
+
+    # The pint unit registry generates unit classes on the fly by overriding the `__getattr__` method and adds them as
+    # class attributes as they are referenced. The complete list of units is stored under the `_unit`, attribute as a
+    # dictionary, so use this to get the attributes and generate the classes. Not all of the units are in ASCII and they
+    # will fail if they are referenced, so skip those units.
+    _ureg = units_pint.UnitRegistry()
+    globals().update({name: getattr(_ureg, name) for name in _ureg._units.keys() if name.isascii()})
+
+except ImportError:
+    print('Unable to import the "pint" module. Run `python -m pip install pint` to install it.')
+
 # Import the various container types and iteration tools without their module names.
 from collections import *
 from itertools import *
