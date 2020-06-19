@@ -43,8 +43,10 @@ try:
     # The pint unit registry generates unit classes on the fly by overriding the `__getattr__` method and adds them as
     # class attributes as they are referenced. The complete list of units is stored under the `_unit`, attribute as a
     # dictionary, so use this to get the attributes and generate the classes. Not all of the units are in ASCII and they
-    # will fail if they are referenced, so skip those units.
+    # will fail if they are referenced, so skip those units. This also doesn't cover all units, some SI unit prefixes
+    # like milliliters aren't listed in the unit list.
     _ureg = units_pint.UnitRegistry()
+    _ureg.milliliter
     globals().update({name: getattr(_ureg, name) for name in _ureg._units.keys() if name.isascii()})
 
 except ImportError:
