@@ -220,6 +220,11 @@
     check-gitignore = ls-files -i --exclude-standard
 
 
+    # List all of the umerged files (if any) currently in the repository. These are files which have merge conflicts,
+    # but have not yet been resolved.
+    conflicts = diff --name-only --diff-filter=U
+
+
     # Update the committer and author timestamps of the most recent commit to the current time.
     commit-update-now = !GIT_COMMITTER_DATE="\"`date`\"" git commit --amend --no-edit --date "\"`date`\""
 
