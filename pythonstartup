@@ -30,7 +30,7 @@ except ImportError:
 # Import the See module so it's available in interpreter, if it is installed. See provides an improved version of the
 # Dir function, for listing the members of objects.
 try:
-    from see import see
+    from see import see as _see
 except ImportError:
     print('Unable to import "see" module. Run `python -m pip install see` to install it.')
 
@@ -239,15 +239,18 @@ del _get_color, _setup_prompt
 # Defined Functions
 #-----------------------------------------------------------------------------------------------------------------------
 
-def see_filter(obj, pattern):
+def see(obj, pattern = None):
     """Filters the members of the given object using a wild card pattern or regex.
 
-    This is a shorthand alias for see(obj).filter(pattern). Note that all members of a object begin with a '.'
-    character, so this needs to be in the pattern. Regular expressions can be specified if the string begins with a
-    forward-slash '/'.
+    This overrides the default see.see function to allow for the pattern to be optionally specified. This is a bit more
+    convenient than doing see(obj).filter(pattern). Note that all members of a object begin with a '.' character, so
+    this needs to be in the pattern. Regular expressions can be specified if the string begins with a forward-slash '/'.
     """
 
-    return see(obj).filter(pattern)
+    if (pattern is None):
+        return _see(obj)
+    else:
+        return _see(obj).filter(pattern)
 
 def wildcard_import_file(python_file_path):
     """Emulates a wild card import of the Python file at the given path, if it exists.
