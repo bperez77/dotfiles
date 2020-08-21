@@ -54,6 +54,20 @@ function get-editing-mode
 }
 
 
+# Gets the string for the prompt indicating the Git information for the prompt, which can include the branch name and
+# mode Git currently is in (merge, rebase, etc.). This is a simple wrapper around the Git-provided __git_ps1 that skips
+# the function if the current working directory is on a mounted network share, because the operation can be quite slow.
+function get-git-ps1
+{
+    local current_fs="$(df --print-type "$(pwd)" | cut -d ' ' -f 2 | tail -n 1)"
+    if [[ "${current_fs}" == "cifs" || "${current_fs}" == "nfs" || "${current_fs}" == "afs" ]]; then
+        return
+    fi
+
+    __git_ps1
+}
+
+
 # Set the terminal prompt. Note that this string is evaluated before each new terminal line is displayed, so command
 # substitutions are escaped so they are evaluated each time. The prompt consists of an optional prefix that can be
 # specified by the user, the current editing mode (only displayed if Vi editing mode is used), the current user (\u),
@@ -64,7 +78,7 @@ export PS1="${RED}${PS1_PREFIX}"
 PS1+="${MAGENTA}\$(get-editing-mode)"
 PS1+="${GREEN}[\\u@\\h"
 PS1+=" ${YELLOW}\\w"
-PS1+="${CYAN}\$(__git_ps1)"
+PS1+="${CYAN}\$(get-git-ps1)"
 PS1+="${GREEN}]\\\$ ${NORMAL}"
 
 
