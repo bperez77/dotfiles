@@ -58,6 +58,9 @@ source "${HOME}/.bash/tab_completion.bash"
 # General Environment Variables
 #-----------------------------------------------------------------------------------------------------------------------
 
+# Set the default editor used in programs to be Vim, such as the editor used for editing Git commit messages.
+export EDITOR='vim'
+
 # The directory where all user-local installed programs and related files are located.
 export USER_LOCAL_DIRECTORY="${HOME}/.local"
 
