@@ -43,6 +43,33 @@ endif
 " pages placed in directory where user-local programs and related files are placed, so no new paths need added.
 call plug#begin(g:vim_plugin_directory)
 
+    " TODO
+    " Plug 'tpope/vim-abolish'
+    " Plug 'peterrincker/vim-argumentative'
+    " Plug 'jiangmiao/auto-pairs'
+    " Plug 'dense-analysis/ale'
+    " Plug 'ntpeters/vim-better-whitespace'
+    " Plug 'octol/vim-cpp-enhanced-highlight'
+    " Plug 'jpetrie/vim-counterpoint'
+    " Plug 'tpope/vim-dispatch'
+    " Plug 'easymotion/vim-easymotion' OR Plug 'justinmk/vim-sneak'
+    " Plug 'pope/vim-eunuch'
+    " Plug 'apalmer1377/factorus'
+    " Plug 'sjl/gundo.vim'
+    " Plug 'nathanaelkane/vim-indent-guides'
+    " Plug 'LucHermitte/lh-cpp'
+    " Plug 'terryma/vim-multiple-cursors'
+    " Plug 'joereynolds/place.vim'
+    " Plug 'sheerun/vim-polyglot'
+    " Plug 'frazrepo/vim-rainbow'
+    " Plug 'jonhiggs/vim-readline'
+    " Plug 'andrewradev/splitjoin.vim'
+    " Plug 'godlygeek/tabular'
+    " Plug 'majutsushi/tagbar'
+    " Plug 'stmuk/taglist.vim'
+    " Plug 'wellle/targets.vim'
+    " Plug 'reedes/vim-wheel'
+
     " Provides a nicer and prettier status and tab line for Vim. This is highly customizable and the default includes the
     " line number, git branch, what Vim mode you're currently in, etc.
     Plug 'vim-airline/vim-airline'
