@@ -173,6 +173,12 @@
     # When pushing to the remote, also push any tags present locally but not on the remote by default.
     followTags = true
 
+[pull]
+
+    # When pulling from the remote, do not rebase the local branch on top of the fetched branch. Instead, perform the
+    # standard behavior of merging or fast-forwarding if possible.
+    rebase = false
+
 
 [rebase]
 
