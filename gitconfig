@@ -170,8 +170,6 @@
     # Additionally, this enforces that the name of the local and remote branches must match.
     default = simple
 
-    # When pushing to the remote, also push any tags present locally but not on the remote by default.
-    followTags = true
 
 [pull]
 
