@@ -232,6 +232,31 @@
     # Update the committer and author timestamps of the most recent commit to the current time.
     commit-update-now = !GIT_COMMITTER_DATE="\"`date`\"" git commit --amend --no-edit --date "\"`date`\""
 
+    # Deletes are local branches which don't have a correpsonding branch on the remote.
+    clear-local-branches = "!bash -c '                                                              \
+            function clear-local-branches                                                           \
+            {                                                                                       \
+                if [[ ${#} -gt 1 ]]; then                                                           \
+                    echo \"Error: Too many command line arguments specified \" &&                   \
+                    echo \"Usage: git clear-local-branches [remote]\" &&                            \
+                    return 1 ;                                                                      \
+                elif [[ ${#} -eq 1 ]]; then                                                         \
+                    local remote=\"${1}\" ;                                                         \
+                else                                                                                \
+                    local remote=\"origin\" ;                                                       \
+                fi &&                                                                               \
+                                                                                                    \
+                for branch in $(git branch --list --color=never | grep --invert-match \"^\\*\") ;   \
+                do                                                                                  \
+                    if ! (git ls-remote --exit-code --heads \"${remote}\" \"${branch}\"); then      \
+                        git branch --delete --force \"${branch}\" ;                                 \
+                    fi                                                                              \
+                done ;                                                                              \
+            } &&                                                                                    \
+                                                                                                    \
+            clear-local-branches                                                                    \
+        '"
+
 
     # Deletes the specified branches, both the local and remote copy. Assumes that the remote is "origin". Note that the
     # arguments to the alias will be implicitly appended to this command string.
