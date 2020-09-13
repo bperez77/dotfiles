@@ -83,13 +83,16 @@ set history=10000
 " persistent until the next search or when it is explicitly disabled.
 set hlsearch
 
-
 " Treats all search patterns as case-insensitive. This works with the smart case option to enable it for searches.
 set ignorecase
 
 " Make the Vim search behave like searching does in a web browser does. When a search command is typed, matches against
 " the current search string are highlighted and updated as more of the command is typed.
 set incsearch
+
+" When joining two text objects (typically with something like autoformatting lines with gq) do not place two spaces
+" after punctuation ('.', '?', or '!'). Instead, place a single space after them.
+set nojoinspaces
 
 " When wrapping long lines, do not wrap the line at the last character that fits on the screen (which can break the line
 " in the middle of a word), but instead break the line only at the characters defined by the 'breakat' option.
