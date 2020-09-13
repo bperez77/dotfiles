@@ -321,6 +321,31 @@
     recent-branches-desc = recent-branches --sort=-committerdate
 
 
+    # Renames a tag from the old name to a new one, preserving all of the old tag's metadata. This supports annotated
+    # tags and will preserve the tag information, but will not preserve any signatures on the old tag.
+    rename-tag = "!bash -c '                                                                                        \
+            set -o pipefail &&                                                                                      \
+            function rename-tag                                                                                     \
+            {                                                                                                       \
+                if [[ ${#} -ne 2 ]]; then                                                                           \
+                    echo \"Error: Improper number of command line arguments specified.\" ;                          \
+                    echo \"Usage: git rename-tag <old_tag> <new_tag>\" ;                                            \
+                    return 1 ;                                                                                      \
+                fi &&                                                                                               \
+                                                                                                                    \
+                old_tag=\"${1}\" &&                                                                                 \
+                new_tag=\"${2}\" &&                                                                                 \
+                                                                                                                    \
+                tag_commit=$(git cat-file -p \"${old_tag}\" | sed -e \"s/^tag ${old_tag}$/tag ${new_tag}/g\"        \
+                        | git mktag) &&                                                                             \
+                git tag \"${new_tag}\" \"${tag_commit}\" ;                                                          \
+                return ${?} ;                                                                                       \
+            } &&                                                                                                    \
+                                                                                                                    \
+            rename-tag \"${0}\" \"${@}\"                                                                            \
+    '"
+
+
     # Pull changes from the remote and rebase the local branch on top of them. Any local, unpushed changes will appear
     # after the remote's commits, and no merge commit will be generated. Keep any local merge commits during the rebase.
     pullr = pull --rebase=merges
