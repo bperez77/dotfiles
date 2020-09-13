@@ -289,6 +289,7 @@
     # used, but they will not respect the follow argument for Git log. Git log was used over Git short log because it
     # doesn't respect the follow option.
     ls-authors = "!bash -c '                                                                                        \
+            set -o pipefail &&                                                                                      \
             function ls-authors                                                                                     \
             {                                                                                                       \
                 if [[ ${#} -gt 1 ]] ; then                                                                          \
@@ -302,6 +303,7 @@
                 fi &&                                                                                               \
                                                                                                                     \
                 git log --format=\"%aN <%aE>\" ${path_args} | sort | uniq --count | sort --numeric-sort --reverse ; \
+                return ${?} ;                                                                                       \
             } &&                                                                                                    \
                                                                                                                     \
             ls-authors \"${0}\" \"${@}\"                                                                            \
