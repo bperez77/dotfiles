@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+
+#-----------------------------------------------------------------------------------------------------------------------
+#
+# Git Summarize Subcommand
+#
+# Description:
+#
+#   This file defines a summarize subcommand (summarize).
+#
+#   This subcommand summarizes the changes (as a diff) between the current commit and the commitish object specified.
+#   The diff will be taken against the current HEAD. Additional diff options may be passed in after the first position
+#   argument.
+#
+#-----------------------------------------------------------------------------------------------------------------------
+
+
+# Exit the script if any command fails.
+set -e
+
+# When executing a pipeline of commands, the pipeline's exit code will be the exit code from the rightmost command to
+# exit with a non-zero exit status or 0 if all command succeed. Normally, the code comes from the final command.
+set -o pipefail
+
+# Treat any undefined variables that are referenced in substitutions as an error.
+set -u
+
+
+function main
+{
+    # Verify that the correct number of command arguments was specified.
+    if [[ ${#} -lt 1 ]]; then
+        echo "Error: Too few command line arguments specified"
+        echo "Usage: git summarize <commit> [diff_options]"
+        return 1
+    fi
+
+    # Get the source and target commits
+    local base_commit
+    local target_commit
+    source_commit="${1}"
+    target_commit="$(git rev-parse --verify HEAD)"
+
+    # The "..." indicates a range of commits and indicates the diff should be taken from the target commitish against
+    # common ancestor of the source and target commitish. That is, only changes introduced in the target commitish and
+    # ancestor commits will be shown.
+    git diff "${@:2}" "${source_commit}...${target_commit}"
+}
+
+
+main "${@}"

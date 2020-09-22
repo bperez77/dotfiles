@@ -25,13 +25,14 @@
 !/ctags.d/*
 !/gdbinit
 !/gitconfig
+!/git_subcommands/*
 !/inputrc
 !/kilerc
 !/minttyrc
 !/pythonstartup
 !/ssh/*
 
-# Allow for the Bashrc file and the various configuration files nder hte Bash director.
+# Allow for the Bashrc file and the various configuration files under the Bash directory.
 !/bashrc
 !*.bash
 

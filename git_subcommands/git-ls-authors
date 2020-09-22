@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+
+#-----------------------------------------------------------------------------------------------------------------------
+#
+# Git List Authors Subcommand
+#
+# Description:
+#
+#   This file defines a list authors subcommand (ls-authors).
+#
+#   This subcommand generates a list of all the authors that have committed to the specified path, in descending order
+#   of number of commits. If no path is specified, then authors are listed across the entire repository. Note that
+#   directories can be specified for the path, but they will not respect the follow option for Git log.
+#
+#-----------------------------------------------------------------------------------------------------------------------
+
+
+# Exit the script if any command fails.
+set -e
+
+# When executing a pipeline of commands, the pipeline's exit code will be the exit code from the rightmost command to
+# exit with a non-zero exit status or 0 if all command succeed. Normally, the code comes from the final command.
+set -o pipefail
+
+# Treat any undefined variables that are referenced in substitutions as an error.
+set -u
+
+
+function main
+{
+    # Verify that the correct number of command line arguments was specified.
+    local path_args
+    if [[ ${#} -gt 1 ]] ; then
+        echo "Error: Too many command line arguments specified."
+        echo "Usage: git ls-authors [path]"
+        return 1
+    elif [[ ${#} -eq 1 ]] ; then
+        path_args="--follow -- ${GIT_PREFIX:-.}/${1}"   # Use the Git prefix if defined or use current directory.
+    else
+        path_args=""
+    fi
+
+    # Use the Git log to generate a list of authors and emails for each commit to the path.
+    git log --format="%aN <%aE>" ${path_args} | sort | uniq --count | sort --numeric-sort --reverse
+
+    return ${?}
+}
+
+
+main "${@}"

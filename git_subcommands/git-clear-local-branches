@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+
+#-----------------------------------------------------------------------------------------------------------------------
+#
+# Git Clear Local Branches Subcommand
+#
+# Description:
+#
+#   This file defines a clear local branches subcommand (clear-local-branches).
+#
+#   This subcommand deletes all local branches which don't have a corresponding branch on the remote. By default, the
+#   remote is assumed to be "origin", but this can be overridden.
+#
+#-----------------------------------------------------------------------------------------------------------------------
+
+
+# Exit the script if any command fails.
+set -e
+
+# When executing a pipeline of commands, the pipeline's exit code will be the exit code from the rightmost command to
+# exit with a non-zero exit status or 0 if all command succeed. Normally, the code comes from the final command.
+set -o pipefail
+
+# Treat any undefined variables that are referenced in substitutions as an error.
+set -u
+
+
+function main
+{
+    # Verify that the correct number of command-line arguments was specified.
+    local remote
+    if [[ ${#} -gt 1 ]]; then
+        echo "Error: Too many command line arguments specified."
+        echo "Usage: git clear-local-branches [remote = origin]"
+        return 1
+    elif [[ ${#} -eq 1 ]]; then
+        remote="${1}"
+    else
+        remote="origin"
+    fi
+
+    # For each local branch (except the current branch), check if it exists on the remote and delete it if it doesn't.
+    for branch in $(git branch --list --color=never | grep --invert-match "^\\*")
+    do
+        if ! (git ls-remote --exit-code --heads "${remote}" "${branch}" > /dev/null); then
+            git branch --delete --force "${branch}"
+        fi
+    done
+}
+
+
+main "${@}"

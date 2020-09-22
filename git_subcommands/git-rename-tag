@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+
+#-----------------------------------------------------------------------------------------------------------------------
+#
+# Git Rename Tag Subcommand
+#
+# Description:
+#
+#   This file defines a rename tag subcommand (rename-tag).
+#
+#   This subcommand renames a Git tag from its old name to the specified new, preserving all of the old tag's metadata.
+#   This supports annotated tags and will rpreserve tag information, but will not preserve any signatures in the old
+#   tag.
+#
+#-----------------------------------------------------------------------------------------------------------------------
+
+
+# Exit the script if any command fails.
+set -e
+
+# When executing a pipeline of commands, the pipeline's exit code will be the exit code from the rightmost command to
+# exit with a non-zero exit status or 0 if all command succeed. Normally, the code comes from the final command.
+set -o pipefail
+
+# Treat any undefined variables that are referenced in substitutions as an error.
+set -u
+
+
+function main
+{
+    # Verify that the correct number of command arguments was specified.
+    if [[ ${#} -ne 2 ]]; then
+        echo "Error: Improper number of command line arguments specified."
+        echo "Usage: git rename-tag <old_tag> <new_tag>"
+        return 1
+    fi &&
+
+    local old_tag
+    local new_tag
+    old_tag="${1}"
+    new_tag="${2}"
+
+    # Read the contents of the old tag, update the name in the metadata, generate a new tag object, then point the new
+    # tag at the object.
+    local new_tag_object
+    new_tag_object="$(git cat-file -p "${old_tag}" | sed -e "s/^tag ${old_tag}$/tag ${new_tag}/g" | git mktag)"
+    git tag "${new_tag}" "${new_tag_object}"
+
+    return ${?}
+}
+
+
+main "${@}"

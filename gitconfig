@@ -232,31 +232,6 @@
     # Update the committer and author timestamps of the most recent commit to the current time.
     commit-update-now = !GIT_COMMITTER_DATE="\"`date`\"" git commit --amend --no-edit --date "\"`date`\""
 
-    # Deletes are local branches which don't have a correpsonding branch on the remote.
-    clear-local-branches = "!bash -c '                                                              \
-            function clear-local-branches                                                           \
-            {                                                                                       \
-                if [[ ${#} -gt 1 ]]; then                                                           \
-                    echo \"Error: Too many command line arguments specified \" &&                   \
-                    echo \"Usage: git clear-local-branches [remote]\" &&                            \
-                    return 1 ;                                                                      \
-                elif [[ ${#} -eq 1 ]]; then                                                         \
-                    local remote=\"${1}\" ;                                                         \
-                else                                                                                \
-                    local remote=\"origin\" ;                                                       \
-                fi &&                                                                               \
-                                                                                                    \
-                for branch in $(git branch --list --color=never | grep --invert-match \"^\\*\") ;   \
-                do                                                                                  \
-                    if ! (git ls-remote --exit-code --heads \"${remote}\" \"${branch}\"); then      \
-                        git branch --delete --force \"${branch}\" ;                                 \
-                    fi                                                                              \
-                done ;                                                                              \
-            } &&                                                                                    \
-                                                                                                    \
-            clear-local-branches                                                                    \
-        '"
-
 
     # Deletes the specified branches, both the local and remote copy. Assumes that the remote is "origin". Note that the
     # arguments to the alias will be implicitly appended to this command string.
@@ -284,32 +259,6 @@
     ls-aliases = config --get-regexp '^alias\\.'
 
 
-    # List all of the authors who have committed to the given path in the repository, sorted by the number of commits.
-    # If no argument is specified, then authors across the entire repository are listed. Note that directories can be
-    # used, but they will not respect the follow argument for Git log. Git log was used over Git short log because it
-    # doesn't respect the follow option.
-    ls-authors = "!bash -c '                                                                                        \
-            set -o pipefail &&                                                                                      \
-            function ls-authors                                                                                     \
-            {                                                                                                       \
-                if [[ ${#} -gt 1 ]] ; then                                                                          \
-                    echo \"Error: Too many command line arguments specified.\" ;                                    \
-                    echo \"Usage: git ls-authors [path]\" ;                                                         \
-                    return 1 ;                                                                                      \
-                elif [[ ${#} -eq 1 ]] ; then                                                                        \
-                    path_args=\"--follow -- ${GIT_PREFIX:-.}/${1}\" ;                                               \
-                else                                                                                                \
-                    path_args=\"\" ;                                                                                \
-                fi &&                                                                                               \
-                                                                                                                    \
-                git log --format=\"%aN <%aE>\" ${path_args} | sort | uniq --count | sort --numeric-sort --reverse ; \
-                return ${?} ;                                                                                       \
-            } &&                                                                                                    \
-                                                                                                                    \
-            ls-authors \"${0}\" \"${@}\"                                                                            \
-        '"
-
-
     # Lists all branches in the repository by the last time a commit was pushed to the branch. A terse summary of each
     # commit is displayed and formatted. Assumes that the remote name is the default of 'origin'.
     recent-branches = for-each-ref --color=always --sort=committerdate \
@@ -319,31 +268,6 @@
 
     # Same as the `recent-branches` alias, except that the branches are listed in descending order.
     recent-branches-desc = recent-branches --sort=-committerdate
-
-
-    # Renames a tag from the old name to a new one, preserving all of the old tag's metadata. This supports annotated
-    # tags and will preserve the tag information, but will not preserve any signatures on the old tag.
-    rename-tag = "!bash -c '                                                                                        \
-            set -o pipefail &&                                                                                      \
-            function rename-tag                                                                                     \
-            {                                                                                                       \
-                if [[ ${#} -ne 2 ]]; then                                                                           \
-                    echo \"Error: Improper number of command line arguments specified.\" ;                          \
-                    echo \"Usage: git rename-tag <old_tag> <new_tag>\" ;                                            \
-                    return 1 ;                                                                                      \
-                fi &&                                                                                               \
-                                                                                                                    \
-                old_tag=\"${1}\" &&                                                                                 \
-                new_tag=\"${2}\" &&                                                                                 \
-                                                                                                                    \
-                tag_commit=$(git cat-file -p \"${old_tag}\" | sed -e \"s/^tag ${old_tag}$/tag ${new_tag}/g\"        \
-                        | git mktag) &&                                                                             \
-                git tag \"${new_tag}\" \"${tag_commit}\" ;                                                          \
-                return ${?} ;                                                                                       \
-            } &&                                                                                                    \
-                                                                                                                    \
-            rename-tag \"${0}\" \"${@}\"                                                                            \
-    '"
 
 
     # Pull changes from the remote and rebase the local branch on top of them. Any local, unpushed changes will appear
@@ -362,26 +286,6 @@
     # Show an abbreviated version of the Git history with the summary of changes to each file. This only shows the
     # commit hash, author, and the first line of each commit, along with the change summary.
     sslog = log --stat --pretty=short
-
-
-    # Summarize the changes (as a diff) between the current branch/commit and the branch/commit specified by the user.
-    # The diff will be taken against the current HEAD.
-    summarize = "!bash -c '                                                                 \
-            function summarize                                                              \
-            {                                                                               \
-                if [[ ${#} -lt 1 ]]; then                                                   \
-                    echo \"Error: Too few command line arguments specified\" ;              \
-                    echo \"Usage: git summarize <commit> [diff_options]\" ;                 \
-                    return 1 ;                                                              \
-                fi &&                                                                       \
-                                                                                            \
-                source_commit=\"${1}\" &&                                                   \
-                target_commit=\"$(git rev-parse --verify HEAD)\" &&                         \
-                git diff \"${@:1}\" \"${source_commit}...${target_commit}\" ;               \
-            } &&                                                                            \
-                                                                                            \
-            summarize \"${0}\" \"${@}\"                                                     \
-        '"
 
 
     # Show the Git history is a visualized graph/tree format that displays the underlying structure of the dependencies

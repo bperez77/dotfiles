@@ -58,6 +58,7 @@ declare -A CONFIGURATION_PATHS=(
         ["${HOME}/.ctags.d"]="${SCRIPT_DIRECTORY}/ctags.d"
         ["${HOME}/.gdbinit"]="${SCRIPT_DIRECTORY}/gdbinit"
         ["${HOME}/.gitconfig"]="${SCRIPT_DIRECTORY}/gitconfig"
+        ["${HOME}/.git_subcommands"]="${SCRIPT_DIRECTORY}/git_subcommands"
         ["${HOME}/.inputrc"]="${SCRIPT_DIRECTORY}/inputrc"
         ["${HOME}/.pythonstartup"]="${SCRIPT_DIRECTORY}/pythonstartup"
         ["${HOME}/.ssh/config"]="${SCRIPT_DIRECTORY}/ssh/config"

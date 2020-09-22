@@ -104,6 +104,9 @@ export PATH="${USER_LOCAL_DIRECTORY}/bin${PATH:+:${PATH}}"
 export MANPATH="${USER_LOCAL_DIRECTORY}/share/man${MANPATH:+:${MANPATH}}"
 export LD_LIBRARY_PATH="${USER_LOCAL_DIRECTORY}/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
 
+# Add the Git custom subcommands to the PATH. These will be picked up by Git.
+export PATH="${HOME}/.git_subcommands:${PATH}"
+
 # The man path must be prefixed by a colon in order for the standard paths to be included (this includes man paths from
 # the system configuration files).
 export MANPATH=":${MANPATH}"
