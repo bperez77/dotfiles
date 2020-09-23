@@ -370,8 +370,8 @@ function notify-popup
     # Check that the proper number of command line arguments was specified.
     local nargs=${#}
     if [[ ${nargs} -lt 2 ]]; then
-        echo 'Error: Improper number of command-line arguments specified. '
-        echo "Usage: ${FUNCNAME[0]} \"<description>\" <cmd> [cmd_arg1 cmd_arg2 ...]"
+        echo 'Error: Improper number of command-line arguments specified. ' 1>&2
+        echo "Usage: ${FUNCNAME[0]} \"<description>\" <cmd> [cmd_arg1 cmd_arg2 ...]" 1>&2
         return 1
     fi
 
@@ -403,8 +403,8 @@ function notify-desktop
     # Check that the proper number of command line arguments was specified.
     local nargs=${#}
     if [[ ${nargs} -lt 2 ]]; then
-        echo 'Error: Improper number of command-line arguments specified. '
-        echo "Usage: ${FUNCNAME[0]} \"<description>\" <cmd> [cmd_arg1 cmd_arg2 ...]"
+        echo 'Error: Improper number of command-line arguments specified. ' 1>&2
+        echo "Usage: ${FUNCNAME[0]} \"<description>\" <cmd> [cmd_arg1 cmd_arg2 ...]" 1>&2
         return 1
     fi
 
@@ -427,6 +427,48 @@ function notify-desktop
 
     # Pop up a window to indicate command completion.
     notify-send ${msg_level} "${msg}"
+    return ${exit_code}
+}
+
+# Runs an arbitrary command and sends a push notification to a mobile phone when the command finishes.
+function notify-phone
+{
+    # Check that the proper number of command line arguments was specified and the IFTTT notify URL environment variable
+    # is defined.
+    local nargs=${#}
+    if [[ ${nargs} -lt 2 ]]; then
+        echo 'Error: Improper number of command-line arguments specified. ' 1>&2
+        echo "Usage: ${FUNCNAME[0]} \"<description>\" <cmd> [cmd_arg1 cmd_arg2 ...]" 1>&2
+        return 1
+    elif [[ -z "${IFTTT_NOTIFY_URL}" ]]; then
+        printf 'Error: The IFTTT_NOTIFY_URL environment varaible is not defined. This is the URL used to trigger' 1>&2
+        printf ' the push notification.' 1>&2
+    fi
+
+    local description="${1}"
+    local cmd="${2}"
+    local args=("${@:3}")
+
+    # Use eval to expand the command if it is an alias (aliases don't expand in functions) and quote the arguments to
+    # preserve embedded quotes and special characters.
+    eval '"${cmd}"' '"${args[@]}"'
+
+    # Based on the success/failure of the command, use the appropriate message and message level.
+    local exit_code=${?}
+    msg="$(_create-notify-message "${description}" ${exit_code} "${cmd}" "${args[@]}")"
+
+    # Use the IFTTT (If This Then That) service to send a push notification, triggering the appropriate event.
+    local content_type='Content-Type: application/json'
+    local json_data="$(jo -p value1="${msg}")"
+    curl --fail --request 'POST' --header "${content_type}" --data "${json_data}" "${IFTTT_NOTIFY_URL}"
+
+    # Warn the user if the command fails. On success, the API doesn't end with a new line, so add one here.
+    if [[ ${?} -ne 0 ]]; then
+        echo "Warning: Failed to trigger Ithe FTTT event to send a push notification" 1>&2
+    else
+        echo
+    fi
+
     return ${exit_code}
 }
 
