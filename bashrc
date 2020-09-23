@@ -345,12 +345,15 @@ function format-text-files
 # message based on whether or not the command failed.
 function _create-notify-message
 {
+    local nargs=${#}
     local description="${1^}"   # Ensure the first word starts with a capital letter.
     local exit_code=${2}
     local cmd="${3}"
     local args=("${@:4}")
 
-    if [[ ${exit_code} -eq 0 ]]; then
+    if [[ -z ${cmd} ]]; then
+        printf "${description} finished. See the command window for its status."
+    elif [[ ${exit_code} -eq 0 ]]; then
         printf "${description} finished successfully."
     else
         local failure_msg="${description} failed with exit code ${exit_code}\n\nCommand:\n\n${cmd}"
@@ -364,14 +367,15 @@ function _create-notify-message
     return 0
 }
 
-# Runs an arbitrary command and generates a pop-up window when the command finishes.
+# Generates a pop-up window as a notification. Optionally, the user can specify a command to run before sending the
+# notification. Otherwise, the notification is simply sent, typically as a command after another one.
 function notify-popup
 {
     # Check that the proper number of command line arguments was specified.
     local nargs=${#}
-    if [[ ${nargs} -lt 2 ]]; then
+    if [[ ${nargs} -lt 1 ]]; then
         echo 'Error: Improper number of command-line arguments specified. ' 1>&2
-        echo "Usage: ${FUNCNAME[0]} \"<description>\" <cmd> [cmd_arg1 cmd_arg2 ...]" 1>&2
+        echo "Usage: ${FUNCNAME[0]} \"<description>\" [cmd cmd_arg1 cmd_arg2 ...]" 1>&2
         return 1
     fi
 
@@ -380,13 +384,15 @@ function notify-popup
     local args=("${@:3}")
 
     # Use eval to expand the command if it is an alias (aliases don't expand in functions) and quote the arguments to
-    # preserve embedded quotes and special characters.
-    eval '"${cmd}"' '"${args[@]}"'
+    # preserve embedded quotes and special characters. Run the command only if one was specified.
+    if [[ ${nargs} -gt 1 ]]; then
+        eval '"${cmd}"' '"${args[@]}"'
+    fi
 
     # Based on the success/failure of the command, use the appropriate message and message level.
     local exit_code=${?}
     local msg="$(_create-notify-message "${description}" ${exit_code} "${cmd}" "${args[@]}")"
-    if [[ ${exit_code} -eq 0 ]]; then
+    if [[ ${exit_code} -eq 0 || ${nargs} -eq 1 ]]; then
         local msg_level='--info'
     else
         local msg_level='--error'
@@ -397,14 +403,15 @@ function notify-popup
     return ${exit_code}
 }
 
-# Runs an arbitrary command and generates a desktop (toast) notification when the command finishes.
+# Generates a desktop (toast) notification. Optionally, the user can specify a command to run before sending the
+# notification. Otherwise, the notification is simply sent, typically as a command after another one.
 function notify-desktop
 {
     # Check that the proper number of command line arguments was specified.
     local nargs=${#}
-    if [[ ${nargs} -lt 2 ]]; then
+    if [[ ${nargs} -lt 1 ]]; then
         echo 'Error: Improper number of command-line arguments specified. ' 1>&2
-        echo "Usage: ${FUNCNAME[0]} \"<description>\" <cmd> [cmd_arg1 cmd_arg2 ...]" 1>&2
+        echo "Usage: ${FUNCNAME[0]} \"<description>\" [cmd cmd_arg1 cmd_arg2 ...]" 1>&2
         return 1
     fi
 
@@ -413,13 +420,15 @@ function notify-desktop
     local args=("${@:3}")
 
     # Use eval to expand the command if it is an alias (aliases don't expand in functions) and quote the arguments to
-    # preserve embedded quotes and special characters.
-    eval '"${cmd}"' '"${args[@]}"'
+    # preserve embedded quotes and special characters. Run the command only if one was specified.
+    if [[ ${nargs} -gt 1 ]]; then
+        eval '"${cmd}"' '"${args[@]}"'
+    fi
 
     # Based on the success/failure of the command, use the appropriate message and message level.
     local exit_code=${?}
     local msg="$(_create-notify-message "${description}" ${exit_code} "${cmd}" "${args[@]}")"
-    if [[ ${exit_code} -eq 0 ]]; then
+    if [[ ${exit_code} -eq 0 || ${nargs} -eq 1 ]]; then
         local msg_level='--urgency low'
     else
         local msg_level='--urgency normal'
@@ -430,15 +439,16 @@ function notify-desktop
     return ${exit_code}
 }
 
-# Runs an arbitrary command and sends a push notification to a mobile phone when the command finishes.
+# Sends a push notification to a mobile phone. Optionally, the user can specify a command to run before sending the
+# notification. Otherwise, the notification is simply sent, typically as a command after another one.
 function notify-phone
 {
     # Check that the proper number of command line arguments was specified and the IFTTT notify URL environment variable
     # is defined.
     local nargs=${#}
-    if [[ ${nargs} -lt 2 ]]; then
+    if [[ ${nargs} -lt 1 ]]; then
         echo 'Error: Improper number of command-line arguments specified. ' 1>&2
-        echo "Usage: ${FUNCNAME[0]} \"<description>\" <cmd> [cmd_arg1 cmd_arg2 ...]" 1>&2
+        echo "Usage: ${FUNCNAME[0]} \"<description>\" [cmd cmd_arg1 cmd_arg2 ...]" 1>&2
         return 1
     elif [[ -z "${IFTTT_NOTIFY_URL}" ]]; then
         printf 'Error: The IFTTT_NOTIFY_URL environment varaible is not defined. This is the URL used to trigger' 1>&2
@@ -449,9 +459,12 @@ function notify-phone
     local cmd="${2}"
     local args=("${@:3}")
 
+
     # Use eval to expand the command if it is an alias (aliases don't expand in functions) and quote the arguments to
-    # preserve embedded quotes and special characters.
-    eval '"${cmd}"' '"${args[@]}"'
+    # preserve embedded quotes and special characters. Run the command only if one was specified.
+    if [[ ${nargs} -gt 1 ]]; then
+        eval '"${cmd}"' '"${args[@]}"'
+    fi
 
     # Based on the success/failure of the command, use the appropriate message and message level.
     local exit_code=${?}
