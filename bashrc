@@ -387,7 +387,7 @@ function notify-popup
     # Use eval to expand the command if it is an alias (aliases don't expand in functions) and quote the arguments to
     # preserve embedded quotes and special characters. Run the command only if one was specified.
     if [[ ${nargs} -gt 1 ]]; then
-        eval '"${cmd}"' '"${args[@]}"'
+        eval "${cmd}" '"${args[@]}"'
         local exit_code=${?}
     fi
 
@@ -423,7 +423,7 @@ function notify-desktop
     # Use eval to expand the command if it is an alias (aliases don't expand in functions) and quote the arguments to
     # preserve embedded quotes and special characters. Run the command only if one was specified.
     if [[ ${nargs} -gt 1 ]]; then
-        eval '"${cmd}"' '"${args[@]}"'
+        eval "${cmd}" '"${args[@]}"'
         local exit_code=${?}
     fi
 
@@ -464,7 +464,7 @@ function notify-phone
     # Use eval to expand the command if it is an alias (aliases don't expand in functions) and quote the arguments to
     # preserve embedded quotes and special characters. Run the command only if one was specified.
     if [[ ${nargs} -gt 1 ]]; then
-        eval '"${cmd}"' '"${args[@]}"'
+        eval "${cmd}" '"${args[@]}"'
         local exit_code=${?}
     fi
 
