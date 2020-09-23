@@ -345,14 +345,15 @@ function format-text-files
 # message based on whether or not the command failed.
 function _create-notify-message
 {
-    local nargs=${#}
     local description="${1^}"   # Ensure the first word starts with a capital letter.
     local exit_code=${2}
     local cmd="${3}"
     local args=("${@:4}")
 
+    # If no command was run by the function, then display the description as the full message. Otherwise, on success
+    # indidcate it and on failure show the exit code and full command.
     if [[ -z ${cmd} ]]; then
-        printf "${description} finished. See the command window for its status."
+        printf "${description}"
     elif [[ ${exit_code} -eq 0 ]]; then
         printf "${description} finished successfully."
     else
@@ -375,7 +376,7 @@ function notify-popup
     local nargs=${#}
     if [[ ${nargs} -lt 1 ]]; then
         echo 'Error: Improper number of command-line arguments specified. ' 1>&2
-        echo "Usage: ${FUNCNAME[0]} \"<description>\" [cmd cmd_arg1 cmd_arg2 ...]" 1>&2
+        echo "Usage: ${FUNCNAME[0]} \"<description|full_message>\" [cmd cmd_arg1 cmd_arg2 ...]" 1>&2
         return 1
     fi
 
@@ -387,10 +388,10 @@ function notify-popup
     # preserve embedded quotes and special characters. Run the command only if one was specified.
     if [[ ${nargs} -gt 1 ]]; then
         eval '"${cmd}"' '"${args[@]}"'
+        local exit_code=${?}
     fi
 
     # Based on the success/failure of the command, use the appropriate message and message level.
-    local exit_code=${?}
     local msg="$(_create-notify-message "${description}" ${exit_code} "${cmd}" "${args[@]}")"
     if [[ ${exit_code} -eq 0 || ${nargs} -eq 1 ]]; then
         local msg_level='--info'
@@ -411,7 +412,7 @@ function notify-desktop
     local nargs=${#}
     if [[ ${nargs} -lt 1 ]]; then
         echo 'Error: Improper number of command-line arguments specified. ' 1>&2
-        echo "Usage: ${FUNCNAME[0]} \"<description>\" [cmd cmd_arg1 cmd_arg2 ...]" 1>&2
+        echo "Usage: ${FUNCNAME[0]} \"<description|full_message>\" [cmd cmd_arg1 cmd_arg2 ...]" 1>&2
         return 1
     fi
 
@@ -423,10 +424,10 @@ function notify-desktop
     # preserve embedded quotes and special characters. Run the command only if one was specified.
     if [[ ${nargs} -gt 1 ]]; then
         eval '"${cmd}"' '"${args[@]}"'
+        local exit_code=${?}
     fi
 
     # Based on the success/failure of the command, use the appropriate message and message level.
-    local exit_code=${?}
     local msg="$(_create-notify-message "${description}" ${exit_code} "${cmd}" "${args[@]}")"
     if [[ ${exit_code} -eq 0 || ${nargs} -eq 1 ]]; then
         local msg_level='--urgency low'
@@ -448,7 +449,7 @@ function notify-phone
     local nargs=${#}
     if [[ ${nargs} -lt 1 ]]; then
         echo 'Error: Improper number of command-line arguments specified. ' 1>&2
-        echo "Usage: ${FUNCNAME[0]} \"<description>\" [cmd cmd_arg1 cmd_arg2 ...]" 1>&2
+        echo "Usage: ${FUNCNAME[0]} \"<description|full_message>\" [cmd cmd_arg1 cmd_arg2 ...]" 1>&2
         return 1
     elif [[ -z "${IFTTT_NOTIFY_URL}" ]]; then
         printf 'Error: The IFTTT_NOTIFY_URL environment varaible is not defined. This is the URL used to trigger' 1>&2
@@ -464,10 +465,10 @@ function notify-phone
     # preserve embedded quotes and special characters. Run the command only if one was specified.
     if [[ ${nargs} -gt 1 ]]; then
         eval '"${cmd}"' '"${args[@]}"'
+        local exit_code=${?}
     fi
 
     # Based on the success/failure of the command, use the appropriate message and message level.
-    local exit_code=${?}
     msg="$(_create-notify-message "${description}" ${exit_code} "${cmd}" "${args[@]}")"
 
     # Use the IFTTT (If This Then That) service to send a push notification, triggering the appropriate event.
