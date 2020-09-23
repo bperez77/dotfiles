@@ -233,28 +233,6 @@
     commit-update-now = !GIT_COMMITTER_DATE="\"`date`\"" git commit --amend --no-edit --date "\"`date`\""
 
 
-    # Deletes the specified branches, both the local and remote copy. Assumes that the remote is "origin". Note that the
-    # arguments to the alias will be implicitly appended to this command string.
-    delete-branches = "!bash -c '                                                           \
-            function delete-branches                                                        \
-            {                                                                               \
-                if [[ ${#} -lt 1 ]]; then                                                   \
-                    echo \"Error: Too few command line arguments specified\" ;              \
-                    echo \"Usage: git delete-branches <branch> [branch ...]\" ;             \
-                    return 1 ;                                                              \
-                fi &&                                                                       \
-                                                                                            \
-                for branch in \"${@}\" ;                                                    \
-                do                                                                          \
-                    git branch -D \"${branch}\" ;                                           \
-                    git push origin \":${branch}\" ;                                        \
-                done ;                                                                      \
-            } &&                                                                            \
-                                                                                            \
-            delete-branches \"${0}\" \"${@}\"                                               \
-        '"
-
-
     # List all of the currently configured Git aliases available to the user.
     ls-aliases = config --get-regexp '^alias\\.'
 
