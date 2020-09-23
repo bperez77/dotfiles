@@ -341,48 +341,93 @@ function format-text-files
     done
 }
 
-# Runs an arbitrary command and generates a popup window when the command finshes with the command's exit status.
-function notify
+# A helper function used to create the message used in the various notify-* functions. This simply prints an appropriate
+# message based on whether or not the command failed.
+function _create-notify-message
+{
+    local description="${1^}"   # Ensure the first word starts with a capital letter.
+    local exit_code=${2}
+    local cmd="${3}"
+    local args=("${@:4}")
+
+    if [[ ${exit_code} -eq 0 ]]; then
+        printf "${description} finished successfully."
+    else
+        local failure_msg="${description} failed with exit code ${exit_code}\n\nCommand:\n\n${cmd}"
+        if [[ ${#args} -ne 0 ]]; then
+            failure_msg+="\n\nArguments:\n\n${args[*]}"
+        fi
+
+        printf "${failure_msg}"
+    fi
+
+    return 0
+}
+
+# Runs an arbitrary command and generates a pop-up window when the command finishes.
+function notify-popup
 {
     # Check that the proper number of command line arguments was specified.
-    local nargs=$#
-    if [[ ${nargs} -eq 0 ]]; then
-        echo 'Error: No command specified.'
-        echo 'Usage: notify <cmd> [cmd_arg1 cmd_arg2 ...]'
+    local nargs=${#}
+    if [[ ${nargs} -lt 2 ]]; then
+        echo 'Error: Improper number of command-line arguments specified. '
+        echo "Usage: ${FUNCNAME[0]} \"<description>\" <cmd> [cmd_arg1 cmd_arg2 ...]"
         return 1
     fi
 
-    # Get the command, its name without the path, and all of the arguments from the command.
-    local cmd="${1}"
-    local cmd_name="$(basename ${1})"
-    local args=("${@:2}")
+    local description="${1}"
+    local cmd="${2}"
+    local args=("${@:3}")
 
-    # Use eval to expand the command if it an alias, and quote the arguments array appropriately to preserve any
-    # embedded quotes. Run the command to completion, and then open popup window to indicate it has finished.
-    eval "${cmd}" '"${args[@]}"'
-    zenity --info --text "The command '${cmd_name}' has finished with exit status '${?}'."
+    # Use eval to expand the command if it is an alias (aliases don't expand in functions) and quote the arguments to
+    # preserve embedded quotes and special characters.
+    eval '"${cmd}"' '"${args[@]}"'
+
+    # Based on the success/failure of the command, use the appropriate message and message level.
+    local exit_code=${?}
+    local msg="$(_create-notify-message "${description}" ${exit_code} "${cmd}" "${args[@]}")"
+    if [[ ${exit_code} -eq 0 ]]; then
+        local msg_level='--info'
+    else
+        local msg_level='--error'
+    fi
+
+    # Pop up a window to indicate command completion.
+    zenity ${msg_level} --text "${msg}"
+    return ${exit_code}
 }
 
-# Variant of the notify function that uses a desktop (toast) notification instead of a popup window.
+# Runs an arbitrary command and generates a desktop (toast) notification when the command finishes.
 function notify-desktop
 {
     # Check that the proper number of command line arguments was specified.
-    local nargs=$#
-    if [[ ${nargs} -eq 0 ]]; then
-        echo 'Error: No command specified.'
-        echo 'Usage: notify <cmd> [cmd_arg1 cmd_arg2 ...]'
+    local nargs=${#}
+    if [[ ${nargs} -lt 2 ]]; then
+        echo 'Error: Improper number of command-line arguments specified. '
+        echo "Usage: ${FUNCNAME[0]} \"<description>\" <cmd> [cmd_arg1 cmd_arg2 ...]"
         return 1
     fi
 
-    # Get the name of the command (without the path) and the full command.
-    local cmd="${1}"
-    local cmd_name="$(basename ${1})"
-    local args=("${@:2}")
+    local description="${1}"
+    local cmd="${2}"
+    local args=("${@:3}")
 
-    # Use eval to expand the command if it an alias, and quote the arguments array appropriately to preserve any
-    # embedded quotes. Run the command to completion, and then send a desktop notification when it finishes.
-    eval "${cmd}" '"${args[@]}"'
-    notify-send "The command '${cmd_name}' has finished with exit status '${?}'."
+    # Use eval to expand the command if it is an alias (aliases don't expand in functions) and quote the arguments to
+    # preserve embedded quotes and special characters.
+    eval '"${cmd}"' '"${args[@]}"'
+
+    # Based on the success/failure of the command, use the appropriate message and message level.
+    local exit_code=${?}
+    local msg="$(_create-notify-message "${description}" ${exit_code} "${cmd}" "${args[@]}")"
+    if [[ ${exit_code} -eq 0 ]]; then
+        local msg_level='--urgency low'
+    else
+        local msg_level='--urgency normal'
+    fi
+
+    # Pop up a window to indicate command completion.
+    notify-send ${msg_level} "${msg}"
+    return ${exit_code}
 }
 
 # Changes the root directory and binds parts of the original root file system to the faked root filesystem, and unmount
