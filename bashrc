@@ -41,6 +41,12 @@ if [[ -f "${HOME}/.fzf.bash" ]]; then
     source "${HOME}/.fzf.bash"
 fi
 
+# Source the Broot settings if there is a Broot Bash file.
+if [[ -f "${HOME}/.config/broot/launcher/bash/br" ]]; then
+    source "${HOME}/.config/broot/launcher/bash/br"
+fi
+
+
 #-----------------------------------------------------------------------------------------------------------------------
 # User Settings
 #-----------------------------------------------------------------------------------------------------------------------
