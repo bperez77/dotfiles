@@ -21,29 +21,25 @@ if [[ -z "${PS1}" ]]; then
     return
 fi
 
-# Source the system-wide defaults if there is a Bashrc for it.
-if [[ -f '/etc/bashrc' ]]; then
-    source '/etc/bashrc'
-fi
-
-# Source any aliases that are defined in a separate file.
-if [[ -f "${HOME}/.bash_aliases" ]]; then
-    source "${HOME}/.bash_aliases"
-fi
-
 # If the current shell is a POSIX shell, source the system-wide defaults for tab-completion for commands.
 if [[ -f '/etc/bash_completion' ]] && (! shopt -oq posix); then
     source '/etc/bash_completion'
+else
+    echo "Warning: The /etc/bash_completion file was not found, so it was not sourced." 1>&2
 fi
 
 # Source the FZF fuzzy finder settings if there is a FZF Bash file.
 if [[ -f "${HOME}/.fzf.bash" ]]; then
     source "${HOME}/.fzf.bash"
+else
+    echo "Warning: The ${HOME}/.fzf.bash file was not found, so it was not sourced." 1>&2
 fi
 
 # Source the Broot settings if there is a Broot Bash file.
 if [[ -f "${HOME}/.config/broot/launcher/bash/br" ]]; then
     source "${HOME}/.config/broot/launcher/bash/br"
+else
+    echo "Warning: The ${HOME}/.config/broot/launcher/bash/br file was not found, so it was not sourced." 1>&2
 fi
 
 
