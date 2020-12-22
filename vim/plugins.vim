@@ -126,6 +126,11 @@ call plug#begin(g:vim_plugin_directory)
     " Adds support for the Rust language to Vim.
     Plug 'rust-lang/rust.vim'
 
+    " Adds support for the Shakespeare template language library for Haskell. This allows for inlining templated code
+    " blocks for other languages (e.g. HTML, CSS, etc.) in Haskell. This plugin adds support for correctly highlighting
+    " these templates.
+    Plug 'pbrisbin/vim-syntax-shakespeare'
+
     " Allows man pages to be viewed with Vim. This is already possible natively with Vim; this plugin sets up a Vim
     " variant of the Man command that renders the Man pages more nicely.
     Plug 'jez/vim-superman', {'do': 'mkdir -p ${STOW_DIR}/vim-superman && cp -ar bin ${STOW_DIR}/vim-superman &&'
