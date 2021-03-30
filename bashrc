@@ -149,6 +149,11 @@ export PATH="/usr/share/cc0/bin/:${PATH}"
 # Programming and Development Tool Aliases
 #-----------------------------------------------------------------------------------------------------------------------
 
+# Restarts the GNOME shell, which replaces the current instance with a new one. This is often useful when window manager
+# processes get hung, the display or messed up, or other issues that affect the whole desktop environment.
+alias gnome-shell-restart="busctl --user call org.gnome.Shell /org/gnome/Shell org.gnome.Shell Eval s \
+                           'Meta.restart(\"Restarting…\")'"
+
 # Runs a Python script with the Python debugger (PDB), which is used for line debugging (both for Python 2.x and 3.x).
 alias python-pdb='python -m pdb -c continue'
 alias python3-pdb='python3 -m pdb -c continue'
