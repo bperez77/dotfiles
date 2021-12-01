@@ -503,7 +503,7 @@ map <silent> <A-Left> :wincmd h<CR>
 map <silent> <A-Right> :wincmd l<CR>
 
 " Add a shortcut to open a Git blame of the current buffer with the CTRL-W + b.
-noremap <silent> <C-w>b :Gblame<CR>
+noremap <silent> <C-w>b :Git blame<CR>
 
 " Use 'ga' as the key stroke shortcut for the easy align command. This creates shortcuts for normal and visual mode.
 nmap ga <Plug>(EasyAlign)
