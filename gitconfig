@@ -254,7 +254,7 @@
 
 
     # Push all changes to all available remotes configured in the repository, including branches and tags.
-    push-all = !git remote | xargs -L 1 -I {} bash -c 'git push --all {} && git push --tags {}'
+    push-all = !git remote | xargs -I {} bash -c 'git push --all {} && git push --tags {}'
 
 
     # Show the Git history with a summary of changes to each file. This is the number of lines added and/or removed.
