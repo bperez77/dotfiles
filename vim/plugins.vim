@@ -75,6 +75,10 @@ call plug#begin(g:vim_plugin_directory)
     " line number, git branch, what Vim mode you're currently in, etc.
     Plug 'vim-airline/vim-airline'
 
+    " Provides a command for wrapping and unwrapping argument lists in function or doing the same for collections like
+    " lists, dictionaries, etc. These turn inline lists into multiline ones and vice-versa.
+    Plug 'FooSoft/vim-argwrap'
+
     " Adds commands for easily commenting out blocks of text to Vim.
     Plug 'tpope/vim-commentary'
 

@@ -521,6 +521,9 @@ inoremap <silent> <C-G><C-P>    <C-o>:call FzfFileSearch(0)<CR>
 nnoremap <silent> * :keepjumps normal! #*<CR>
 nnoremap <silent> # :keepjumps normal! *#<CR>
 
+" Add a shortcut to wrap/unwrap arguments using the ArgWrap plugin.
+nnoremap <silent> <leader>a :ArgWrap<CR>
+
 "-----------------------------------------------------------------------------------------------------------------------
 " Insert Mode Text Expansions (Macros)
 "-----------------------------------------------------------------------------------------------------------------------
