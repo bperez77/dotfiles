@@ -1,0 +1,97 @@
+#-----------------------------------------------------------------------------------------------------------------------
+#
+# Flake8 Configuration File
+#
+#
+# Description:
+#
+#   This file contains the Flake8 configuration used when linting Python code.
+#
+#   This file defines the default configuration and behavior when performing linting on the specified Python programs
+#   for style and potential errors. This determines the strictness of checking and common exceptions to the normal
+#   rules.
+#
+#-----------------------------------------------------------------------------------------------------------------------
+
+
+[flake8]
+
+#-----------------------------------------------------------------------------------------------------------------------
+# General Options
+#-----------------------------------------------------------------------------------------------------------------------
+
+    # The maximum length any line in source code can be. This differs from the PEP 8 recommendation of 79 characters
+    # per line. There are some exceptions to this rule, such as strings or comments that are entirely URLs.
+    max-line-length = 120
+
+    # The maximum McCabe (cyclomatic) complexity that is allowed in a block of code (function or method typically). The
+    # McCabe complexity is the number of linearily independent paths through a section of source code. For more
+    # information, see:
+    #
+    #   https://en.wikipedia.org/wiki/Cyclomatic_complexity
+    max-complexity = 15
+
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Ignored Rules
+#-----------------------------------------------------------------------------------------------------------------------
+
+    # The list of linting codes to ignore (i.e. allow violations of) when linting code. Note that this overrides the
+    # default set of ignored codes by Flake8, but some of the original defaults are included.
+    ignore =
+
+            # [Default] Ignore a line being under indented for hanging indents. Hanging indents are when all lines in
+            # a "paragraph" are indented except the first line. This allows for code blocks like multiline dictionaries
+            # to have an arbitrary indentation, not simply restricted to being 4 spaces.
+            E121,
+
+            # [Default] Ignore a line being over indented for hanging indents. This covers the other case for hanging
+            # indents, allowing them to be greater than 4 spaces.
+            E126,
+
+            # Allow for having multiple spaces before an operator. While this is generally undesired, this
+            # rule also prevents assignment statements from being aligned along the '=' operator. Since this rule
+            # applies to all operators, it is disabled to prevent this case. E222 covers when there are too many spaces
+            # after the operator.
+            E221,
+
+            # Allow for additional spaces after separators used in collection literals (e.g. ",", ":"). While this does
+            # permit some bad patterns, it allows for visually aligned dictionary and tuple literals.
+            E241,
+
+            # Allow for additional spaces around a keyword or default valued parameter in a function definition or call.
+            # This allows for code like `f(x = 'y')`, instead of forcing it to be `f(x='y')`.
+            E251,
+
+            # [Default] Allow for line breaks before a binary operator. This, along with including W504 implicitly,
+            # ensures that breaking expressions over multiple lines requires that new lines start with the operator,
+            # rather than leaving the operator on the previous line. For example, `x + y` becomes `x\n + y`.
+            W503,
+
+            # [Plugin: flake8-comprehensions] Allow for using dict/list/tuple calls instead of using the equivalent
+            # literal. This allows for using `dict()` instead of forcing code to use `{}` for the expression.
+            C408,
+
+    # The list of specific linting codes to ignore on a file by file basis. Codes listed here are appened to the codes
+    # specified by the ignore option.
+    per-file-ignores =
+
+        # Type stub files are generally used to define interfaces to C++ Python Binding modules. Those function follow
+        # casing guidelines for the Bing C++ guidelines, which differ greatly from Python casing rules. Thus, naming
+        # rules are ignored for these files (N8XX).
+        *.pyi:N8
+
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Output Formatting Options
+#-----------------------------------------------------------------------------------------------------------------------
+
+    # Display a line at the end of the output for the total number of errors.
+    count = True
+
+    # Display a series of summary lines at the end of the output that indicate the number of occurrences of each lint
+    # violation code. This is helpful in determining the number of each type of linting violation.
+    statistics = True
+
+    # Display the source code snippet that caused the lint violation when printing the output.
+    show-source = True

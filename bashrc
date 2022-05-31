@@ -189,6 +189,9 @@ alias latex='latex -shell-escape'
 # codes by default.
 alias rlwrap='rlwrap --always-readline --histsize 1000000 --history-no-dupes 2 --ansi-colour-aware'
 
+# Setup Flake8 to use the global user configuration file by default.
+alias flake8="flake8 --config '${HOME}/.flake8'"
+
 # Create aliases for commands that wraps them with the Readline library. This is useful for commands that utilize a
 # REPL, but do not provide Readline functionality. This will give the commands persistent history and tab completion.
 RLWRAP_COMMANDS=(lua smlnj coin sim240)

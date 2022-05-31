@@ -24,13 +24,15 @@
 # Allow for the various configuration files.
 !/ctags.d/*
 !/gdbinit
-!/gitconfig
 !/git_subcommands/*
+!/gitconfig
 !/inputrc
 !/kilerc
 !/minttyrc
+!/mypy.ini
 !/pythonstartup
 !/ssh/*
+!flake8
 
 # Allow for the Bashrc file and the various configuration files under the Bash directory.
 !/bashrc
