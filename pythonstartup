@@ -340,8 +340,11 @@ def wildcard_import_file(python_file_path: pathlib.Path) -> None:
     python_file_name = python_file_path.name.replace(python_file_path.suffix, '')
     module_loader = importlib.machinery.SourceFileLoader(python_file_name, str(python_file_path))
     module_spec = importlib.util.spec_from_loader(module_loader.name, module_loader)
-    module = importlib.util.module_from_spec(module_spec)   # type: ignore[arg-type]
-    module_spec.loader.exec_module(module)  # type: ignore[union-attr]
+
+    assert(module_spec is not None)
+    assert(module_spec.loader is not None)
+    module = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(module)
 
     # Emulate a wild card import by importing all user-defined or specified variables into the global namespace. This is
     # either the `__all__` attribute, or all names that don't start with an underscore if `__all__` is not defined.
