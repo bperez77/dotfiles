@@ -16,7 +16,7 @@
 "-----------------------------------------------------------------------------------------------------------------------
 
 " The directory where plugins that come from online repository sources are installed.
-let g:vim_plugin_directory          = g:vim_directory . '/installed_plugins'
+let g:vim_plugin_directory          = g:editor_directory . '/plugins'
 
 " The directory where local plugins that are on the filesystem are located.
 let g:vim_manual_plugin_directory   = g:vim_directory . '/manual_plugins'
@@ -194,7 +194,7 @@ highlight GitGutterChange   ctermfg=DarkYellow  ctermbg=NONE
 "-----------------------------------------------------------------------------------------------------------------------
 
 " Define the directory where created tags files are placed. Tags are placed here rather than at the root of projects.
-let g:gutentags_cache_dir                   = g:vim_directory . '/editor_files/tags_files'
+let g:gutentags_cache_dir                   = g:editor_directory . '/tags_files'
 
 " The list of extra arguments to pass to the Ctags program when invoking it.
 let g:gutentags_ctags_extra_args            = ['--recurse', '--extras=+q', '--fields=+i']
