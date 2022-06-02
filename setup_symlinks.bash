@@ -102,7 +102,7 @@ function main
             local i=1
             while [[ -e "${link_path}.~${i}~" ]]
             do
-                i=$((${i} + 1))
+                i=$((i + 1))
             done
 
             echo "Removing and backing up the directory \"${link_path}\" to \"${link_path}.~${i}~..."
@@ -110,9 +110,10 @@ function main
         fi
 
         # Get the directory where the link will be created (source) and the relative path from there to the target.
-        local link_dir="$(dirname "${link_path}")"
-        local target_relative_path="$(realpath --canonicalize-missing --no-symlinks --relative-to="${link_dir}" \
-            "${target_path}")"
+        local link_dir target_relative_path
+        link_dir="$(dirname "${link_path}")"
+        target_relative_path="$(realpath --canonicalize-missing --no-symlinks --relative-to="${link_dir}" \
+                                "${target_path}")"
 
         # Change the directory to the source path's directory, so the created symbolic link can be relative. Overwrite
         # the file if it already exists, but create a backup in case the file shouldn't have been overwritten.
