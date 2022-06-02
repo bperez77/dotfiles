@@ -1,0 +1,39 @@
+#----------------------------------------------------------------------------------------------------------------------
+#
+# Global Python Packages (Via PIP Requirements)
+#
+# Author:           Brandon Perez <bmperez@alumni.cmu.edu>
+# Creation Date:    Wednesday, June 01, 2022 at 06:15:22 PM PDT
+#
+# Description:
+#
+#   This file contains the Python packages that should be installed globally using Pip.
+#
+#   These are various packages that improve the Python debugging environment as well as linting packages for linting
+#   Python files.
+#
+#----------------------------------------------------------------------------------------------------------------------
+
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Utility Packages
+#-----------------------------------------------------------------------------------------------------------------------
+
+autoimport  # Enables automatic importing (lazily)
+pint        # Defines standard unit classes that can be used to represent units and convert between them.
+see         # Alternative to the dir function that neatly summarizes an object's attributes.
+
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Linting Packages
+#-----------------------------------------------------------------------------------------------------------------------
+
+flake8                  # General Python linter for static analysis, style, and other standard linting.
+flake8-broken-line      # Flake8 plugin that forbids using backslashes to break lines.
+flake8-builtins         # Flake8 plugin that checks if Python builtins are being shadowed.
+flake8-commas           # Flake8 plugin that checks if multiline definitions are missing trailing commas.
+flake8-comprehensions   # Flake8 plugin that checks that comprehensions are used when possible and correctly.
+flake8-eradicate        # Flake8 plugin that finds commented out code.
+flake8-use-fstring      # Flake8 plugin that ensures f-strings are used for string formatting and used correctly.
+mypy                    # Python linter that statically type checks code based on its type annotations.
+pep8-naming             # Flake8 plugin that checks that code conforms to PEP 8 naming conventions.
