@@ -524,6 +524,11 @@ nnoremap <silent> # :keepjumps normal! *#<CR>
 " Add a shortcut to wrap/unwrap arguments using the ArgWrap plugin.
 nnoremap <silent> <leader>a :ArgWrap<CR>
 
+" Add shortcuts to navigate between the previous and next linting errors reported by the ALE plugin.
+nnoremap [l <Plug>(ale_previous_wrap)
+nnoremap ]l <Plug>(ale_next_wrap)
+
+
 "-----------------------------------------------------------------------------------------------------------------------
 " Insert Mode Text Expansions (Macros)
 "-----------------------------------------------------------------------------------------------------------------------

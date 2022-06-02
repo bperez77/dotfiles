@@ -18,3 +18,12 @@ setlocal textwidth=120
 " When using ArgWrap always include a trailing comma when expanding a argument list out across multiple lines as Python
 " permits this and it is the standard style.
 let b:argwrap_tail_comma = 1
+
+" Restrict the linters used by the ALE plugin to Flake8 and Mypy only.
+let b:ale_linters = [
+    \ 'flake8',
+    \ 'mypy',
+\ ]
+
+" Add an option for explicitly specifying the user's Flake8 configuration file when running the Flake8 linter.
+let b:python_flake8_options = '--config "$HOME/.flake8"'

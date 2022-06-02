@@ -46,7 +46,6 @@ call plug#begin(g:vim_plugin_directory)
     " TODO
     " Plug 'peterrincker/vim-argumentative'
     " Plug 'jiangmiao/auto-pairs'
-    " Plug 'dense-analysis/ale'
     " Plug 'ntpeters/vim-better-whitespace'
     " Plug 'octol/vim-cpp-enhanced-highlight'
     " Plug 'jpetrie/vim-counterpoint'
@@ -67,6 +66,10 @@ call plug#begin(g:vim_plugin_directory)
     " Provides a nicer and prettier status and tab line for Vim. This is highly customizable and the default includes the
     " line number, git branch, what Vim mode you're currently in, etc.
     Plug 'vim-airline/vim-airline'
+
+    " Provides live linting on files while they are being edited, highlighting linting errors based on whatever linting
+    " tool is used for that language via an Asynchronous Lint Engine (ALE).
+    Plug 'dense-analysis/ale'
 
     " Provides a command for wrapping and unwrapping argument lists in function or doing the same for collections like
     " lists, dictionaries, etc. These turn inline lists into multiline ones and vice-versa.
@@ -131,7 +134,7 @@ call plug#begin(g:vim_plugin_directory)
     " Allows man pages to be viewed with Vim. This is already possible natively with Vim; this plugin sets up a Vim
     " variant of the Man command that renders the Man pages more nicely.
     Plug 'jez/vim-superman', {'do': 'mkdir -p ${STOW_DIR}/vim-superman && cp -ar bin ${STOW_DIR}/vim-superman &&'
-            \ . ' stow vim-superman'}
+                                    \ . ' stow vim-superman'}
 
     " Adds commands for easily surrounding text with delimiters (e.g. quotes, parenthesis, etc.) to Vim.
     Plug 'tpope/vim-surround'
