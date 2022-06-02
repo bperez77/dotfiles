@@ -18,60 +18,88 @@
 
 # Import the Automatic Imports module so it's available in the interpreter, if it is installed. This module lazily
 # imports all available Python modules. The modules are available, but the actual importing doesn't happen until the
-# module is used in the interpreter. This lazy importing is also recursive. This should come before any other imports.
+# module is used in the interpreter. This lazy importing is also recursive. This must come before any other imports.
 try:
     from autoimp import *   # type: ignore[import]  # noqa: F401, F403
-
-    # Add additional aliases for module names other than NumPy which is already available.
-    if 'tensorflow' in globals():
-        tf = globals()['tensorflow']
 except ImportError:
     print('Unable to import "autoimp" module. Run `python -m pip install autoimp` to install it.')
 
-# Import the See module so it's available in interpreter, if it is installed. See provides an improved version of the
-# Dir function, for listing the members of objects.
+# Import the See module if it has been installed on this system.
 try:
-    from see import see as _see     # type: ignore[import]
+    import see as _see  # type: ignore[import]
 except ImportError:
     print('Unable to import "see" module. Run `python -m pip install see` to install it.')
-
-# Import the Pint module so it's available in the interpreter, setup a default unit registry, and add some common units
-# as globals so they can simply be referred to by name (e.g. `meter` instead of `ureg.meter`).
-try:
-    # Needs to be renamed as it will be overriden by the pint unit.
-    import pint as units_pint   # type: ignore[import]
-
-    # The pint unit registry generates unit classes on the fly by overriding the `__getattr__` method and adds them as
-    # class attributes as they are referenced. The complete list of units is stored under the `_unit`, attribute as a
-    # dictionary, so use this to get the attributes and generate the classes. Not all of the units are in ASCII and they
-    # will fail if they are referenced, so skip those units. This also doesn't cover all units, some SI unit prefixes
-    # like milliliters aren't listed in the unit list.
-    _ureg = units_pint.UnitRegistry()
-    _ureg.milliliter
-    globals().update({name: getattr(_ureg, name) for name in _ureg._units.keys() if name.isascii()})
-
-except ImportError:
-    print('Unable to import the "pint" module. Run `python -m pip install pint` to install it.')
 
 # Import the various container types and iteration tools without their module names.
 from collections import *   # noqa: F401, F403
 from itertools import *     # noqa: F401, F403
 
 # Import typing and other modules to add type annotations to this file.
-import typing
 import pathlib
+import typing
 
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Global Namespace Values
+# ----------------------------------------------------------------------------------------------------------------------
+
+def _add_pint_units() -> None:
+    """Adds the common units from the Pint module to the global namespace for the REPL.
+
+    This uses the pint module, instantiates the various units through its interface, and then adds them to the global
+    namespace so the user can access them from the REPL. This adds units like pint, meter, and all their various
+    aliases.
+    """
+
+    # General Imports
+    try:
+        import pint as units_pint
+    except ImportError:
+        print('Unable to import the "pint" module. Run `python -m pip install pint` to install it.')
+        return
+
+    # The pint unit registry generates unit classes on the fly by overriding the `__getattr__` method and adds them as
+    # class attributes as they are referenced. The complete list of units is stored under the `_unit`, attribute as a
+    # dictionary, so this is used get the attributes and generate the classes. Not all of the units are in ASCII and
+    # they will fail if they are referenced, so they are skipped. This also doesn't cover all units, some SI unit
+    # prefixes like milliliters aren't listed in the unit list, so these have to be manually referenced.
+    _ureg = units_pint.UnitRegistry()
+    _ureg.milliliter
+    globals().update({name: getattr(_ureg, name) for name in _ureg._units.keys() if name.isascii()})
+
+
+def _add_module_aliases() -> None:
+    """Adds some common aliases for modules to the global namespace so the user doesn't have to import them this way.
+
+    This allows the user in the REPL to use these aliases to refer to these modules automatically via the `autoimp`
+    module, such as `np` for `numpy`.
+    """
+
+    global_namespace = globals()
+    if 'tensorflow' in global_namespace:
+        global_namespace['tf'] = global_namespace['tensorflow']
+    if 'numpy' in globals():
+        global_namespace['np'] = global_namespace['numpy']
+
+
+_add_pint_units()
+_add_module_aliases()
+del _add_pint_units, _add_module_aliases
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Readline Settings
 # ----------------------------------------------------------------------------------------------------------------------
 
 # The history entry that was selected by the reverse history search, to be displayed on the subsequent line.
-_SELECTED_HISTORY_ENTRY = ''
+_SELECTED_HISTORY_ENTRY: str = ''
 
 
 def _setup_readline() -> None:
-    """Sets up tab completion and persistent command history for the interactive session."""
+    """Sets up tab completion, persistent command history, and shortcuts for the interactive session.
+
+    This file imports the settings from a user's inputrc file and also sets up a shortcut to leverage FZF to enable
+    fuzzy searching over the command history.
+    """
 
     # The Readline library is only supported on Linux and Mac systems.
     import platform
@@ -183,51 +211,64 @@ del _setup_readline
 # Prompt Settings
 # ----------------------------------------------------------------------------------------------------------------------
 
-def _get_color(color: int, foreground: bool) -> str:
-    """Gets the string code to represent the given color or modifier in the terminal by its name name (e.g green,
-    magenta_background, normal, bold, etc). The returned string also has the appropriate delimiters so the color can be
-    used in a Python prompt string."""
+def _ansi_escape_sequence(capability: str, color: typing.Optional[int] = None) -> str:
+    """Gets the ANSI escape sequence that represents the given capability for the terminal.
+
+    This function will get the escape sequence if the terminal supports the capability or modifier (and optional color
+    code if it is a foreground or background coloring one) and then convert it to a UTF-8 string.
+
+    Args:
+        capability  The capability to get the code for, which is typically the text modifier for the terminal.
+        color       The color code to use for the capability, only necessary if it is a foreground or background setting
+                    capability.
+
+    Returns:
+        The ANSI escape sequence as a string representing the capability and optional color for the terminal or an empty
+        string if the terminal does not support that capability.
+    """
 
     # If Python is not being run on a Linux system, then the curses library is unavailable, so colors cannot be used.
     import platform
     if platform.system().lower() != 'linux':
         return ''
 
-    # Otherwise, if the current terminal does not support color codes, then they cannot be used.
+    # Setup the terminal for use by the curses library.
     import curses
     curses.setupterm()
-    if curses.tigetstr('setaf') is None:
+
+    # Check that the terminal supports the requested capability and get it if it does.
+    cap_code = curses.tigetstr(capability)
+    if cap_code is None:
         return ''
 
-    # Based on whether the foreground or background is being modified, get the appropriate capability.
-    if foreground:
-        capability = curses.tigetstr('setaf')
+    # If a color code was not specified, then the capability string is used as is. Otherwise, we need to get the full
+    # color code string.
+    if color is None:
+        terminal_code = cap_code.decode('utf-8')
     else:
-        capability = curses.tigetstr('setab')
-    assert(capability is not None)
+        terminal_code = curses.tparm(cap_code, color).decode('utf-8')
 
-    # Get and return the color code as a standard string. Note that the \001 and \002 delimiters tell Readline not to
-    # count the characters towards the line length. This is necessary to wrap long lines properly.
-    color_code = curses.tparm(capability, color).decode('utf-8')
-    return f'\001{color_code}\002'
+    # Note that the \001 and \002 delimiters tell Readline not to count the characters towards the line length. This is
+    # necessary to wrap long lines properly.
+    return f'\001{terminal_code}\002'
 
 
 def _setup_prompt() -> None:
-    """Modifies the PS1 and PS2 prompts used for the interactive session."""
+    """Modifies the PS1 and PS2 prompts used for the interactive session.
+
+    If possible, terminal color codes are used. The PS1 prompt shows the Python version while the PS2 prompt aligns line
+    continuations with the same level as the PS1 prompt offsets the first line.
+    """
 
     # General Imports
     import curses
     import sys
 
     # Generate the color strings to use in the format strings.
-    green = _get_color(curses.COLOR_GREEN, foreground = True)
-    magenta_background = _get_color(curses.COLOR_MAGENTA, foreground = False)
-    yellow = _get_color(curses.COLOR_YELLOW, foreground = True)
-
-    # Generate the string to return the terminal to normal formatting.
-    normal_code = curses.tigetstr('sgr0')
-    assert(normal_code is not None)
-    normal = f'\001{normal_code.decode("utf-8")}\002'
+    normal = _ansi_escape_sequence('sgr0')
+    green = _ansi_escape_sequence('setaf', color = curses.COLOR_GREEN)
+    yellow = _ansi_escape_sequence('setaf', color = curses.COLOR_YELLOW)
+    magenta_background = _ansi_escape_sequence('setab', color = curses.COLOR_MAGENTA)
 
     # Override the default prompt used in the interactive session, printed at the beginning of each line, and set it up
     # to display the version of Python being used.
@@ -244,25 +285,41 @@ def _setup_prompt() -> None:
 
 # Remove the setup prompt function so it doesn't pollute the interactive session's namespace.
 _setup_prompt()
-# del _setup_prompt, _get_color
+del _setup_prompt
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-# Defined Functions
+# Functions for the REPL
 # ----------------------------------------------------------------------------------------------------------------------
 
-def see(obj: object, pattern: typing.Optional[str] = None) -> typing.List[str]:
-    """Filters the members of the given object using a wild card pattern or regex.
+def see(obj: object, pattern: typing.Optional[str] = None) -> _see.SeeResult:
+    """Gets the attributes of the given object and optionally filters it using a glob or regex pattern.
 
-    This overrides the default see.see function to allow for the pattern to be optionally specified. This is a bit more
+    This serves as a better replacement for the `dir` function in Python and this overrides the default see.see function
+    to allow for a pattern to be optionally specified. This is a bit more convenient than doing
+    `see(obj).filter(pattern)`.
     convenient than doing see(obj).filter(pattern). Note that all members of a object begin with a '.' character, so
     this needs to be in the pattern. Regular expressions can be specified if the string begins with a forward-slash '/'.
+
+    Args:
+        obj         The object to see the attributes for.
+        pattern     The pattern to pass to the filter method. This can be a glob or a regular expression. Note that
+                    standard attributes of an object begin with '.' and regular expressions must start with a
+                    forward-slash.
+
+    Returns:
+        A SeeResult object which represents the list of attributes for the object, optionally filtered with the pattern.
     """
 
+    # If the See module could not be imported, then this function cannot run.
+    if '_see' not in globals():
+        raise Exception('The see module is not installed so the see function cannot be used.')
+
+    # Based on if a pattern is specified or not, invoke the appropriate functions.
     if (pattern is None):
-        return _see(obj)    # type: ignore[no-any-return]
+        return _see.see(obj)
     else:
-        return _see(obj).filter(pattern)    # type: ignore[no-any-return]
+        return _see.see(obj).filter(pattern)
 
 
 def wildcard_import_file(python_file_path: pathlib.Path) -> None:
@@ -270,6 +327,9 @@ def wildcard_import_file(python_file_path: pathlib.Path) -> None:
 
     This follows the behavior of a wild card import (i.e. `from module import *`). If the module defines `__all__`, then
     only those names are imported. Otherwise, all names are imported which do not start with an underscore.
+
+    Args:
+        python_file_python  The path to the Python file to import.
     """
 
     # General Imports
@@ -309,4 +369,5 @@ def _import_local_startup() -> None:
 _import_local_startup()
 del _import_local_startup
 
-del typing
+# Cleanup import modules that are only needed for this file so they don't pollute the namespace.
+del pathlib, typing
