@@ -57,7 +57,7 @@ set belloff=all
 
 " Change the directory where Vim's backup files are stored. These are created by Vim when it opens a file. This changes
 " it from the default of the current working directory, which helps keep the working directory clean. Note that the
-" trailing '//' the file names are unique, by including the full path in the name.
+" trailing '//' ensures the file names are unique by including the full path in the name.
 let &backupdir          = g:vim_directory . '/editor_files/backup_files//'
 
 " Set the characters that will cause a line break when wrapping long lines.
@@ -100,7 +100,7 @@ set linebreak
 
 " Enable the displaying of indicator characters for various types of whitespace characters and in certain situations.
 " Specifically, use '«' and '»' to indicate that a line continues further to left or right, respectively, when line
-" wrapping  is disabled. Use '·' to display trailing whitespace characters and use '▸' to indicate where a tab character
+" wrapping is disabled. Use '·' to display trailing whitespace characters and use '▸' to indicate where a tab character
 " starts and use '·' to indicate the whitespace that it fills. Use '␣' to mark non-breakable space characters.
 set list
 let &listchars          = 'extends:»,nbsp:␣,trail:·,precedes:«,tab:▸·'
