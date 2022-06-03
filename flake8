@@ -98,6 +98,20 @@
             # rather than leaving the operator on the previous line. For example, `x + y` becomes `x\n + y`.
             W503,
 
+            # [Plugin: flake8-bandit] Allow for assert statements even though they are removed in optimized byte code as
+            # this is not a typical use case.
+            S101,
+
+            # [Plugin: flake8-bandit] Suppress the linting messages that say to consider the security impliciations of
+            # using various modules (e.g. subprocess, pickle, etc.).
+            S403,
+            S404,
+
+            # [Plugin: flake8-bandit] Supress linting messages related to using subprocess with a partial path and a
+            # notice to check for untrusted input.
+            S603,
+            S607,
+
             # [Plugin: flake8-comprehensions] Allow for using dict/list/tuple calls instead of using the equivalent
             # literal. This allows for using `dict()` instead of forcing code to use `{}` for the expression.
             C408,
@@ -105,14 +119,6 @@
             # [Plugin: flake8-docstring] Allow for a blank line to be after a function docstring. This tends to yield
             # cleaner looking code.
             D202,
-
-            # [Plugin: flake8-secure-coding-standard] Allow for assert statements, even in production code, as they are
-            # useful.
-            SCS108,
-
-            # [Plugin: flake8-bandit] Allow for assert statements even though they are removed in optimized byte code as
-            # this is not a typical use case.
-            S101,
 
             # [Plugin: flake8-docstring] Allow for the first line of a multi-line docstring summary (i.e. module
             # comment) to start with an empty line. This looks a bit cleaner as it aligns with the rest of the text.
@@ -123,15 +129,10 @@
             # docstrings, but this is acceptable.
             D415,
 
-            # [Plugin: flake8-bandit] Suppress the linting messages that say to consider the security impliciations of
-            # using various modules (e.g. subprocess, pickle, etc.).
-            S403,
-            S404,
+            # [Plugin: flake8-secure-coding-standard] Allow for assert statements, even in production code, as they are
+            # useful.
+            SCS108,
 
-            # [Plugin: flake8-bandit] Supress linting messages related to using subprocess with a partial path and a
-            # notice to check for untrusted input.
-            S603,
-            S607
 
     # The list of specific linting codes to ignore on a file by file basis. Codes listed here are appened to the codes
     # specified by the ignore option.
