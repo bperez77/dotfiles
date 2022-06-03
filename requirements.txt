@@ -28,12 +28,37 @@ see         # Alternative to the dir function that neatly summarizes an object's
 # Linting Packages
 #-----------------------------------------------------------------------------------------------------------------------
 
-flake8                  # General Python linter for static analysis, style, and other standard linting.
-flake8-broken-line      # Flake8 plugin that forbids using backslashes to break lines.
-flake8-builtins         # Flake8 plugin that checks if Python builtins are being shadowed.
-flake8-commas           # Flake8 plugin that checks if multiline definitions are missing trailing commas.
-flake8-comprehensions   # Flake8 plugin that checks that comprehensions are used when possible and correctly.
-flake8-eradicate        # Flake8 plugin that finds commented out code.
-flake8-use-fstring      # Flake8 plugin that ensures f-strings are used for string formatting and used correctly.
-mypy                    # Python linter that statically type checks code based on its type annotations.
-pep8-naming             # Flake8 plugin that checks that code conforms to PEP 8 naming conventions.
+darglint                        # Flake8 plugin that checks for and validates docstrings.
+flake8                          # General Python linter for static analysis, style, and other standard linting.
+flake8-broken-line              # Flake8 plugin that forbids using backslashes to break lines.
+flake8-bugbear                  # Flake8 plugin that finds likely bugs and design problems in code.
+flake8-builtins                 # Flake8 plugin that checks if Python builtins are being shadowed.
+flake8-class-attributes-order   # Flake8 plugin that enforces the ordering of class attribute definitions.
+flake8-commas                   # Flake8 plugin that checks if multiline definitions are missing trailing commas.
+flake8-comments                 # Flake8 plugin that checks for redendant (and useless) comments in code.
+flake8-comprehensions           # Flake8 plugin that checks that comprehensions are used when possible and correctly.
+flake8-debugger                 # Flake8 plugin that checks for debugger breakpoints accidentally left in code.
+flake8-docstrings               # Flake8 plugin that checks for and validates docstrings.
+flake8-encodings                # Flake8 plugin that identifies the incorrect use of string encodings.
+flake8-eradicate                # Flake8 plugin that finds commented out code.
+flake8-executable               # Flake8 plugin that checks that Python scripts are properly configured to be executable.
+flake8-expression-complexity    # Flake8 plugin that checks for expressions that are too complex in code.
+flake8-implicit-str-concat      # Flake8 plugin that checks for unintended implicitly concatenated string literals.
+flake8-import-order             # Flake8 plugin that checks that Python imports are in a particular order.
+flake8-literal                  # Flake8 plugin that checks for consistent string literal definition (e.g. preferring ' over ").
+flake8-markdown                 # Flake8 plugin that lints Python code snippets in Markdown files.
+flake8-newspaper-style          # Flake8 plugin that enforces newspaper style for function definitions, which is that functions should be defined after their first use.
+flake8-noqa                     # Flake8 plugin that validates lint suppression comments (# noqa).
+flake8-pyi                      # Flake8 plugin that provides specialized linting for type hinting stub files (*.pyi).
+flake8-scream                   # Flake8 plugin that prevents using magic values for function arguments.
+flake8-secure-coding-standard   # Flake8 plugin that enforces some common secure coding standards.
+flake8-simplify                 # Flake8 plugin that finds places where more complex code can be simplified.
+flake8-slots                    # Flake8 plugin that checks subclasses of immutable types define __slots__.
+flake8-unused-arguments         # Flake8 plugin that checks for unused function arguments.
+flake8-use-fstring              # Flake8 plugin that ensures f-strings are used for string formatting and used correctly.
+flake8-useless-assert           # Flake8 plugin that catches useless assert statements.
+flake8-variables-names          # Flake8 plugin that enforces using more readable an descriptive variable names.
+flake8-warnings                 # Flake8 plugin that detects the use of deprecated modules, classes, etc.
+pep8-naming                     # Flake8 plugin that checks that code conforms to PEP 8 naming conventions.
+
+mypy                            # Python linter that statically type checks code based on its type annotations.
