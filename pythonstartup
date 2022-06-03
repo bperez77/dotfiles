@@ -1,15 +1,15 @@
-# -----------------------------------------------------------------------------------------------------------------------
-#
-# Python Startup File
-#
-# Author:           Brandon Perez <bmperez@alumni.cmu.edu>
-# Creation Date:    Tuesday, February 16, 2016 at 11:19:26 AM EDT
-#
-# Description:
-#   This file is executed whenever an interactive Python session starts up, and it sets up persistent command history,
-#   tab completion, and default imported modules for the session.
-#
-# ----------------------------------------------------------------------------------------------------------------------
+"""
+Python Startup File
+
+Author:           Brandon Perez <bmperez@alumni.cmu.edu>
+Creation Date:    Tuesday, February 16, 2016 at 11:19:26 AM EDT
+
+Description:
+
+    This file is executed whenever an interactive Python session starts up and sets up settings for the REPL.
+
+    This file sets up persistent command history, tab completion, and default imported modules for the session.
+"""
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ from collections import *   # noqa: F401, F403
 from itertools import *     # noqa: F401, F403
 
 # Import typing and other modules to add type annotations to this file.
-import pathlib
+import pathlib  # noqa: AZ100
 import typing
 
 
@@ -211,6 +211,36 @@ del _setup_readline
 # Prompt Settings
 # ----------------------------------------------------------------------------------------------------------------------
 
+def _setup_prompt() -> None:
+    """Modifies the PS1 and PS2 prompts used for the interactive session.
+
+    If possible, terminal color codes are used. The PS1 prompt shows the Python version while the PS2 prompt aligns line
+    continuations with the same level as the PS1 prompt offsets the first line.
+    """
+
+    # General Imports
+    import curses
+    import sys
+
+    # Generate the color strings to use in the format strings.
+    normal = _ansi_escape_sequence('sgr0')
+    green = _ansi_escape_sequence('setaf', color = curses.COLOR_GREEN)
+    yellow = _ansi_escape_sequence('setaf', color = curses.COLOR_YELLOW)
+    magenta_background = _ansi_escape_sequence('setab', color = curses.COLOR_MAGENTA)
+
+    # Override the default prompt used in the interactive session, printed at the beginning of each line, and set it up
+    # to display the version of Python being used.
+    version = sys.version_info
+    sys.ps1 = f'{green}[{yellow}Python-{version.major}.{version.minor}.{version.micro}{green}]>>> {normal}'
+
+    # Override the default prompt used for line continuations, so that multi-line commands can be copied properly. Align
+    # the lines with the PS1 prompt length, so function definitions look nice.
+    ps1_len = len(f'[Python-{version.major}.{version.minor}.{version.micro}]>>> ')
+    ps2_len = ps1_len - 1
+    space = ' '
+    sys.ps2 = f'{magenta_background}{space:<{ps2_len}}{normal} '
+
+
 def _ansi_escape_sequence(capability: str, color: typing.Optional[int] = None) -> str:
     """Gets the ANSI escape sequence that represents the given capability for the terminal.
 
@@ -218,9 +248,9 @@ def _ansi_escape_sequence(capability: str, color: typing.Optional[int] = None) -
     code if it is a foreground or background coloring one) and then convert it to a UTF-8 string.
 
     Args:
-        capability  The capability to get the code for, which is typically the text modifier for the terminal.
-        color       The color code to use for the capability, only necessary if it is a foreground or background setting
-                    capability.
+        capability:     The capability to get the code for, which is typically the text modifier for the terminal.
+        color:          The color code to use for the capability, only necessary if it is a foreground or background
+                        setting capability.
 
     Returns:
         The ANSI escape sequence as a string representing the capability and optional color for the terminal or an empty
@@ -253,36 +283,6 @@ def _ansi_escape_sequence(capability: str, color: typing.Optional[int] = None) -
     return f'\001{terminal_code}\002'
 
 
-def _setup_prompt() -> None:
-    """Modifies the PS1 and PS2 prompts used for the interactive session.
-
-    If possible, terminal color codes are used. The PS1 prompt shows the Python version while the PS2 prompt aligns line
-    continuations with the same level as the PS1 prompt offsets the first line.
-    """
-
-    # General Imports
-    import curses
-    import sys
-
-    # Generate the color strings to use in the format strings.
-    normal = _ansi_escape_sequence('sgr0')
-    green = _ansi_escape_sequence('setaf', color = curses.COLOR_GREEN)
-    yellow = _ansi_escape_sequence('setaf', color = curses.COLOR_YELLOW)
-    magenta_background = _ansi_escape_sequence('setab', color = curses.COLOR_MAGENTA)
-
-    # Override the default prompt used in the interactive session, printed at the beginning of each line, and set it up
-    # to display the version of Python being used.
-    version = sys.version_info
-    sys.ps1 = f'{green}[{yellow}Python-{version.major}.{version.minor}.{version.micro}{green}]>>> {normal}'
-
-    # Override the default prompt used for line continuations, so that multi-line commands can be copied properly. Align
-    # the lines with the PS1 prompt length, so function definitions look nice.
-    ps1_len = len(f'[Python-{version.major}.{version.minor}.{version.micro}]>>> ')
-    ps2_len = ps1_len - 1
-    space = ' '
-    sys.ps2 = f'{magenta_background}{space:<{ps2_len}}{normal} '
-
-
 # Remove the setup prompt function so it doesn't pollute the interactive session's namespace.
 _setup_prompt()
 del _setup_prompt
@@ -302,18 +302,21 @@ def see(obj: object, pattern: typing.Optional[str] = None) -> _see.SeeResult:
     this needs to be in the pattern. Regular expressions can be specified if the string begins with a forward-slash '/'.
 
     Args:
-        obj         The object to see the attributes for.
-        pattern     The pattern to pass to the filter method. This can be a glob or a regular expression. Note that
+        obj:        The object to see the attributes for.
+        pattern:    The pattern to pass to the filter method. This can be a glob or a regular expression. Note that
                     standard attributes of an object begin with '.' and regular expressions must start with a
                     forward-slash.
 
     Returns:
         A SeeResult object which represents the list of attributes for the object, optionally filtered with the pattern.
+
+    Raises:
+        RuntimeError:   The see module was not imported and thus isn't installed.
     """
 
     # If the See module could not be imported, then this function cannot run.
     if '_see' not in globals():
-        raise Exception('The see module is not installed so the see function cannot be used.')
+        raise RuntimeError('The see module is not installed so the see function cannot be used.')
 
     # Based on if a pattern is specified or not, invoke the appropriate functions.
     if (pattern is None):
@@ -329,7 +332,7 @@ def wildcard_import_file(python_file_path: pathlib.Path) -> None:
     only those names are imported. Otherwise, all names are imported which do not start with an underscore.
 
     Args:
-        python_file_python  The path to the Python file to import.
+        python_file_path:   The path to the Python file to import.
     """
 
     # General Imports
@@ -365,7 +368,7 @@ def _import_local_startup() -> None:
 
     local_pythonstartup_path = Path.home() / '.pythonstartup_local'
     if local_pythonstartup_path.exists():
-        wildcard_import_file(local_pythonstartup_path)
+        wildcard_import_file(local_pythonstartup_path)  # noqa: NEWS100
 
 
 # Import the local Python startup file if one exists.
