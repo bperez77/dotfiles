@@ -42,7 +42,7 @@
 
     # The maximum permitted complexity for any given expression in code for the flake8-expression-complexity plugin.
     # This is simply the number of subexpressions that are in a single expression.
-    max-expression-complexity = 5
+    max-expression-complexity = 7
 
     # The import style to use when checking import ordering with the flake8-import-order plugin.
     import-order-style = google
