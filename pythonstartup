@@ -30,12 +30,11 @@ try:
 except ImportError:
     print('Unable to import "see" module. Run `python -m pip install see` to install it.')
 
-# Import the various container types and iteration tools without their module names.
+# Import the various container types and iteration tools without their qualified nammes, import the Path class so it can
+# be easily used, and import the typing module for type annotations.
 from collections import *   # noqa: F401, F403
 from itertools import *     # noqa: F401, F403
-
-# Import typing and other modules to add type annotations to this file.
-import pathlib  # noqa: AZ100
+from pathlib import Path
 import typing
 
 
@@ -106,11 +105,8 @@ def _setup_readline() -> None:
     if platform.system().lower() != 'linux':
         return
 
-    # General Imports
+    # Standard Imports
     import atexit
-    from pathlib import Path
-
-    # Readline Imports
     import readline
 
     # Enable tab completion to be used in the Python interpreter.
@@ -325,7 +321,7 @@ def see(obj: object, pattern: typing.Optional[str] = None) -> _see.SeeResult:
         return _see.see(obj).filter(pattern)
 
 
-def wildcard_import_file(python_file_path: pathlib.Path) -> None:
+def wildcard_import_file(python_file_path: Path) -> None:
     """Emulates a wild card import of the Python file at the given path, if it exists.
 
     This follows the behavior of a wild card import (i.e. `from module import *`). If the module defines `__all__`, then
@@ -364,8 +360,6 @@ def wildcard_import_file(python_file_path: pathlib.Path) -> None:
 def _import_local_startup() -> None:
     """Imports the local Python startup file, if one exists."""
 
-    from pathlib import Path
-
     local_pythonstartup_path = Path.home() / '.pythonstartup_local'
     if local_pythonstartup_path.exists():
         wildcard_import_file(local_pythonstartup_path)  # noqa: NEWS100
@@ -374,6 +368,3 @@ def _import_local_startup() -> None:
 # Import the local Python startup file if one exists.
 _import_local_startup()
 del _import_local_startup
-
-# Cleanup import modules that are only needed for this file so they don't pollute the namespace.
-del pathlib, typing
