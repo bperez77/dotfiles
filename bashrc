@@ -308,8 +308,9 @@ alias scp='scp -p -r'
 
 # Setup the remote sync command to preserve file metadata, show incremental progress, and exclude files by default.
 RSYNC_EXCLUDE="$(echo ${COPY_IGNORE_LIST[@]} | sed -e 's/[^ ]\+/--exclude "&"/g')"
-alias rsync="rsync --recursive --archive --hard-links --acls --xattrs --checksum --human-readable --human-readable \
-        --info=progress2 ${RSYNC_EXCLUDE[@]}"
+alias rsync="rsync --recursive --archive --hard-links --acls --xattrs --human-readable --human-readable \
+             --info=progress2 ${RSYNC_EXCLUDE[@]}"
+alias rsync-strict="rsync --checksum"
 
 # Remote sync and mirror the destination to the source. This means any files present on the destination, but not in the
 # source are deleted (along with excluded files). Normally, these files would remain.
