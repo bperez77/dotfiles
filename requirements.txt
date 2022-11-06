@@ -19,7 +19,7 @@
 # Utility Packages
 #-----------------------------------------------------------------------------------------------------------------------
 
-autoimport  # Enables automatic importing (lazily)
+autoimp     # Enables automatic importing (lazily)
 pint        # Defines standard unit classes that can be used to represent units and convert between them.
 see         # Alternative to the dir function that neatly summarizes an object's attributes.
 
