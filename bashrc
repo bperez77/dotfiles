@@ -192,6 +192,10 @@ alias rlwrap='rlwrap --always-readline --histsize 1000000 --history-no-dupes 2 -
 # Setup Flake8 to use the global user configuration file by default.
 alias flake8="flake8 --config '${HOME}/.flake8'"
 
+# Setup the Tar command to preserve all permission and metadata information from files and to display a total files and
+# bytes statistic line at the end.
+alias tar='tar --total --acls --selinux --xattrs --xattrs-include="*"'
+
 # Create aliases for commands that wraps them with the Readline library. This is useful for commands that utilize a
 # REPL, but do not provide Readline functionality. This will give the commands persistent history and tab completion.
 RLWRAP_COMMANDS=(lua smlnj coin sim240)
