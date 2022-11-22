@@ -196,6 +196,9 @@ alias flake8="flake8 --config '${HOME}/.flake8'"
 # bytes statistic line at the end.
 alias tar='tar --total --acls --selinux --xattrs --xattrs-include="*"'
 
+# Change the man command so that Vim Superman (vman) is used by default.
+alias man='vman'
+
 # Create aliases for commands that wraps them with the Readline library. This is useful for commands that utilize a
 # REPL, but do not provide Readline functionality. This will give the commands persistent history and tab completion.
 RLWRAP_COMMANDS=(lua smlnj coin sim240)
