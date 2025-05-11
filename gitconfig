@@ -134,8 +134,8 @@
     # Setup Git large file storage (LFS) as a file filter. Git LFS is used to handle the storage of large files,
     # particularity binaries. Setup the clean, smudge, and process aliases for the filter driver.
     clean = git-lfs clean -- %f
-    smudge = git-lfs smudge -- %f
-    process = git-lfs filter-process
+    smudge = git-lfs smudge --skip -- %f
+    process = git-lfs filter-process --skip
 
     # Indicates that the filter must always succeed. Any failure means the operation must be aborted.
     required = true
