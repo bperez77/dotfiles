@@ -331,6 +331,10 @@ alias rsync-progress='rsync --no-inc-recursive'
 # Setup the Feh image viewer to scale the image down to the screen size by default.
 alias feh='feh --scale-down'
 
+# Prevent GPG from caching the salted passphrases used for symmetric encryption. This forces users to enter the
+# passphrase every single time when decrypting the file.
+alias gpg='gpg --no-symkey-cache'
+
 # Setup several shortcut aliases for navigating up parent directories (one alias for each level of directories). These
 # aliases are of the format ..1, ..2, ..3, etc.
 MAX_DIRS=20
