@@ -25,5 +25,7 @@ let b:ale_linters = [
     \ 'mypy',
 \ ]
 
-" Add an option for explicitly specifying the user's Flake8 configuration file when running the Flake8 linter.
-let b:python_flake8_options = '--config "$HOME/.flake8"'
+" Add an option for explicitly specifying the user's Flake8 configuration file when running the Flake8 linter. The
+" linting warnings NQA102 (<code> has not matching violations) is currently ignored because the flake8-noqa plugin and
+" ALE Vim plugin interact poorly to cause false positives for this linting warning.
+let b:ale_python_flake8_options = '--config "$HOME/.flake8" --extend-ignore NQA102'
