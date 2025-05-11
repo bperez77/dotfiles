@@ -135,6 +135,16 @@
         # docstrings, but this is acceptable.
         D415,
 
+        # [Plugin: flake8-literal] Allow for the mixing of single and double quote continuation strings when doing
+        # implicit concatenation of string literals. This is done as single quotes are strongly preferred, so when a
+        # string literal requires double quotes, it won't force the rest to be changed to double quotes as well.
+        LIT015,
+        LIT016,
+
+        # [Plugin: flake8-literal] Allow for the raw prefix on a string literal even if no escapes are used. This is
+        # useful in some cases such as regular expressions.
+        LIT101,
+
         # [Plugin: flake8-pyi] Allow for docstrings to be included in Python type stub files, mostly because they
         # can be used to define interfaces to C++ Python binding modules.
         Y021,
