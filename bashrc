@@ -593,7 +593,7 @@ alias wol-poweroff="sudo ethtool -s \$(ifconfig | grep '^e' | awk '{print \$1}')
 alias wol-poweron='wakeonlan -i 192.168.2.255'
 
 # Fetches all the files under a given directory on a website with the web get command.
-alias wget-dir='wget --recursive i--no-host-directories --no-directories --no-parent --execute robots=off'
+alias wget-dir='wget --recursive --no-host-directories --no-directories --no-parent --execute robots=off'
 
 # Downloads a file in parallel from a website using the maximum possible number of connections and threads.
 MAX_DOWNLOAD_CONNECTIONS=16
