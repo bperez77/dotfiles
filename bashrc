@@ -335,6 +335,12 @@ alias feh='feh --scale-down'
 # passphrase every single time when decrypting the file.
 alias gpg='gpg --no-symkey-cache'
 
+# Update all of the relevent pacakges in the system across the various utilities.
+alias update-all="sudo apt update && sudo apt dist-upgrade --yes && sudo snap refresh
+                  && pip install --upgrade --requirement ~/bin/dotfiles/requirements.txt
+                  && vim -c ':PlugUpdate' -c ':noautocmd qall!' && rustup self update
+                  && cargo install broot fd-find ripgrep"
+
 # Setup several shortcut aliases for navigating up parent directories (one alias for each level of directories). These
 # aliases are of the format ..1, ..2, ..3, etc.
 MAX_DIRS=20
