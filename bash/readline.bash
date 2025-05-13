@@ -43,8 +43,9 @@ function fzf-edit
 
     # Define the command used to select the file(s) to edit. Note that the null character is used to delimit the outputs
     # so that all files with special characters can be handled properly.
-    local fzf_cmd='command fd --color never --follow --hidden --no-ignore --type file --print0 ${FD_TEXT_IGNORE}
-            --search-path "${search_directory}" | fzf ${FZF_DEFAULT_OPTS} --multi --height "40%" --reverse --read0 --print0'
+    local fzf_cmd='command fdfind --color never --follow --hidden --no-ignore --type file --print0 ${FD_TEXT_IGNORE}
+                                  --search-path "${search_directory}"
+                   | fzf ${FZF_DEFAULT_OPTS} --multi --height "40%" --reverse --read0 --print0'
 
     # Use the map file primitive to put the selected files into an array variable.
     local files=()
@@ -79,8 +80,9 @@ function fzf-cd
 
     # Use the FZF command to select the directory to change to. Note that the null chracter is used to delimit the
     # outputs so that directories with special characters can be handled properly.
-    local directory="$(command fd --color never --follow --hidden --no-ignore --type directory ${FD_IGNORE} \
-            --search-path "${search_directory}" | fzf ${FZF_DEFAULT_OPTS} --height "40%" --reverse --no-multi)"
+    local directory="$(command fdfind --color never --follow --hidden --no-ignore --type directory ${FD_IGNORE} \
+                               --search-path "${search_directory}" \
+                       | fzf ${FZF_DEFAULT_OPTS} --height "40%" --reverse --no-multi)"
 
     if [[ ! -z ${directory} ]]; then
         printf "cd %q" ${directory}

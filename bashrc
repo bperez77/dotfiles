@@ -81,8 +81,8 @@ export TEXT_IGNORE_LIST="${COPY_IGNORE_LIST} ${FIND_IGNORE_LIST}"
 # Setup the default commands used for the various FZF shortcuts and commands to use FD and respect an ignore list.
 FD_IGNORE="$(echo ${FIND_IGNORE_LIST[@]} | sed -e "s/[^ ]\\+/--exclude &/g")"
 FD_TEXT_IGNORE="$(echo ${TEXT_IGNORE_LIST} | sed -e "s/[^ ]\\+/--exclude &/g")"
-export FZF_ALT_C_COMMAND="command fd --color never --follow --hidden --no-ignore --type directory ${FD_IGNORE}"
-export FZF_CTRL_T_COMMAND="command fd --color never --follow --hidden --no-ignore ${FD_IGNORE}"
+export FZF_ALT_C_COMMAND="command fdfind --color never --follow --hidden --no-ignore --type directory ${FD_IGNORE}"
+export FZF_CTRL_T_COMMAND="command fdfind --color never --follow --hidden --no-ignore ${FD_IGNORE}"
 export FZF_DEFAULT_COMMAND="${FZF_CTRL_T_COMMAND}"
 
 # Enable multi-select mode by default for the standard FZF command and the CTRL-T shortcut.
@@ -252,8 +252,10 @@ alias emacs='emacs24 --no-window-system'
 # Open an empty Vim buffer for creating a Git commit message. This sets the file type appropriately.
 alias vim-commit="vim -c 'setlocal filetype=gitcommit'"
 
-# Setup the FD command to follow symbolic links and include most files in its search by default.
-alias fd="fd --follow --hidden --no-ignore --show-errors ${FD_IGNORE}"
+# Setup the FD command to follow symbolic links and include most files in its search by default and add a shorter alias
+# for the `fdfind` command.
+alias fdfind="fdfind --follow --hidden --no-ignore --show-errors ${FD_IGNORE}"
+alias fd='fdfind'
 
 # Perform a FD file search only on file not ignored by Git. This search is performed from the root of repository.
 # In order to specify other paths, the `--search-path` flag must be used.
@@ -269,7 +271,7 @@ function fd-git
 
     # If the git root result is empty (from being at the root of the repository), then make sure '.' is specified.
     local args=("${@}")
-    command fd --follow --hidden ${FD_IGNORE} --search-path ${git_root:-.} "${args[@]}"
+    command fdfind --follow --hidden ${FD_IGNORE} --search-path ${git_root:-.} "${args[@]}"
 }
 
 # Setup the Ripgrep command to follow symbolic links and include most files in its search by default.
